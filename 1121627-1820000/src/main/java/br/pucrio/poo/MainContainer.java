@@ -20,5 +20,6 @@ public class MainContainer {
 		
 		MainWindow window = new MainWindow(boardPanel, operationsPanel);	
 		window.setVisible(true);
+		
 	}
 }
