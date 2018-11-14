@@ -14,6 +14,8 @@ public class PlayerWalkController {
 		this.boardController = boardController;
 		this.turnFinalizer = turnFinalizer;
 		this.spotFrontController = spotFrontController;
+		///jssisi
+		
 	}
 
 	public void playerWalk(Player player) {
