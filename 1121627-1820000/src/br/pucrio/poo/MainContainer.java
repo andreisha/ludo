@@ -32,12 +32,12 @@ public class MainContainer {
 	private static final int TOKEN_HEIGHT = 38 * 2 / 3;
 	private static final int TOKEN_WIDTH = 25 * 2 / 3;
 
-	private static final int BOARD_SPOTS_TO_CORNER = 10;
+	private static final int BOARD_SPOTS_TO_CORNER = 15;
 	private static final int BOARD_CELLS_TO_CORNER = 13;
 
-	private static final int TOKEN_RADIUS = 10;
-	private static final int BOARD_WIDTH = 800;
-	private static final int BOARD_HEIGHT = 801;
+	private static final int TOKEN_RADIUS = 5;
+	private static final int BOARD_WIDTH = 500;
+	private static final int BOARD_HEIGHT = 500;
 
 	public static void main(String[] args) {
 		Game game = Game.getInstance();
@@ -60,7 +60,9 @@ public class MainContainer {
 
 		// initializing controllers
 		ColorController colorController = new ColorController();
-		BoardController boardController = new BoardController(players, tokenCalculator, boardPanel, colorController);
+		NewGameController newGameController = new NewGameController();
+		newGameController.startNewGame(BOARD_WIDTH, BOARD_HEIGHT);
+		BoardController boardController = new BoardController(players, tokenCalculator, boardPanel, colorController, newGameController.getCasas());
 
 		TurnFinalizerController turnFinalizer = new TurnFinalizerController(boardController, game);
 		SpotFrontController spotFrontController = new SpotFrontController(new ArrayList<SpotController>());
@@ -69,7 +71,7 @@ public class MainContainer {
 		DicesController dicesController = new DicesController(dicesPanel, walkController, turnFinalizer);
 
 		LoadGameController loadGameController = new LoadGameController();
-		NewGameController newGameController = new NewGameController();
+		
 		SaveGameController saveGameController = new SaveGameController();
 		OperationsController operationsController = new OperationsController(operationsPanel, loadGameController,
 				newGameController, saveGameController);
@@ -79,7 +81,7 @@ public class MainContainer {
 		turnFinalizer.setTurnInitializer(turnInitializer);
 
 		window.setVisible(true);
-		boardController.update();
-		turnInitializer.startTurnOf(game.currentPlayer());
+		boardController.update(newGameController.getCasas());
+		turnInitializer.startTurnOf(game.currentPlayer(), newGameController.getCasas());
 	}
 }

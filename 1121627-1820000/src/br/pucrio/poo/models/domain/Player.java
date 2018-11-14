@@ -1,28 +1,38 @@
 package br.pucrio.poo.models.domain;
 
+import java.util.List;
 import java.util.Observable;
+
+import br.pucrio.poo.views.board.CasaJogo;
+import java.awt.Color;
+
 
 public class Player extends Observable {
 
 	private static final int MAX_CONTINUED_ROLL = 2;
 	private final PlayerColor color;
-	private int spotNumber;
+	//private final Color color;
+	private int spotNumberIni;
+	private int spotNumber = 0;
 	private final int spotsQuantity;
 	private Dice diceOne;
-	private Dice diceTwo;
 	private int continuedRollCount = 0;
 	private String name;
+	
 
-	public Player(String name, PlayerColor color, int spotsQuantity) {
+	public Player(String name, PlayerColor color, int spotsQuantity, int spotNumber) {
 		this.name = name;
 		this.color = color;
-		this.spotNumber = 0;
+		this.spotNumberIni = spotNumber;
+		//this.spotNumber = spotNumber;
 		this.spotsQuantity = spotsQuantity;
 	}
 
-	public void goForward(int steps) {
+	public void goForward(int steps, List<CasaJogo> casas) {
+		casas.get(this.spotNumber).modifyColor1(Color.WHITE);
 		this.spotNumber += steps;
-		this.spotNumber %= spotsQuantity;
+		//this.spotNumber %= spotsQuantity;
+		casas.get(this.spotNumber).modifyColor1(Color.RED);
 	}
 
 	public PlayerColor getColor() {
@@ -35,7 +45,6 @@ public class Player extends Observable {
 
 	public void rollDices() throws Exception {
 		this.diceOne = Dice.roll();
-		this.diceTwo = Dice.roll();
 		if (canPlayAgain()) {
 			continuedRollCount++;
 		} else {
@@ -44,27 +53,21 @@ public class Player extends Observable {
 	}
 
 	public int getDicePoints() {
-		return this.diceOne.getValue() + this.diceTwo.getValue();
+		return this.diceOne.getValue();
 	}
 	
 	public int getDiceOneResult() {
 		return diceOne.getValue();
 	}
 	
-	public int getDiceTwoResult() {
-		return diceTwo.getValue();
-	}
+
 
 	public Dice getDiceOne() {
 		return diceOne;
 	}
 
-	public Dice getDiceTwo() {
-		return diceTwo;
-	}
-
 	public boolean canPlayAgain() {
-		return diceOne == diceTwo;
+		return diceOne.getValue() == 6 ;
 	}
 
 	public boolean exceedContinuedRoll() {

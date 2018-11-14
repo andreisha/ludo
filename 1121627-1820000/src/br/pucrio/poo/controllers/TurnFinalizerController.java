@@ -1,8 +1,10 @@
 package br.pucrio.poo.controllers;
 
+import java.util.List;
+
 import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.Player;
-
+import br.pucrio.poo.views.board.*;
 public class TurnFinalizerController {
 
 	private BoardController boardController;
@@ -14,7 +16,7 @@ public class TurnFinalizerController {
 		this.game = game;
 	}
 
-	public void finalizeTurn() {
+	public void finalizeTurn(List<CasaJogo> casas) {
 		Player player = this.game.currentPlayer();
 		Player currentPlayer;
 
@@ -22,16 +24,16 @@ public class TurnFinalizerController {
 		if (canPlayAgain) {
 			currentPlayer = player;
 		} else {
-			currentPlayer = passTurn(player);
+			currentPlayer = passTurn(player, casas);
 		}
-		this.turnInitializer.startTurnOf(currentPlayer);
+		this.turnInitializer.startTurnOf(currentPlayer, casas);
 	}
 
-	private Player passTurn(Player lastPlayer) {
+	private Player passTurn(Player lastPlayer, List<CasaJogo> casas) {
 		this.game.endPlayerTurn();
 		Player currentPlayer = this.game.currentPlayer();
 
-		this.boardController.update();
+		this.boardController.update(casas);
 		return currentPlayer;
 	}
 

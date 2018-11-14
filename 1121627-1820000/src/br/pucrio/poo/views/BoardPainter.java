@@ -18,7 +18,10 @@ public class BoardPainter {
 	private List<Casa> casasiniciais = new ArrayList<Casa>();;
 	private List<Casa> casas = new ArrayList<Casa>();;
 	private List<Reta> retas = new ArrayList<Reta>();;
-
+	private List<Token> tokensbrancos = new ArrayList<Token>();;
+	private List<Token> tokens = new ArrayList<Token>();;
+	
+	
 	public BoardPainter(int boardWidth, int boardHeight, int tokenRadius) {
 		this.boardWidth = boardWidth;
 		this.boardHeight = boardHeight;
@@ -29,15 +32,12 @@ public class BoardPainter {
 
 		/* desenho das casas iniciais */
 		this.casasiniciais.add(new Casa(0, 0, 6 * boardWidth / 15, 6 * boardHeight / 15, Color.RED));
-		this.casasiniciais
-				.add(new Casa(9 * boardWidth / 15, 0, 6 * boardWidth / 15, 6 * boardHeight / 15, Color.GREEN));
-		this.casasiniciais
-				.add(new Casa(0, 9 * boardHeight / 15, 6 * boardWidth / 15, 6 * boardHeight / 15, Color.BLUE));
-		this.casasiniciais.add(new Casa(9 * boardWidth / 15, 9 * boardHeight / 15, 6 * boardWidth / 15,
-				6 * boardHeight / 15, Color.YELLOW));
+		this.casasiniciais.add(new Casa(9 * boardWidth / 15, 0, 6 * boardWidth / 15, 6 * boardHeight / 15, Color.GREEN));
+		this.casasiniciais.add(new Casa(0, 9 * boardHeight / 15, 6 * boardWidth / 15, 6 * boardHeight / 15, Color.BLUE));
+		this.casasiniciais.add(new Casa(9 * boardWidth / 15, 9 * boardHeight / 15, 6 * boardWidth / 15,6 * boardHeight / 15, Color.YELLOW));
 
 		for (Casa casa : this.casasiniciais) {
-			paintCasa(graphics, casa);
+			casa.paintCasa(graphics);
 		}
 
 		Casa br;
@@ -63,7 +63,7 @@ public class BoardPainter {
 							Color.WHITE);
 
 				this.casas.add(br);
-				paintCasa(graphics, br);
+				br.paintCasa(graphics);
 			}
 		}
 
@@ -88,7 +88,7 @@ public class BoardPainter {
 							Color.WHITE);
 
 				this.casas.add(br);
-				paintCasa(graphics, br);
+				br.paintCasa(graphics);
 			}
 		}
 
@@ -103,39 +103,61 @@ public class BoardPainter {
 		int xblue[] = { 6 * boardWidth / 15, (15 * boardWidth + 15) / 30, 9 * boardWidth / 15 };
 		int yblue[] = { 9 * boardHeight / 15, (15 * boardHeight + 15) / 30, 9 * boardHeight / 15 };
 
+		int x_retabr_red[] = {(5 * boardWidth + 15) / 60, (7 * boardWidth + 15) / 60, (5 * boardWidth + 15) / 60};
+		int y_retabr_red[] = {(25 * boardHeight + 15) / 60, (13 * boardHeight + 15) / 30, (27 * boardHeight + 45) / 60};
+		
+		int x_retabr_green[] = {(33 * boardWidth + 15) / 60, (34 * boardWidth + 15) / 60, (35 * boardWidth + 15) / 60};
+		int y_retabr_green[] = {(5 * boardHeight + 15) / 60, (7 * boardHeight + 15) / 60, (5 * boardHeight + 15) / 60};
+		
+		int x_retabr_yellow[] = {(55 * boardWidth + 15) / 60, (53 * boardWidth + 15) / 60, (55 * boardWidth + 15) / 60};
+		int y_retabr_yellow[] = {(33 * boardHeight + 15) / 60, (34 * boardHeight + 15) / 60, (35 * boardHeight + 15) / 60};
+		
+		int x_retabr_blue[] = {(25 * boardWidth + 15) / 60, (26 * boardWidth + 15) / 60, (27 * boardWidth + 15) / 60};
+		int y_retabr_blue[] = {(55 * boardHeight + 15) / 60, (53 * boardHeight + 15) / 60, (55 * boardHeight + 15) / 60};
+					
+		
 		this.retas.add(new Reta(xred, yred, Color.RED));
 		this.retas.add(new Reta(xgreen, ygreen, Color.GREEN));
 		this.retas.add(new Reta(xyellow, yyellow, Color.YELLOW));
 		this.retas.add(new Reta(xblue, yblue, Color.BLUE));
+		this.retas.add(new Reta(x_retabr_red, y_retabr_red, Color.WHITE));
+		this.retas.add(new Reta(x_retabr_green, y_retabr_green, Color.WHITE));
+		this.retas.add(new Reta(x_retabr_yellow, y_retabr_yellow, Color.WHITE));
+		this.retas.add(new Reta(x_retabr_blue, y_retabr_blue, Color.WHITE));
 
 		for (Reta reta : this.retas) {
-			paintReta(graphics, reta);
+			reta.paintReta(graphics);
 		}
+		
+		/* desenho dos circulos dos retangulos */
+				
+		this.tokensbrancos.add(new Token(boardWidth/15,boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(4*boardWidth/15,boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(boardWidth/15,4*boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(4*boardWidth/15,4*boardHeight/15, Color.WHITE, 30));
+		
+		this.tokensbrancos.add(new Token(10*boardWidth/15,boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(13*boardWidth/15,boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(10*boardWidth/15,4*boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(13*boardWidth/15,4*boardHeight/15, Color.WHITE, 30));
+
+		this.tokensbrancos.add(new Token(boardWidth/15,10*boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(4*boardWidth/15,10*boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(boardWidth/15,13*boardHeight/15, Color.WHITE,30));
+		this.tokensbrancos.add(new Token(4*boardWidth/15,13*boardHeight/15, Color.WHITE, 30));
+
+		this.tokensbrancos.add(new Token(10*boardWidth/15,10*boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(13*boardWidth/15,10*boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(10*boardWidth/15,13*boardHeight/15, Color.WHITE, 30));
+		this.tokensbrancos.add(new Token(13*boardWidth/15,13*boardHeight/15, Color.WHITE, 30));
+
+		for (Token token : this.tokensbrancos) {
+			token.paintToken(graphics);
+			}
+
+		/* desenho dos tokens para jogar */
+		
+	
 	}
 
-	public void paintToken(Graphics2D graphics, Token token) {
-
-		Ellipse2D circ = new Ellipse2D.Double(token.getX(), token.getY(), tokenRadius, tokenRadius);
-		graphics.setPaint(token.getColor());
-		graphics.fill(circ);
-	}
-
-	public void paintCasa(Graphics2D graphics, Casa casa) {
-
-		// codigo de desenho das casas do jogo
-		Rectangle2D casainicial = new Rectangle2D.Double(casa.getX(), casa.getY(), casa.getWidth(), casa.getHeigth());
-		graphics.setPaint(Color.BLACK);
-		graphics.draw(casainicial);
-		graphics.setPaint(casa.getColor());
-		graphics.fill(casainicial);
-	}
-
-	public void paintReta(Graphics2D graphics, Reta reta) {
-
-		// codigo de desenho das casas do jogo
-		graphics.setPaint(Color.BLACK);
-		graphics.drawPolygon(reta.getX(), reta.getY(), 3);
-		graphics.setPaint(reta.getColor());
-		graphics.fillPolygon(reta.getX(), reta.getY(), 3);
-	}
 }

@@ -14,7 +14,7 @@ public class NewGameButton extends JButton {
 		super("Novo Jogo");
 	}
 
-	public void enable(final NewGameController newGameController) {
+	public void enable(final NewGameController newGameController, final int boardWidth, final int boardHeight) {
 		if (this.listener != null) {
 			removeActionListener(listener);
 		}
@@ -23,7 +23,7 @@ public class NewGameButton extends JButton {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				newGameController.startNewGame();
+				newGameController.startNewGame(boardWidth,boardHeight);
 			}
 		};
 		addActionListener(listener);

@@ -9,11 +9,13 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import br.pucrio.poo.views.board.CasaJogo;
 import br.pucrio.poo.views.board.Token;
 
 public class BoardPanel extends JPanel {
 	private BoardPainter painter;
 	private List<Token> tokens;
+	private List<CasaJogo> casas;
 
 	public BoardPanel(BoardPainter painter, int width, int height) {
 		this.painter = painter;
@@ -24,23 +26,43 @@ public class BoardPanel extends JPanel {
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		painter.paintBoard((Graphics2D) graphics);
-		paintTokens((Graphics2D) graphics);
+		paintTokens((Graphics2D) graphics, this.casas);
+		
 	}
 
-	public void repaint(List<Token> tokens) {
+	/*public void repaint(List<Token> tokens) {
 		this.tokens = tokens;
+		this.repaint();
+	}*/
+	
+	public void repaint(List<Token> tokens, List<CasaJogo> casas) {
+		this.tokens = tokens;
+		this.casas = casas;
 		this.repaint();
 	}
 
-	private void paintTokens(Graphics2D graphics) {
-
-		this.tokens.add(new Token(10, 10, Color.BLUE));
-		this.tokens.add(new Token(10, 30, Color.BLUE));
-		this.tokens.add(new Token(30, 10, Color.BLUE));
-		this.tokens.add(new Token(30, 30, Color.BLUE));
-
+	private void paintTokens(Graphics2D graphics, List<CasaJogo> casas ) {
+		
+		
+	/*	this.tokens.add(new Token(10, 30, Color.WHITE, 15));
+		this.tokens.add(new Token(20, 30, Color.BLUE, 15));
+		this.tokens.add(new Token(30, 10, Color.BLUE, 15));
+		this.tokens.add(new Token(30, 30, Color.BLUE, 15));
+*/
 		for (Token token : this.tokens) {
-			painter.paintToken(graphics, token);
+			token.paintToken(graphics);
 		}
+		
+		for (CasaJogo casa: casas) {
+			int x = (casa.getXMAX()+casa.getXMIN())/2 -7;
+			int y = (casa.getYMAX()+casa.getYMIN())/2 -7;
+			if ((casa.getColor1() != Color.WHITE) | (casa.getColor2() != Color.WHITE)) {
+				Token tokencasa = new Token(x, y, casa.getColor1(), 15);
+				tokencasa.paintToken(graphics);
+			}
+				
+
+		}
+		
 	}
 }

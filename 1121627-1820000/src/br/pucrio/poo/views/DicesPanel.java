@@ -7,6 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,30 +19,29 @@ import javax.swing.JPanel;
 
 import br.pucrio.poo.controllers.DicesController;
 import br.pucrio.poo.models.domain.Player;
+import br.pucrio.poo.views.board.CasaJogo;
 
 public class DicesPanel extends JPanel {
 	private JButton button;
 	
 	private DicesImagesPanel imagesPanel;
 	private JLabel diceOne;
-	private JLabel diceTwo;
 	private ActionListener buttonListener;
-
+	
 	public DicesPanel() {
 		this.imagesPanel = new DicesImagesPanel();
 		
-		this.button = new JButton("Lançar Dado");
+		this.button = new JButton("Lancar Dado");
 		this.diceOne = new JLabel("-");
-		this.diceTwo = new JLabel("-");
 
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		
 
-		// panel do botão
+		// panel do botao
 		JPanel buttonPanel = new JPanel();
 		BoxLayout layout = new BoxLayout(buttonPanel, BoxLayout.Y_AXIS);
 		buttonPanel.setLayout(layout);
-		buttonPanel.add(new JLabel("À JOGAR"));
+		buttonPanel.add(new JLabel("JOGAR"));
 		buttonPanel.add(button);
 
 		// panel dos resultados
@@ -57,9 +59,8 @@ public class DicesPanel extends JPanel {
 		//this.disablePanel();
 	}
 	
-	public void repaint(Image dice1Image, Image dice2Image) {
+	public void repaint(Image dice1Image) {
 		this.imagesPanel.setDice1Image(dice1Image);
-		this.imagesPanel.setDice2Image(dice2Image);
 		this.imagesPanel.setBounds(0, 0, dice1Image.getWidth(null), dice1Image.getHeight(null));
 		this.repaint();
 	}
@@ -68,11 +69,8 @@ public class DicesPanel extends JPanel {
 		diceOne.setText(diceNumber);
 	}
 
-	public void setDiceTwoNumber(String diceNumber) {
-		diceTwo.setText(diceNumber);
-	}
 
-	public void enableTo(final Player player, final DicesController dicesController) {
+	public void enableTo(final Player player, final DicesController dicesController, List<CasaJogo> casas) {
 		if (this.buttonListener != null) {
 			this.button.removeActionListener(buttonListener);
 		}
@@ -80,10 +78,12 @@ public class DicesPanel extends JPanel {
 		this.buttonListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				dicesController.roll(player);
+				
+				dicesController.roll(player, casas);
 			}
 		};
 		this.button.addActionListener(buttonListener);
+		
 		this.enablePanel();
 	}
 

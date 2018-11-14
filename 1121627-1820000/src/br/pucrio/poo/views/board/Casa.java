@@ -1,6 +1,8 @@
 package br.pucrio.poo.views.board;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 public class Casa {
 	private int x;
@@ -35,5 +37,14 @@ public class Casa {
 
 	public Color getColor() {
 		return color;
+	}
+	public void paintCasa(Graphics2D graphics) {
+
+		// codigo de desenho das casas do jogo
+		Rectangle2D casainicial = new Rectangle2D.Double(this.getX(), this.getY(), this.getWidth(), this.getHeigth());
+		graphics.setPaint(Color.BLACK);
+		graphics.draw(casainicial);
+		graphics.setPaint(this.getColor());
+		graphics.fill(casainicial);
 	}
 }

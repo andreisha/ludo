@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Game {
 
-	private static final int SPOTS_QUANTITY = 40;
+	private static final int SPOTS_QUANTITY = 52;
 
 	private static Game instance;
 
@@ -34,11 +34,11 @@ public class Game {
 			Board board = new Board(SPOTS_QUANTITY);
 
 			// initializing models
-			List<Player> players = Arrays.asList(new Player("Player 1", PlayerColor.BLUE, board.getSpotsQuantity()),
-					new Player("Player 2", PlayerColor.RED, board.getSpotsQuantity()),
-					new Player("Player 3", PlayerColor.GREEN, board.getSpotsQuantity()),
-					new Player("Player 4", PlayerColor.YELLOW, board.getSpotsQuantity()));
-
+			List<Player> players = Arrays.asList(new Player("Player 0", PlayerColor.RED, board.getSpotsQuantity(), 1),
+					new Player("Player 1", PlayerColor.GREEN, board.getSpotsQuantity(), 14),
+					new Player("Player 2", PlayerColor.YELLOW, board.getSpotsQuantity(), 27),
+					new Player("Player 3", PlayerColor.BLUE, board.getSpotsQuantity(), 40));
+		
 			instance = new Game(players, board);
 		}
 

@@ -1,10 +1,13 @@
 package br.pucrio.poo.controllers;
 
 import java.awt.Image;
+import java.util.List;
 
 import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.utils.Resources;
+import br.pucrio.poo.views.BoardPanel;
 import br.pucrio.poo.views.DicesPanel;
+import br.pucrio.poo.views.board.CasaJogo;
 
 public class DicesController {
 
@@ -20,23 +23,22 @@ public class DicesController {
 		this.turnFinalizer = turnFinalizer;
 	}
 
-	public void enableRolling(Player player) {
-		dicesPanel.enableTo(player, this);
+	public void enableRolling(Player player, List<CasaJogo> casas) {
+		dicesPanel.enableTo(player, this, casas);
 	}
 
-	public void roll(Player player) {
+	public void roll(Player player, List<CasaJogo> casas) {
 
 		try {
 			player.rollDices();
 			this.dicesPanel.setDiceOneNumber(player.getDiceOne().toString());
-			this.dicesPanel.setDiceTwoNumber(player.getDiceTwo().toString());
 			
 			showResults(player);
 
 			this.dicesPanel.disablePanel();
 
 			if (player.exceedContinuedRoll()) {
-				turnFinalizer.finalizeTurn();
+				turnFinalizer.finalizeTurn(casas);
 			} else {
 				walkController.playerWalk(player);
 			}
@@ -48,8 +50,7 @@ public class DicesController {
 	
 	public void showResults(Player player) {
 		int dice1Result = player.getDiceOneResult();
-		int dice2Result = player.getDiceTwoResult();
-		dicesPanel.repaint(getDiceImage(dice1Result), getDiceImage(dice2Result));
+		dicesPanel.repaint(getDiceImage(dice1Result));
 	}
 	
 	private Image getDiceImage(int value) {

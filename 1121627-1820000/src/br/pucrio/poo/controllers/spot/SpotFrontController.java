@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.pucrio.poo.controllers.TurnFinalizerController;
 import br.pucrio.poo.models.domain.Player;
+import br.pucrio.poo.views.board.CasaJogo;
 
 public class SpotFrontController {
 	private List<SpotController> spotControllers;
@@ -12,7 +13,7 @@ public class SpotFrontController {
 		this.spotControllers = spotControllers;
 	}
 
-	public void spotActivatedBy(Player player, TurnFinalizerController turnFinalizer) {
-		spotControllers.get(player.getSpotNumber()).activatedBy(player, turnFinalizer);
+	public void spotActivatedBy(Player player, TurnFinalizerController turnFinalizer, List<CasaJogo> casas) {
+		spotControllers.get(player.getSpotNumber()).activatedBy(player, turnFinalizer, casas);
 	}
 }
