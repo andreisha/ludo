@@ -11,6 +11,7 @@ public class PlayerWalkController {
 
 	public PlayerWalkController(BoardController boardController, TurnFinalizerController turnFinalizer,
 			SpotFrontController spotFrontController) {
+		
 		this.boardController = boardController;
 		this.turnFinalizer = turnFinalizer;
 		this.spotFrontController = spotFrontController;
