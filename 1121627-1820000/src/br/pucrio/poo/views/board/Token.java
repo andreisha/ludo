@@ -39,6 +39,8 @@ public class Token {
 		return spotNumber;
 	}
 	
+	
+	
 	public void modifyColor(Color color) {
 		this.color = color;
 	}
