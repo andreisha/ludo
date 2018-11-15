@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.pucrio.poo.views.board.Casa;
-import br.pucrio.poo.views.board.CasaJogo;
 
 public class Board {
 	private int spotsQuantity;
-	private List<CasaJogo> casas = new ArrayList<CasaJogo>();;
+	private List<Casa> casas = new ArrayList<Casa>();;
 	
 	public Board(int spotsQuantity) {
 		this.spotsQuantity = spotsQuantity;

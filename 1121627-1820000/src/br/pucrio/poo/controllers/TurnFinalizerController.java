@@ -16,7 +16,7 @@ public class TurnFinalizerController {
 		this.game = game;
 	}
 
-	public void finalizeTurn(List<CasaJogo> casas) {
+	public void finalizeTurn(List<Casa> casas) {
 		Player player = this.game.currentPlayer();
 		Player currentPlayer;
 
@@ -29,7 +29,7 @@ public class TurnFinalizerController {
 		this.turnInitializer.startTurnOf(currentPlayer, casas);
 	}
 
-	private Player passTurn(Player lastPlayer, List<CasaJogo> casas) {
+	private Player passTurn(Player lastPlayer, List<Casa> casas) {
 		this.game.endPlayerTurn();
 		Player currentPlayer = this.game.currentPlayer();
 

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
-public class PecaJogo {
+public class Peca {
 	private int x_min;
 	private int x_max;
 	private int y_min;
@@ -13,7 +13,7 @@ public class PecaJogo {
 	private Color color2;
 	private int radius;
 
-	public PecaJogo(int x_min,int x_max, int y_min, int y_max, Color color1, Color color2, int radius) {
+	public Peca(int x_min,int x_max, int y_min, int y_max, Color color1, Color color2, int radius) {
 		this.x_min = x_min;
 		this.x_max = x_max;
 		this.y_min = y_min;
@@ -51,7 +51,7 @@ public class PecaJogo {
 		return radius;
 	}
 
-	public void paintPecaJogo(Graphics2D graphics) {
+	public void paintPeca(Graphics2D graphics) {
 		
 		int x = (this.getXMAX()+this.getXMIN())/2;
 		int y = (this.getYMAX()+this.getYMIN())/2;

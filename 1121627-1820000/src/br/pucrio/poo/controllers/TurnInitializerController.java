@@ -3,7 +3,7 @@ package br.pucrio.poo.controllers;
 import java.util.List;
 
 import br.pucrio.poo.models.domain.Player;
-import br.pucrio.poo.views.board.CasaJogo;
+import br.pucrio.poo.views.board.Casa;
 
 public class TurnInitializerController {
 	private DicesController dicesController;
@@ -14,7 +14,7 @@ public class TurnInitializerController {
 		this.operationsController = operationsController;
 	}
 
-	public void startTurnOf(Player player, List<CasaJogo> casas) {
+	public void startTurnOf(Player player, List<Casa> casas) {
 		dicesController.enableRolling(player, casas);
 		operationsController.enableTo(player);
 	}

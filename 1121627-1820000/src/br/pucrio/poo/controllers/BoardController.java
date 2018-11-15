@@ -11,7 +11,7 @@ import br.pucrio.poo.models.TokenPositionCalculator;
 import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.Position;
 import br.pucrio.poo.views.BoardPanel;
-import br.pucrio.poo.views.board.CasaJogo;
+import br.pucrio.poo.views.board.Casa;
 import br.pucrio.poo.views.board.Token;
 import br.pucrio.poo.controllers.NewGameController;
 
@@ -23,10 +23,10 @@ public class BoardController {
 	private ColorController colorController;
 	private MouseListener mouseListener;
 	//private PlayerWalkController playerWalkController;
-	private List<CasaJogo> casas;
+	private List<Casa> casas;
 	
 	public BoardController(List<Player> players, TokenPositionCalculator tokenCalculator, BoardPanel boardPanel,
-			ColorController colorController, List<CasaJogo> casas ) {
+			ColorController colorController, List<Casa> casas ) {
 		this.players = players;
 		this.tokenCalculator = tokenCalculator;
 		this.boardPanel = boardPanel;
@@ -35,7 +35,7 @@ public class BoardController {
 		this.casas = casas;
 	}
 
-	public void update(List<CasaJogo> casas) {
+	public void update(List<Casa> casas) {
 		boardPanel.repaint(getTokens(), casas);
 	}
 
@@ -54,8 +54,8 @@ public class BoardController {
 
 		int x = tokenPosition.getRoundedX();
 		int y = tokenPosition.getRoundedY();
-		Token pin = new Token(x, y, colorController.getColorFromPlayerColor(player.getColor()), 15);
-		return pin;
+		Token token = new Token(x, y, colorController.getColorFromPlayerColor(player.getColor()), 15, 0);
+		return token;
 	}
 	
 	public void getMouseClic(PlayerWalkController playerWalkController, Player player, int steps) {
@@ -65,16 +65,16 @@ public class BoardController {
 				int x=e.getX();
 			    int y=e.getY();
 			  //System.out.println(x+","+y);
-			    CasaJogo casaclic = null;
+			    Casa casaclic = null;
 			    
-			    for (CasaJogo casa: casas) {
+			    for (Casa casa: casas) {
 			    	if ((x<=casa.getXMAX()) & (x>= casa.getXMIN()) & (y <=casa.getYMAX()) & (y>=casa.getYMIN())) {
 			    		casaclic = casa;
 			    	}
 			    }
 			   
 			    
-			    if ((casaclic.getColor1() == Color.WHITE) ) { //  or =>  | (casaclic.getColor1() == player.getColor())
+			    if ((casaclic.getColor() == Color.WHITE) ) { //  or =>  | (casaclic.getColor1() == player.getColor())
 					//casaclic.modifyColor1(player.getColor());
 			    	playerWalkController.playerWalkOk(player, casas);
 			    	

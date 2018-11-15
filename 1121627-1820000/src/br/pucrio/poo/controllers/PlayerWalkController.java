@@ -6,7 +6,7 @@ import java.awt.event.MouseAdapter;
 
 import br.pucrio.poo.controllers.spot.SpotFrontController;
 import br.pucrio.poo.models.domain.Player;
-import br.pucrio.poo.views.board.CasaJogo;
+import br.pucrio.poo.views.board.Casa;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -31,7 +31,7 @@ public class PlayerWalkController {
 		this.spotFrontController = spotFrontController;
 	}
 
-	public void playerWalk(Player player) {
+	public void playerWalk(Player player,  List<Casa> casas) {
 		int steps = player.getDicePoints();
 		
 		boardController.getMouseClic(this, player, steps);
@@ -39,7 +39,7 @@ public class PlayerWalkController {
 		
 		//this.spotFrontController.spotActivatedBy(player, turnFinalizer);
 	}
-	public void playerWalkOk(Player player, List<CasaJogo> casas) {
+	public void playerWalkOk(Player player, List<Casa> casas) {
 		int steps = player.getDicePoints();
 
 		player.goForward(steps, casas);

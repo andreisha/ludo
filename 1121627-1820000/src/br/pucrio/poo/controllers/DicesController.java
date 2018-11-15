@@ -7,7 +7,7 @@ import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.utils.Resources;
 import br.pucrio.poo.views.BoardPanel;
 import br.pucrio.poo.views.DicesPanel;
-import br.pucrio.poo.views.board.CasaJogo;
+import br.pucrio.poo.views.board.Casa;
 
 public class DicesController {
 
@@ -23,11 +23,11 @@ public class DicesController {
 		this.turnFinalizer = turnFinalizer;
 	}
 
-	public void enableRolling(Player player, List<CasaJogo> casas) {
+	public void enableRolling(Player player, List<Casa> casas) {
 		dicesPanel.enableTo(player, this, casas);
 	}
 
-	public void roll(Player player, List<CasaJogo> casas) {
+	public void roll(Player player, List<Casa> casas) {
 
 		try {
 			player.rollDices();
@@ -40,7 +40,7 @@ public class DicesController {
 			if (player.exceedContinuedRoll()) {
 				turnFinalizer.finalizeTurn(casas);
 			} else {
-				walkController.playerWalk(player);
+				walkController.playerWalk(player, casas);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -40,7 +40,7 @@ public class MainContainer {
 	private static final int BOARD_HEIGHT = 500;
 
 	public static void main(String[] args) {
-		Game game = Game.getInstance();
+		Game game = Game.getInstance(BOARD_WIDTH, BOARD_HEIGHT);
 		Board board = game.getBoard();
 		List<Player> players = game.getPlayers();
 
@@ -62,7 +62,7 @@ public class MainContainer {
 		ColorController colorController = new ColorController();
 		NewGameController newGameController = new NewGameController();
 		newGameController.startNewGame(BOARD_WIDTH, BOARD_HEIGHT);
-		BoardController boardController = new BoardController(players, tokenCalculator, boardPanel, colorController, newGameController.getCasas());
+		BoardController boardController = new BoardController(players, tokenCalculator, boardPanel, colorController, game.getCasas());
 
 		TurnFinalizerController turnFinalizer = new TurnFinalizerController(boardController, game);
 		SpotFrontController spotFrontController = new SpotFrontController(new ArrayList<SpotController>());
@@ -81,7 +81,7 @@ public class MainContainer {
 		turnFinalizer.setTurnInitializer(turnInitializer);
 
 		window.setVisible(true);
-		boardController.update(newGameController.getCasas());
-		turnInitializer.startTurnOf(game.currentPlayer(), newGameController.getCasas());
+		boardController.update(game.getCasas());
+		turnInitializer.startTurnOf(game.currentPlayer(), game.getCasas());
 	}
 }

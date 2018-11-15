@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 
 import br.pucrio.poo.controllers.DicesController;
 import br.pucrio.poo.models.domain.Player;
-import br.pucrio.poo.views.board.CasaJogo;
+import br.pucrio.poo.views.board.Casa;
 
 public class DicesPanel extends JPanel {
 	private JButton button;
@@ -70,7 +70,7 @@ public class DicesPanel extends JPanel {
 	}
 
 
-	public void enableTo(final Player player, final DicesController dicesController, List<CasaJogo> casas) {
+	public void enableTo(final Player player, final DicesController dicesController, List<Casa> casas) {
 		if (this.buttonListener != null) {
 			this.button.removeActionListener(buttonListener);
 		}
