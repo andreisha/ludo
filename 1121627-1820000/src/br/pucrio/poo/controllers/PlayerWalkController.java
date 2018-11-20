@@ -1,49 +1,43 @@
 package br.pucrio.poo.controllers;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-
 import br.pucrio.poo.controllers.spot.SpotFrontController;
+import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.Player;
-import br.pucrio.poo.views.board.Casa;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.List;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import br.pucrio.poo.models.domain.PlayerColor;
 
 public class PlayerWalkController {
 
 	private BoardController boardController;
 	private TurnFinalizerController turnFinalizer;
 	private SpotFrontController spotFrontController;
-	private MouseListener mouseListener;
-	private MouseEvent mouseEvent;
+	private Game game;
 	
 	public PlayerWalkController(BoardController boardController, TurnFinalizerController turnFinalizer,
-			SpotFrontController spotFrontController) {
+			SpotFrontController spotFrontController, Game game) {
 		this.boardController = boardController;
 		this.turnFinalizer = turnFinalizer;
 		this.spotFrontController = spotFrontController;
+		this.game = game;
 	}
-
-	public void playerWalk(Player player,  List<Casa> casas) {
+	
+	public void playerWalk(Player player, int spotNumber) {
 		int steps = player.getDicePoints();
 		
-		boardController.getMouseClic(this, player, steps);
+		player.goForward(steps,spotNumber);
+		boardController.update();
 		
-		
-		//this.spotFrontController.spotActivatedBy(player, turnFinalizer);
+		this.spotFrontController.spotActivatedBy(player, turnFinalizer);
 	}
-	public void playerWalkOk(Player player, List<Casa> casas) {
-		int steps = player.getDicePoints();
-
-		player.goForward(steps, casas);
-		boardController.update(casas);
-		
-			}
+	
+	public void playerWalk(PlayerColor color, int spotNumber) {
+		//Player player = null;
+		for (Player player : game.getPlayers()) {
+			if(player.getColor() == color) {
+				int steps = player.getDicePoints();				
+				player.goForward(steps,spotNumber);
+				boardController.update();
+				this.spotFrontController.spotActivatedBy(player, turnFinalizer);
+			}				
+		}			
+	}
 }

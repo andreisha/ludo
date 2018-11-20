@@ -1,92 +1,57 @@
 package br.pucrio.poo.controllers;
-
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.pucrio.poo.models.TokenPositionCalculator;
+import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.Position;
 import br.pucrio.poo.views.BoardPanel;
-import br.pucrio.poo.views.board.Casa;
 import br.pucrio.poo.views.board.Token;
-import br.pucrio.poo.controllers.NewGameController;
+import br.pucrio.poo.views.board.TokenFactory;
 
 
 public class BoardController {
-	private List<Player> players;
+	private Game game;
 	private TokenPositionCalculator tokenCalculator;
 	private BoardPanel boardPanel;
 	private ColorController colorController;
-	private MouseListener mouseListener;
-	//private PlayerWalkController playerWalkController;
-	private List<Casa> casas;
+	private TokenFactory tokenFactory;
 	
-	public BoardController(List<Player> players, TokenPositionCalculator tokenCalculator, BoardPanel boardPanel,
-			ColorController colorController, List<Casa> casas ) {
-		this.players = players;
+	public BoardController(Game game, TokenPositionCalculator tokenCalculator,BoardPanel boardPanel,
+			ColorController colorController, TokenFactory tokenFactory ) {
+		this.game = game;
 		this.tokenCalculator = tokenCalculator;
 		this.boardPanel = boardPanel;
 		this.colorController = colorController;
-		//this.playerWalkController = playerWalkController;
-		this.casas = casas;
+		this.tokenFactory = tokenFactory;
 	}
 
-	public void update(List<Casa> casas) {
-		boardPanel.repaint(getTokens(), casas);
+	public void update() {
+		boardPanel.repaint(getTokens()); // implementar observable
 	}
 
 	private List<Token> getTokens() {
 		ArrayList<Token> tokens = new ArrayList<Token>();
 
-		for (int i = 0; i < this.players.size(); i++) {
-			tokens.add(getTokenOfPlayer(i));
+		for (int i = 0; i < this.game.getPlayers().size(); i++) {
+			tokens.addAll(getTokenOfPlayer(i));
 		}
 		return tokens;
 	}
 
-	private Token getTokenOfPlayer(int i) {
-		Player player = this.players.get(i);
-		Position tokenPosition = tokenCalculator.getPositionOf(player.getSpotNumber(), i);
-
-		int x = tokenPosition.getRoundedX();
-		int y = tokenPosition.getRoundedY();
-		Token token = new Token(x, y, colorController.getColorFromPlayerColor(player.getColor()), 15, 0);
-		return token;
-	}
-	
-	public void getMouseClic(PlayerWalkController playerWalkController, Player player, int steps) {
+	private ArrayList<Token> getTokenOfPlayer(int playerIndex) {
+		ArrayList<Token> tokens = new ArrayList<Token>();
 		
-		this.mouseListener = new MouseAdapter() {			
-			public void mouseClicked(MouseEvent e) {
-				int x=e.getX();
-			    int y=e.getY();
-			  //System.out.println(x+","+y);
-			    Casa casaclic = null;
-			    
-			    for (Casa casa: casas) {
-			    	if ((x<=casa.getXMAX()) & (x>= casa.getXMIN()) & (y <=casa.getYMAX()) & (y>=casa.getYMIN())) {
-			    		casaclic = casa;
-			    	}
-			    }
-			   
-			    
-			    if ((casaclic.getColor() == Color.WHITE) ) { //  or =>  | (casaclic.getColor1() == player.getColor())
-					//casaclic.modifyColor1(player.getColor());
-			    	playerWalkController.playerWalkOk(player, casas);
-			    	
-					
-			    }
-			   // elseif 
-			    
-			}
-		};
+		Player player = this.game.getPlayers().get(playerIndex);
 		
-		boardPanel.addMouseListener(mouseListener);
-		
+		for (int relativeSpotNumber : player.getSpotNumbers()) {
+			Position tokenPosition = tokenCalculator.getPositionOf(relativeSpotNumber, player.getColor());
+			int spotNumber = tokenCalculator.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, player.getColor());
+			Token token = tokenFactory.getToken(tokenPosition, colorController.getColorFromPlayerColor(player.getColor()), spotNumber);			
+			tokens.add(token);
+		}		
+		return tokens;
 	}
 	
 	public BoardPanel getBoardPanel() {

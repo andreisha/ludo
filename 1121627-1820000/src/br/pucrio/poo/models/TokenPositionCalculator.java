@@ -1,32 +1,20 @@
 package br.pucrio.poo.models;
 
+import br.pucrio.poo.models.domain.PlayerColor;
+
 public class TokenPositionCalculator {
-
-	private int totalOfPins;
+	
 	private BoardSpotsCalculations spotsCalculation;
-	private int tokenWidth;
-	private int tokenHeight;
 
-	public TokenPositionCalculator(int totalOfPins, BoardSpotsCalculations spotsCalculation, int tokenWidth,
-			int tokenHeight) {
-		this.totalOfPins = totalOfPins;
+	public TokenPositionCalculator(BoardSpotsCalculations spotsCalculation) {		
 		this.spotsCalculation = spotsCalculation;
-		this.tokenWidth = tokenWidth;
-		this.tokenHeight = tokenHeight;
 	}
 
-	public Position getPositionOf(int spotNumber, int pinOrder) {
-		Position spotMiddlePosition = spotsCalculation.getSpotPosition(spotNumber);
-		double variationPercent = (double) pinOrder / totalOfPins - 0.5;
-		Position variation = spotsCalculation.getSpotVariation(spotNumber, variationPercent);
-		Position pinMiddlePosition = spotMiddlePosition.plus(variation);
-		return pinMiddlePosition.plus(getVariationToPinBeInMiddleOfSpot());
+	public Position getPositionOf(int relativeSpotNumber, PlayerColor color) {
+		return spotsCalculation.getSpotPosition(relativeSpotNumber, color);
 	}
-
-	private Position getVariationToPinBeInMiddleOfSpot() {
-		double x = -tokenWidth / 2.0;
-		double y = -tokenHeight / 2.0;
-		return new Position(x, y);
+	
+	public int getSpotNumberFromRelativeSpotNumber(int relativeSpotNumber, PlayerColor color) {
+		return spotsCalculation.getSpotNumber(relativeSpotNumber, color);
 	}
-
 }

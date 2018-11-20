@@ -16,7 +16,7 @@ public class TurnFinalizerController {
 		this.game = game;
 	}
 
-	public void finalizeTurn(List<Casa> casas) {
+	public void finalizeTurn() {
 		Player player = this.game.currentPlayer();
 		Player currentPlayer;
 
@@ -24,16 +24,16 @@ public class TurnFinalizerController {
 		if (canPlayAgain) {
 			currentPlayer = player;
 		} else {
-			currentPlayer = passTurn(player, casas);
+			currentPlayer = passTurn(player);
 		}
-		this.turnInitializer.startTurnOf(currentPlayer, casas);
+		this.turnInitializer.startTurnOf(currentPlayer);
 	}
 
-	private Player passTurn(Player lastPlayer, List<Casa> casas) {
+	private Player passTurn(Player lastPlayer) {
 		this.game.endPlayerTurn();
 		Player currentPlayer = this.game.currentPlayer();
 
-		this.boardController.update(casas);
+		this.boardController.update();
 		return currentPlayer;
 	}
 

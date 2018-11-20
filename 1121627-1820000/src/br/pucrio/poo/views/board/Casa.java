@@ -1,37 +1,40 @@
 package br.pucrio.poo.views.board;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
+import java.awt.Stroke;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Casa {
-	private int x_min;
-	private int x_max;
-	private int y_min;
-	private int y_max;
+	protected int x_min;
+	protected int x_max;
+	protected int y_min;
+	protected int y_max;
 	private Color color;
 	private boolean tem_reta;  // true=sim e false=nao
-	private int width;
-	private int heigth;
+	protected int width;
+	protected int heigth;
 	private boolean casa_final; //true se casas finais, false nao)
-	private int num_casa;
-	private Token token1;
-	private Token token2;
+	protected int num_casa;
+
+	private List<Token> tokens;
 	
-	public Casa(int x_min,int x_max, int y_min, int y_max, Color color, boolean tem_reta, int width, int heigth, boolean casa_final, int num_casa, Token token1, Token token2) {
+	public Casa(int x_min,int x_max, int y_min, int y_max, Color color, int width, int heigth, int num_casa) {
 		this.x_min = x_min;
 		this.x_max = x_max;
 		this.y_min = y_min;
 		this.y_max = y_max;
 		this.color = color;
-		this.tem_reta = tem_reta;
 		this.width = width;
 		this.heigth = heigth;
-		this.casa_final = casa_final;
 		this.num_casa = num_casa;
-		this.token1 = token1;
-		this.token2 = token2;
+		this.tokens = new ArrayList<Token>();
 	}
 	
 	public int getXMIN() {
@@ -74,29 +77,51 @@ public class Casa {
 		return casa_final;
 	}
 	
-	public Token getToken1() {
-		return token1;
+	public void addToken(Token token) {
+		this.tokens.add(token);
 	}
 	
-	public Token getToken2() {
-		return token2;
+	public void removeToken(Token token) {
+		this.tokens.remove(token);
 	}
 	
-	public void modifyColorToken1(Color color) {
-		this.token1.modifyColor(color);
+	public boolean anyToken() {
+		return !this.tokens.isEmpty();
 	}
-
-	public void modifyColorToken2(Color color) {
-		this.token2.modifyColor(color);
+	
+	public List<Token> getTokens() {
+		return this.tokens;
 	}
 	
 	public void paintCasa(Graphics2D graphics) {
 		
 		// codigo de desenho das casas do jogo
-		Rectangle2D casainicial = new Rectangle2D.Double(this.getXMIN(), this.getYMIN(), this.width, this.heigth);
+		Rectangle2D casainicial = new Rectangle2D.Double(this.getXMIN(), this.getYMIN(), this.width, this.heigth);		
 		graphics.setPaint(Color.BLACK);
+		graphics.setStroke(new BasicStroke(2));
 		graphics.draw(casainicial);
 		graphics.setPaint(this.getColor());
-		graphics.fill(casainicial);
+		graphics.fill(casainicial);	
+		
+		// temporário
+		paintSpotNum(graphics);
+	}
+
+	private void paintSpotNum(Graphics2D graphics) {
+		Font font = graphics.getFont().deriveFont(16f);
+		graphics.setFont(font);
+        String text = String.valueOf(num_casa);
+        FontRenderContext frc = graphics.getFontRenderContext();
+        int textWidth = (int)font.getStringBounds(text, frc).getWidth();
+        LineMetrics lm = font.getLineMetrics(text, frc);
+        int textHeight = (int)(lm.getAscent() + lm.getDescent());
+        int sx = this.getXMIN() + (this.width - textWidth)/2;
+        int sy = (int)(this.getYMIN() + (this.heigth + textHeight)/2 - lm.getDescent());
+        
+        if(this.getColor() == Color.blue)
+        	graphics.setColor(Color.white);
+        else
+        	graphics.setColor(Color.blue);
+        graphics.drawString(text, sx, sy);
 	}
 }

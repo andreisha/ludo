@@ -9,7 +9,7 @@ import br.pucrio.poo.views.board.Casa;
 public class DoNothingSpotController implements SpotController {
 
 	@Override
-	public void activatedBy(Player player, TurnFinalizerController turnFinalizer, List<Casa> casas) {
-		turnFinalizer.finalizeTurn(casas);
+	public void activatedBy(Player player, TurnFinalizerController turnFinalizer) {
+		turnFinalizer.finalizeTurn();
 	}
 }

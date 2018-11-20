@@ -23,24 +23,21 @@ public class DicesController {
 		this.turnFinalizer = turnFinalizer;
 	}
 
-	public void enableRolling(Player player, List<Casa> casas) {
-		dicesPanel.enableTo(player, this, casas);
+	public void enableRolling(Player player) {
+		dicesPanel.enableTo(player, this);
 	}
 
-	public void roll(Player player, List<Casa> casas) {
+	public void roll(Player player) {
 
 		try {
-			player.rollDices();
-			this.dicesPanel.setDiceOneNumber(player.getDiceOne().toString());
-			
+			player.rollDices();			
 			showResults(player);
-
-			this.dicesPanel.disablePanel();
+			this.dicesPanel.disablePanel();// implementar observable
 
 			if (player.exceedContinuedRoll()) {
-				turnFinalizer.finalizeTurn(casas);
+				turnFinalizer.finalizeTurn();
 			} else {
-				walkController.playerWalk(player, casas);
+				//walkController.playerWalk(player);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -49,8 +46,8 @@ public class DicesController {
 	}
 	
 	public void showResults(Player player) {
-		int dice1Result = player.getDiceOneResult();
-		dicesPanel.repaint(getDiceImage(dice1Result));
+		int dice1Result = player.getDiceResult();
+		dicesPanel.repaint(getDiceImage(dice1Result));// implementar observable
 	}
 	
 	private Image getDiceImage(int value) {

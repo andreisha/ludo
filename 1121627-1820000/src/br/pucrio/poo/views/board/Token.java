@@ -37,17 +37,11 @@ public class Token {
 	
 	public int getSpotNumber() {
 		return spotNumber;
-	}
+	}	
 	
-	
-	
-	public void modifyColor(Color color) {
-		this.color = color;
-	}
-	
-	public void paintToken(Graphics2D graphics, int x, int y) {
+	public void paintToken(Graphics2D graphics) {
 
-		Ellipse2D token = new Ellipse2D.Double(x, y, radius, radius);
+		Ellipse2D token = new Ellipse2D.Double(x + radius/2, y + radius/2, radius, radius);
 		graphics.setPaint(Color.BLACK);
 		graphics.draw(token);
 		graphics.setPaint(this.getColor());

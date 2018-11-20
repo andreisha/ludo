@@ -26,14 +26,9 @@ import br.pucrio.poo.views.DicesPainter;
 import br.pucrio.poo.views.DicesPanel;
 import br.pucrio.poo.views.MainWindow;
 import br.pucrio.poo.views.OperationsPanel;
+import br.pucrio.poo.views.board.TokenFactory;
 
 public class MainContainer {
-
-	private static final int TOKEN_HEIGHT = 38 * 2 / 3;
-	private static final int TOKEN_WIDTH = 25 * 2 / 3;
-
-	private static final int BOARD_SPOTS_TO_CORNER = 15;
-	private static final int BOARD_CELLS_TO_CORNER = 13;
 
 	private static final int TOKEN_RADIUS = 5;
 	private static final int BOARD_WIDTH = 500;
@@ -42,16 +37,14 @@ public class MainContainer {
 	public static void main(String[] args) {
 		Game game = Game.getInstance(BOARD_WIDTH, BOARD_HEIGHT);
 		Board board = game.getBoard();
-		List<Player> players = game.getPlayers();
 
-		BoardSpotsCalculations spotsCalculation = new BoardSpotsCalculations(BOARD_SPOTS_TO_CORNER,
-				BOARD_CELLS_TO_CORNER, BOARD_WIDTH, BOARD_HEIGHT);
-		TokenPositionCalculator tokenCalculator = new TokenPositionCalculator(players.size(), spotsCalculation,
-				TOKEN_WIDTH, TOKEN_HEIGHT);
+		BoardSpotsCalculations spotsCalculation = new BoardSpotsCalculations(BOARD_WIDTH, BOARD_HEIGHT);
+		TokenPositionCalculator tokenCalculator = new TokenPositionCalculator(spotsCalculation);
 
 		// initializing views
 		BoardPainter painter = new BoardPainter(BOARD_WIDTH, BOARD_HEIGHT, TOKEN_RADIUS);
-		BoardPanel boardPanel = new BoardPanel(painter, BOARD_WIDTH, BOARD_HEIGHT);
+		//BoardPanel boardPanel = new BoardPanel(painter, BOARD_WIDTH, BOARD_HEIGHT,tokenCalculator,walkController,colorController);
+		BoardPanel boardPanel = new BoardPanel(painter, BOARD_WIDTH, BOARD_HEIGHT,tokenCalculator);
 		OperationsPanel operationsPanel = new OperationsPanel();
 		DicesPainter dicesPainter = new DicesPainter();
 		DicesPanel dicesPanel = new DicesPanel();
@@ -62,12 +55,12 @@ public class MainContainer {
 		ColorController colorController = new ColorController();
 		NewGameController newGameController = new NewGameController();
 		newGameController.startNewGame(BOARD_WIDTH, BOARD_HEIGHT);
-		BoardController boardController = new BoardController(players, tokenCalculator, boardPanel, colorController, game.getCasas());
+		TokenFactory tokenFactory = new TokenFactory(BOARD_WIDTH/30);
+		BoardController boardController = new BoardController(game, tokenCalculator, boardPanel, colorController,tokenFactory);
 
 		TurnFinalizerController turnFinalizer = new TurnFinalizerController(boardController, game);
 		SpotFrontController spotFrontController = new SpotFrontController(new ArrayList<SpotController>());
-		PlayerWalkController walkController = new PlayerWalkController(boardController, turnFinalizer,
-				spotFrontController);
+		PlayerWalkController walkController = new PlayerWalkController(boardController, turnFinalizer,spotFrontController, game);
 		DicesController dicesController = new DicesController(dicesPanel, walkController, turnFinalizer);
 
 		LoadGameController loadGameController = new LoadGameController();
@@ -81,7 +74,7 @@ public class MainContainer {
 		turnFinalizer.setTurnInitializer(turnInitializer);
 
 		window.setVisible(true);
-		boardController.update(game.getCasas());
-		turnInitializer.startTurnOf(game.currentPlayer(), game.getCasas());
+		boardController.update();
+		turnInitializer.startTurnOf(game.currentPlayer());
 	}
 }

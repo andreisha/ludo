@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,80 +20,67 @@ import javax.swing.JPanel;
 
 import br.pucrio.poo.controllers.DicesController;
 import br.pucrio.poo.models.domain.Player;
-import br.pucrio.poo.views.board.Casa;
 
 public class DicesPanel extends JPanel {
-	private JButton button;
+	private JButton lançarButton;
 	
 	private DicesImagesPanel imagesPanel;
-	private JLabel diceOne;
 	private ActionListener buttonListener;
+
+	private JLabel jogarLabel;
 	
 	public DicesPanel() {
-		this.imagesPanel = new DicesImagesPanel();
-		
-		this.button = new JButton("Lancar Dado");
-		this.diceOne = new JLabel("-");
-
-		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		
+		this.imagesPanel = new DicesImagesPanel();		
+		this.lançarButton = new JButton("Lancar Dado");
+		this.jogarLabel = new JLabel("JOGAR");
 
 		// panel do botao
 		JPanel buttonPanel = new JPanel();
-		BoxLayout layout = new BoxLayout(buttonPanel, BoxLayout.Y_AXIS);
-		buttonPanel.setLayout(layout);
-		buttonPanel.add(new JLabel("JOGAR"));
-		buttonPanel.add(button);
-
-		// panel dos resultados
-//		JPanel resultPanel = new JPanel();
-//		layout = new BoxLayout(resultPanel, BoxLayout.Y_AXIS);
-//		resultPanel.setLayout(layout);
-//		resultPanel.add(new JLabel("Dices:"));
-//		resultPanel.add(diceOne);
-//		resultPanel.add(diceTwo);
-//		this.add(resultPanel);
 		
-		this.add(buttonPanel,BorderLayout.NORTH);
-		this.add(this.imagesPanel,BorderLayout.SOUTH);		
+		buttonPanel.setLayout(new BorderLayout());
+		buttonPanel.add(jogarLabel,BorderLayout.NORTH);	
+		buttonPanel.add(lançarButton,BorderLayout.SOUTH);
 
+		this.setLayout(null);
+		this.add(buttonPanel);
+		this.add(imagesPanel);
+		Insets insets = getInsets();
+		Dimension size = buttonPanel.getPreferredSize();
+		buttonPanel.setBounds(insets.left, 100 + insets.top, size.width, size.height);	
+		size = imagesPanel.getPreferredSize();
+		imagesPanel.setBounds(insets.left, insets.top, size.width, size.height);
 		//this.disablePanel();
 	}
 	
-	public void repaint(Image dice1Image) {
-		this.imagesPanel.setDice1Image(dice1Image);
-		this.imagesPanel.setBounds(0, 0, dice1Image.getWidth(null), dice1Image.getHeight(null));
+	public void repaint(Image diceImage) {
+		this.imagesPanel.setDiceImage(diceImage);
+		this.imagesPanel.setBounds(0, 0, diceImage.getWidth(null), diceImage.getHeight(null));
 		this.repaint();
 	}
 
-	public void setDiceOneNumber(String diceNumber) {
-		diceOne.setText(diceNumber);
-	}
-
-
-	public void enableTo(final Player player, final DicesController dicesController, List<Casa> casas) {
+	public void enableTo(final Player player, final DicesController dicesController) {
 		if (this.buttonListener != null) {
-			this.button.removeActionListener(buttonListener);
+			this.lançarButton.removeActionListener(buttonListener);
 		}
 
 		this.buttonListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				
-				dicesController.roll(player, casas);
+				dicesController.roll(player);
 			}
 		};
-		this.button.addActionListener(buttonListener);
+		this.lançarButton.addActionListener(buttonListener);
 		
 		this.enablePanel();
 	}
 
 	public void disablePanel() {
-		this.button.setEnabled(false);
+		this.lançarButton.setEnabled(false);
 	}
 
 	private void enablePanel() {
-		this.button.setEnabled(true);
+		this.lançarButton.setEnabled(true);
 	}
 
 }

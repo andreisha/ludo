@@ -13,7 +13,8 @@ public class SpotFrontController {
 		this.spotControllers = spotControllers;
 	}
 
-	public void spotActivatedBy(Player player, TurnFinalizerController turnFinalizer, List<Casa> casas) {
-		spotControllers.get(player.getSpotNumber()).activatedBy(player, turnFinalizer, casas);
+	public void spotActivatedBy(Player player, TurnFinalizerController turnFinalizer) {
+		//spotControllers.get(player.getSpotNumber()).activatedBy(player, turnFinalizer);
+		spotControllers.get(0).activatedBy(player, turnFinalizer);
 	}
 }
