@@ -15,6 +15,10 @@ public class TokenPositionCalculator {
 	}
 	
 	public int getSpotNumberFromRelativeSpotNumber(int relativeSpotNumber, PlayerColor color) {
-		return spotsCalculation.getSpotNumber(relativeSpotNumber, color);
+		return spotsCalculation.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, color);
+	}
+	
+	public int getRelativeSpotNumberFromSpotNumber(int spotNumber, PlayerColor color) {
+		return spotsCalculation.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
 	}
 }

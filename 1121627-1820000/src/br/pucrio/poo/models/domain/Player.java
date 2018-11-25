@@ -1,12 +1,12 @@
 package br.pucrio.poo.models.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Observable;
+import br.pucrio.poo.utils.IObservable;
+import br.pucrio.poo.utils.IObserver;
 
 
-public class Player extends Observable {
+public class Player implements IObservable{
 
 	private static final int MAX_CONTINUED_ROLL = 2;
 	private final PlayerColor color;
@@ -14,21 +14,24 @@ public class Player extends Observable {
 	private int continuedRollCount = 0;
 	private String name;
 	private List<Pin> pins;	
+	private List<IObserver> observers = new ArrayList<IObserver>();
 
 	public Player(String name, PlayerColor color, int spotsQuantity) {
 		this.name = name;
 		this.color = color;
 		PinFactory pinFactory = new PinFactory(spotsQuantity);
 		this.pins = pinFactory.getPin(color);
+		this.dice = Dice.roll();
 	}
 
 	public void goForward(int steps, int spotNumber) {
 		for (Pin pin : pins) {
 			if(pin.getSpotNumber() == spotNumber) {				
 				pin.goForward(steps);
-				return;// move apenas o primeiro que achar na casa spotNumber
+				break;
 			}
-		}		
+		}	
+		notifyObservers();
 	}
 	
 	public List<Integer> getSpotNumbers() {
@@ -43,13 +46,15 @@ public class Player extends Observable {
 		return this.color;
 	}
 
-	public void rollDices() throws Exception {
-		this.dice = Dice.roll();
+	public void rollDices(){
+		this.dice = Dice.roll();	
+		
 		if (canPlayAgain()) {
 			continuedRollCount++;
 		} else {
 			continuedRollCount = 0;
 		}
+		notifyObservers();
 	}
 
 	public int getDicePoints() {
@@ -65,7 +70,7 @@ public class Player extends Observable {
 	}
 
 	public boolean canPlayAgain() {
-		return dice.getValue() == 6 ;
+		return dice.getValue() == 6 && !exceedContinuedRoll();
 	}
 
 	public boolean exceedContinuedRoll() {
@@ -79,5 +84,24 @@ public class Player extends Observable {
 
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public void registerObserver(IObserver observer) {
+		observers.add(observer);
+		
+	}
+
+	@Override
+	public void removeObserver(IObserver observer) {
+		observers.remove(observer);
+		
+	}
+
+	@Override
+	public void notifyObservers() {
+		for (IObserver observer : observers) {
+			observer.updateView(this);
+            }		
 	}
 }

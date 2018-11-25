@@ -13,10 +13,10 @@ import javax.swing.JPanel;
 public class DicesImagesPanel extends JPanel {
 	private Image diceImage;
 	private DicesPainter painter;
+	private Color playerColor;
 	
 	public DicesImagesPanel( ) {	
-		
-	this.painter = new DicesPainter();
+		this.painter = new DicesPainter();
 	}
 	
 	@Override
@@ -24,9 +24,7 @@ public class DicesImagesPanel extends JPanel {
 		super.paintComponent(g);
 		
         Graphics2D graphics = (Graphics2D)g.create();
-        
-        // Pegar a cor do próximo player a jogar
-        graphics.setPaint(Color.RED);
+        graphics.setPaint(playerColor);
         Rectangle2D rect = new Rectangle2D.Double(0, 0, getWidth(), getHeight());     
         graphics.fill(rect);
         
@@ -59,7 +57,12 @@ public class DicesImagesPanel extends JPanel {
 	public Image getDiceImage() {
 		return diceImage;
 	}
-	public void setDiceImage(Image dice1Image) {
-		this.diceImage = dice1Image;
+	
+	public void setDiceImage(Image diceImage) {
+		this.diceImage = diceImage;
+	}
+	
+	public void setPlayerColor(Color color) {
+		this.playerColor = color;
 	}
 }

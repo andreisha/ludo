@@ -5,6 +5,9 @@ import java.util.List;
 import br.pucrio.poo.models.TokenPositionCalculator;
 import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.Player;
+import br.pucrio.poo.models.domain.PlayerColor;
+import br.pucrio.poo.utils.IObserver;
+import br.pucrio.poo.models.BoardSpotsCalculations;
 import br.pucrio.poo.models.Position;
 import br.pucrio.poo.views.BoardPanel;
 import br.pucrio.poo.views.board.Token;
@@ -14,24 +17,30 @@ import br.pucrio.poo.views.board.TokenFactory;
 public class BoardController {
 	private Game game;
 	private TokenPositionCalculator tokenCalculator;
-	private BoardPanel boardPanel;
 	private ColorController colorController;
 	private TokenFactory tokenFactory;
+	private BoardSpotsCalculations spotsCalculation;
 	
-	public BoardController(Game game, TokenPositionCalculator tokenCalculator,BoardPanel boardPanel,
-			ColorController colorController, TokenFactory tokenFactory ) {
+	public BoardController(Game game, int width, int height) {
 		this.game = game;
-		this.tokenCalculator = tokenCalculator;
-		this.boardPanel = boardPanel;
-		this.colorController = colorController;
-		this.tokenFactory = tokenFactory;
+		this.colorController = new ColorController();
+		this.spotsCalculation = new BoardSpotsCalculations(width, height);
+		 this.tokenCalculator = new TokenPositionCalculator(spotsCalculation);
+		 this.tokenFactory = new TokenFactory(width/30);
 	}
 
 	public void update() {
-		boardPanel.repaint(getTokens()); // implementar observable
+		//boardPanel.repaint(getTokens());
 	}
+	
+	public void registerObserver(IObserver observer) {
+		List<Player> players = this.game.getPlayers();
+		for (Player player : players) {
+			player.registerObserver(observer);
+		}
+	}	
 
-	private List<Token> getTokens() {
+	public List<Token> getTokens() {
 		ArrayList<Token> tokens = new ArrayList<Token>();
 
 		for (int i = 0; i < this.game.getPlayers().size(); i++) {
@@ -54,8 +63,8 @@ public class BoardController {
 		return tokens;
 	}
 	
-	public BoardPanel getBoardPanel() {
-		return boardPanel;
+	public int getRelativeSpotNumberFromSpotNumber(int spotNumber, PlayerColor color) {
+		return spotsCalculation.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
 	}
-
+	
 }

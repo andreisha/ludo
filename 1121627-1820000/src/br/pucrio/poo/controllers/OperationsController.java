@@ -15,11 +15,8 @@ public class OperationsController {
 	private LoadGameButton loadGameButton;
 	private SaveGameButton saveGameButton;
 
-	public OperationsController(OperationsPanel operationsPanel, LoadGameController loadGameController,
+	public OperationsController(LoadGameController loadGameController,
 			NewGameController newGameController, SaveGameController saveGameController) {
-		this.loadGameButton = operationsPanel.getLoadGameButton();
-		this.newGameButton = operationsPanel.getNewGameButton();
-		this.saveGameButton = operationsPanel.getSaveGameButton();
 		this.saveGameController = saveGameController;
 		this.newGameController = newGameController;
 		this.loadGameController = loadGameController;
@@ -27,8 +24,8 @@ public class OperationsController {
 
 	public void enableTo(Player player) {
 
-		this.loadGameButton.setEnabled(false);
-		this.newGameButton.setEnabled(false);
-		this.saveGameButton.setEnabled(false);
+		//this.loadGameButton.setEnabled(false);
+		//this.newGameButton.setEnabled(false);
+		//this.saveGameButton.setEnabled(false);
 	}
 }

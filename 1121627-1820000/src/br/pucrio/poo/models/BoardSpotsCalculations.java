@@ -15,6 +15,10 @@ public class BoardSpotsCalculations {
 	Integer[] greenCircuit; 
 	Integer[] yellowCircuit;
 	Integer[] blueCircuit;
+	Integer[] initialRedSpots;
+	Integer[] initialBlueSpots;
+	Integer[] initialGreenSpots;
+	Integer[] initialYellowSpots;
 
 	public BoardSpotsCalculations(double boardWidth, double boardHeight) {
 		this.boardWidth = boardWidth;
@@ -24,6 +28,23 @@ public class BoardSpotsCalculations {
 	}
 	
 	public Position getSpotPosition(int relativeSpotNumber, PlayerColor color) {
+		
+		if(relativeSpotNumber < 0) {
+			relativeSpotNumber = Math.abs(relativeSpotNumber) -1;
+			switch (color) {
+			case RED:
+				return positionMap.get(initialRedSpots[relativeSpotNumber]);
+			case BLUE:
+				return positionMap.get(initialBlueSpots[relativeSpotNumber]);
+			case GREEN:
+				return positionMap.get(initialGreenSpots[relativeSpotNumber]);
+			case YELLOW:
+				return positionMap.get(initialYellowSpots[relativeSpotNumber]);
+			default:
+				return null;
+			}
+		}		
+		
 		switch (color) {
 		case RED:
 			return positionMap.get(redCircuit[relativeSpotNumber]);
@@ -38,7 +59,24 @@ public class BoardSpotsCalculations {
 		}
 	}
 	
-	public int getSpotNumber(int relativeSpotNumber, PlayerColor color) {
+	public int getSpotNumberFromRelativeSpotNumber(int relativeSpotNumber, PlayerColor color) {
+		
+		if(relativeSpotNumber < 0) {
+			relativeSpotNumber = Math.abs(relativeSpotNumber) -1;
+			switch (color) {
+			case RED:
+				return initialRedSpots[relativeSpotNumber];
+			case BLUE:
+				return initialBlueSpots[relativeSpotNumber];
+			case GREEN:
+				return initialGreenSpots[relativeSpotNumber];
+			case YELLOW:
+				return initialYellowSpots[relativeSpotNumber];
+			default:
+				return 0;
+			}
+		}
+		
 		switch (color) {
 		case RED:
 			return redCircuit[relativeSpotNumber];
@@ -53,6 +91,56 @@ public class BoardSpotsCalculations {
 		}
 	}
 	
+	public int getRelativeSpotNumberFromSpotNumber(int spotNumber, PlayerColor color) {
+		
+		if(isInitialSpot(spotNumber,color))
+			return -(getInitialSpotNumber(spotNumber,color) + 1);
+		
+		switch (color) {
+		case RED:			
+			return Arrays.asList(initialRedSpots).indexOf(spotNumber);
+		case BLUE:
+			return Arrays.asList(blueCircuit).indexOf(spotNumber);
+		case GREEN:
+			return Arrays.asList(greenCircuit).indexOf(spotNumber);
+		case YELLOW:
+			return Arrays.asList(yellowCircuit).indexOf(spotNumber);
+		default:
+			return 0;
+		}
+	}
+	
+	private boolean isInitialSpot(int spotNumber, PlayerColor color ) {
+		switch (color) {
+		case RED:
+			return Arrays.asList(initialRedSpots).contains(spotNumber);
+		case BLUE:
+			return Arrays.asList(initialBlueSpots).contains(spotNumber);
+		case GREEN:
+			return Arrays.asList(initialGreenSpots).contains(spotNumber);
+		case YELLOW:
+			return Arrays.asList(initialYellowSpots).contains(spotNumber);
+		default:
+			return false;
+		}
+	}
+	
+	private int getInitialSpotNumber(int spotNumber, PlayerColor color ) {
+		switch (color) {
+		case RED:
+			return Arrays.asList(initialRedSpots).indexOf(spotNumber);
+		case BLUE:
+			return Arrays.asList(initialBlueSpots).indexOf(spotNumber);
+		case GREEN:
+			return Arrays.asList(initialGreenSpots).indexOf(spotNumber);
+		case YELLOW:
+			return Arrays.asList(initialYellowSpots).indexOf(spotNumber);
+		default:
+			return 0;
+		}
+	}
+	
+	
 	private void InitializeMaps() {
 		InitializePositionMap();
 		InitializeRedCircuit();
@@ -62,44 +150,52 @@ public class BoardSpotsCalculations {
 	}
 
 	private void InitializeRedCircuit() {
-		redCircuit = new Integer[]{72,73,74,75, //casas iniciais
+		redCircuit = new Integer[]{
 				                   1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 				                  11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
 				                  21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
 				                  31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 				                  41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
 				                  51, 52, 53, 54, 55, 56}; 
+		
+		initialRedSpots = new Integer[] {72,73,74,75};
 	}
 	
 	private void InitializeGreenCircuit() {
-		greenCircuit = new Integer[] {76,77,78,79,//casas iniciais
+		greenCircuit = new Integer[] {
 				14, 15, 16, 17, 18, 19, 20,
                 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
                 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
                 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
                 51, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
                 57, 58, 59, 60, 61};
+		
+		initialGreenSpots = new Integer[] {76,77,78,79};
 	}
 	
 	private void InitializeYellowCircuit() {
-		yellowCircuit = new Integer[] { 80,81,82,83, //casas iniciais
+		yellowCircuit = new Integer[] {
 				27, 28, 29, 30,
                 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
                 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
                 51, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
                 11, 12,13, 14, 15, 16, 17, 18, 19, 20,
-                21, 22, 23, 24, 25, 62, 63, 64, 65, 66};		
+                21, 22, 23, 24, 25, 62, 63, 64, 65, 66};
+		
+		initialYellowSpots = new Integer[] {80,81,82,83};
 	}	
 	
 	private void InicializeBlueCircuit() {
-		blueCircuit = new Integer[] {84,85,86,87, 
+		blueCircuit = new Integer[] { 
 				40,
                 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
                 51, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
                 11, 12,13, 14, 15, 16, 17, 18, 19, 20,
                 21, 22, 23, 24, 25,26, 27, 28, 29, 30,
                 31, 32, 33, 34, 35, 36, 37, 38, 67, 68,
-                69, 70, 71};// 4 últimos são as casas iniciais
+                69, 70, 71};
+		
+		initialBlueSpots = new Integer[] {84,85,86,87};
 	}
 	
 	private void InitializePositionMap(){

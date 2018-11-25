@@ -20,23 +20,14 @@ public class PlayerWalkController {
 		this.game = game;
 	}
 	
-	public void playerWalk(Player player, int spotNumber) {
-		int steps = player.getDicePoints();
-		
-		player.goForward(steps,spotNumber);
-		boardController.update();
-		
-		this.spotFrontController.spotActivatedBy(player, turnFinalizer);
-	}
-	
 	public void playerWalk(PlayerColor color, int spotNumber) {
 		//Player player = null;
 		for (Player player : game.getPlayers()) {
 			if(player.getColor() == color) {
-				int steps = player.getDicePoints();				
-				player.goForward(steps,spotNumber);
-				boardController.update();
-				this.spotFrontController.spotActivatedBy(player, turnFinalizer);
+				int steps = player.getDicePoints();	
+				int relativeSpotNumber = boardController.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
+				player.goForward(steps,relativeSpotNumber);
+				//this.spotFrontController.spotActivatedBy(player, turnFinalizer);
 			}				
 		}			
 	}

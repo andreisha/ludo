@@ -5,10 +5,12 @@ public class Pin {
 	private int spotNumber;
 	private int spotsQuantity;
 	private boolean atHome;
+	private int initialSpotNumber;
 
 	public Pin(int spotsQuantity, int spotNumber) {
 		this.spotsQuantity = spotsQuantity;
 		this.spotNumber = spotNumber;
+		this.initialSpotNumber = spotNumber;
 		atHome = true;
 	}
 
@@ -18,7 +20,7 @@ public class Pin {
 
 	public void goForward(int steps) {
 		if(isAtHome()) {
-			this.spotNumber = steps;
+			this.spotNumber = steps-1;
 			atHome = false;
 		}
 		
@@ -26,6 +28,11 @@ public class Pin {
 			this.spotNumber += steps;
 		}
 	}
+	
+	public void goToHome() {
+		spotNumber = initialSpotNumber;
+	}
+	
 	
 	public boolean isAtHome() {
 		return atHome;
