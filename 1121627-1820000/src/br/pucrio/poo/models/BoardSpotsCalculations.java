@@ -98,7 +98,7 @@ public class BoardSpotsCalculations {
 		
 		switch (color) {
 		case RED:			
-			return Arrays.asList(initialRedSpots).indexOf(spotNumber);
+			return Arrays.asList(redCircuit).indexOf(spotNumber);
 		case BLUE:
 			return Arrays.asList(blueCircuit).indexOf(spotNumber);
 		case GREEN:

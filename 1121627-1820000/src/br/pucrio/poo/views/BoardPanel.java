@@ -14,11 +14,12 @@ import javax.swing.JPanel;
 import br.pucrio.poo.controllers.BoardController;
 import br.pucrio.poo.controllers.ColorController;
 import br.pucrio.poo.controllers.PlayerWalkController;
+import br.pucrio.poo.utils.IMoveObserver;
 import br.pucrio.poo.utils.IObserver;
 import br.pucrio.poo.views.board.Casa;
 import br.pucrio.poo.views.board.Token;
 
-public class BoardPanel extends JPanel implements IObserver {
+public class BoardPanel extends JPanel implements IMoveObserver {
 	private BoardPainter painter;
 	private List<Token> tokens;
 	private MouseListener mouseListener;
@@ -45,6 +46,7 @@ public class BoardPanel extends JPanel implements IObserver {
 			    		for (Token token : tokens) {
 			    			if(token.getSpotNumber() == casa.getNum()) {
 			    				playerWalkController.playerWalk(colorController.getPlayerColorFromColor(token.getColor()),token.getSpotNumber());
+			    				return;			    			
 			    			}
 						}
 			    	}

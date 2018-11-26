@@ -2,11 +2,16 @@ package br.pucrio.poo.models.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.pucrio.poo.utils.IMoveObservable;
+import br.pucrio.poo.utils.IMoveObserver;
 import br.pucrio.poo.utils.IObservable;
 import br.pucrio.poo.utils.IObserver;
+import br.pucrio.poo.utils.IResultObservable;
+import br.pucrio.poo.utils.IResultObserver;
 
 
-public class Player implements IObservable{
+public class Player implements IMoveObservable, IResultObservable{
 
 	private static final int MAX_CONTINUED_ROLL = 2;
 	private static final int MUST_LEAVE_STEPS = 5;
@@ -15,7 +20,8 @@ public class Player implements IObservable{
 	private int continuedRollCount = 0;
 	private String name;
 	private List<Pin> pins;	
-	private List<IObserver> observers = new ArrayList<IObserver>();
+	private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
+	private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
 
 	public Player(String name, PlayerColor color, int spotsQuantity) {
 		this.name = name;
@@ -31,7 +37,7 @@ public class Player implements IObservable{
 			return;		
 		int steps = getDicePoints();		
 		pin.goForward(steps);
-		notifyObservers();
+		notifyMoveObservers();
 	}
 	
 	private Pin getPinAtSpot(int spotNumber) {
@@ -65,7 +71,7 @@ public class Player implements IObservable{
 		} else {
 			continuedRollCount = 0;
 		}
-		notifyObservers();
+		notifyResultObservers();
 	}
 
 	public int getDicePoints() {
@@ -122,13 +128,24 @@ public class Player implements IObservable{
 		if(shouldLeaveHome()) {
 			Pin pinAtHome = getPinAtHome();
 			pinAtHome.leaveHome();
+			notifyMoveObservers();
 		}
+	}
+	
+	public boolean isHomeSpot(int spotNumber) {
+		return spotNumber < 0;
 	}
 	
 	public boolean canMove(int spotNumber) {
 		Pin pin = getPinAtSpot(spotNumber);
 		
 		if(pin==null)
+			return false;
+		
+		boolean isAtHome = pin.isAtHome();
+		int steps = getDicePoints();
+		boolean isInitialSpotBloqued = isInitialSpotBloqued();
+		if(isAtHome && (steps != MUST_LEAVE_STEPS || isInitialSpotBloqued))
 			return false;
 		
 		return true;
@@ -148,21 +165,36 @@ public class Player implements IObservable{
 	}
 
 	@Override
-	public void registerObserver(IObserver observer) {
-		observers.add(observer);
-		
+	public void registerMoveObserver(IObserver observer) {
+		moveObservers.add((IMoveObserver)observer);		
 	}
 
 	@Override
-	public void removeObserver(IObserver observer) {
-		observers.remove(observer);
-		
+	public void removeMoveObserver(IObserver observer) {
+		moveObservers.remove(observer);		
 	}
 
 	@Override
-	public void notifyObservers() {
-		for (IObserver observer : observers) {
+	public void notifyMoveObservers() {
+		for (IMoveObserver observer : moveObservers) {
 			observer.updateView(this);
-            }		
+		}
+	}
+
+	@Override
+	public void registerResultObserver(IObserver observer) {
+		resultObservers.add((IResultObserver)observer);		
+	}
+
+	@Override
+	public void removeResultObserver(IObserver observer) {
+		resultObservers.remove(observer);		
+	}
+
+	@Override
+	public void notifyResultObservers() {
+		for (IResultObserver observer : resultObservers) {
+			observer.updateView(this);
+		}
 	}
 }

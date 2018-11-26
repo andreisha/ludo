@@ -26,15 +26,18 @@ public class PlayerWalkController {
 		if(player == null)
 			return;
 		
-		if(canLeaveHome(player)) {
-			player.leaveHome();
+		int relativeSpotNumber = boardController.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
+		
+		if (player.isHomeSpot(relativeSpotNumber)) {
+			if (canLeaveHome(player)) {
+				player.leaveHome();				
+			}
 			return;
 		}
 		
 		if(!canMove(player,spotNumber))
-			return;
+			return;		
 		
-		int relativeSpotNumber = boardController.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
 		player.goForward(relativeSpotNumber);					
 	}
 	
@@ -54,10 +57,11 @@ public class PlayerWalkController {
 	}
 
 	private boolean canMove(Player player, int spotNumber) {				
-		if(!player.canMove(spotNumber))
-			return false;
-		
 		int relativeSpotNumber = boardController.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
+		
+		if(!player.canMove(relativeSpotNumber))
+			return false;
+				
 		int steps = player.getDicePoints();
 		int targetSpot = relativeSpotNumber + steps;
 		

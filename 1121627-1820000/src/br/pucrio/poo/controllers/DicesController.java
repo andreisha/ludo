@@ -25,7 +25,7 @@ public class DicesController {
 	}
 
 	public void enableRolling(Player player) {
-		player.notifyObservers();
+		player.notifyResultObservers();
 	}
 
 	public void roll(Player player) {
@@ -51,7 +51,7 @@ public class DicesController {
 	public void registerObserver(IObserver observer) {
 		List<Player> players = this.game.getPlayers();
 		for (Player player : players) {
-			player.registerObserver(observer);
+			player.registerResultObserver(observer);
 		}
 	}
 }

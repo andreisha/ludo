@@ -32,7 +32,7 @@ public class BoardController {
 	public void registerObserver(IObserver observer) {
 		List<Player> players = this.game.getPlayers();
 		for (Player player : players) {
-			player.registerObserver(observer);
+			player.registerMoveObserver(observer);
 		}
 	}	
 
@@ -96,13 +96,14 @@ public class BoardController {
 			for (int relativeSpotNumber : player.getSpotNumbers()) {
 				int spotNumber = tokenCalculator.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, player.getColor());
 				
-				if(spotNumber == spot)
+				if(spotNumber == spot) {
 					pinsAtSpot++;
+					
+					if(pinsAtSpot > 1)
+						return true;
+				}
 			}
-		}
-		if(pinsAtSpot > 1)
-			return true;
-		
+		}		
 		return false;
 	}
 	
