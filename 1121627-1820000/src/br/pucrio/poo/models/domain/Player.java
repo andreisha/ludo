@@ -9,6 +9,7 @@ import br.pucrio.poo.utils.IObserver;
 public class Player implements IObservable{
 
 	private static final int MAX_CONTINUED_ROLL = 2;
+	private static final int MUST_LEAVE_STEPS = 5;
 	private final PlayerColor color;
 	private Dice dice;
 	private int continuedRollCount = 0;
@@ -24,14 +25,21 @@ public class Player implements IObservable{
 		this.dice = Dice.roll();
 	}
 
-	public void goForward(int steps, int spotNumber) {
-		for (Pin pin : pins) {
-			if(pin.getSpotNumber() == spotNumber) {				
-				pin.goForward(steps);
-				break;
-			}
-		}	
+	public void goForward(int spotNumber) {
+		Pin pin = getPinAtSpot(spotNumber);		
+		if(pin==null)
+			return;		
+		int steps = getDicePoints();		
+		pin.goForward(steps);
 		notifyObservers();
+	}
+	
+	private Pin getPinAtSpot(int spotNumber) {
+		for (Pin pin : pins) {
+			if(pin.getSpotNumber() == spotNumber)
+				return pin;
+		}
+		return null;
 	}
 	
 	public List<Integer> getSpotNumbers() {
@@ -47,7 +55,10 @@ public class Player implements IObservable{
 	}
 
 	public void rollDices(){
-		this.dice = Dice.roll();	
+		this.dice = Dice.roll();
+		
+		if(shouldLeaveHome())
+			leaveHome();
 		
 		if (canPlayAgain()) {
 			continuedRollCount++;
@@ -71,6 +82,56 @@ public class Player implements IObservable{
 
 	public boolean canPlayAgain() {
 		return dice.getValue() == 6 && !exceedContinuedRoll();
+	}
+	
+	public boolean isInitialSpotBloqued() {
+		int pinsAtInitialSpot = 0;
+		
+		for (Pin pin : pins) {
+			if(pin.isAtInitialSpot())
+				pinsAtInitialSpot++;
+		}
+		
+		if(pinsAtInitialSpot > 1)
+			return true;
+		
+		return false;
+	}
+	
+	public boolean anyPinAtHome() {
+		for (Pin pin : pins) {
+			if(pin.isAtHome())
+				return true;
+		}
+		return false;
+	}
+	
+	public Pin getPinAtHome() {
+		for (Pin pin : pins) {
+			if(pin.isAtHome())
+				return pin;
+		}
+		return null;
+	}
+	
+	public boolean shouldLeaveHome() {
+		return getDicePoints() == MUST_LEAVE_STEPS && anyPinAtHome() && !isInitialSpotBloqued();
+	}
+	
+	public void leaveHome() {		
+		if(shouldLeaveHome()) {
+			Pin pinAtHome = getPinAtHome();
+			pinAtHome.leaveHome();
+		}
+	}
+	
+	public boolean canMove(int spotNumber) {
+		Pin pin = getPinAtSpot(spotNumber);
+		
+		if(pin==null)
+			return false;
+		
+		return true;
 	}
 
 	public boolean exceedContinuedRoll() {

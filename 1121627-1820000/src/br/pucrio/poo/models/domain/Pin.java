@@ -1,7 +1,8 @@
 package br.pucrio.poo.models.domain;
 
 public class Pin {
-
+	
+	private static final int INITIAL_SPOT = 0;
 	private int spotNumber;
 	private int spotsQuantity;
 	private boolean atHome;
@@ -20,7 +21,7 @@ public class Pin {
 
 	public void goForward(int steps) {
 		if(isAtHome()) {
-			this.spotNumber = steps-1;
+			this.spotNumber = INITIAL_SPOT;
 			atHome = false;
 		}
 		
@@ -36,6 +37,14 @@ public class Pin {
 	
 	public boolean isAtHome() {
 		return atHome;
+	}
+	
+	public boolean isAtInitialSpot(){
+		return spotNumber == initialSpotNumber;
+	}
+	
+	public void leaveHome() {
+		spotNumber = initialSpotNumber;
 	}
 
 	public boolean isFinalized() {

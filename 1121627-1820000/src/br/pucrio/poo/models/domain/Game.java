@@ -12,12 +12,10 @@ public class Game {
 
 	private List<Player> players;
 	private int currentIndex;
-	private Board board;
 
-	private Game(List<Player> players, Board board) {
+	private Game(List<Player> players) {
 		this.currentIndex = 0;
 		this.players = players;
-		this.board = board;
 	}
 
 	public Player currentPlayer() {
@@ -31,8 +29,6 @@ public class Game {
 	
 	public static Game getInstance(final int boardWidth, final int boardHeight) {
 		if (instance == null) {
-			Board board = new Board(SPOTS_QUANTITY);
-
 			// initializing models
 			List<Player> players = Arrays.asList(
 					new Player("Player 0", PlayerColor.RED, SPOTS_QUANTITY),
@@ -40,7 +36,7 @@ public class Game {
 					new Player("Player 2", PlayerColor.YELLOW, SPOTS_QUANTITY),
 					new Player("Player 3", PlayerColor.BLUE, SPOTS_QUANTITY));		
 			 
-	    	instance = new Game(players, board);
+	    	instance = new Game(players);
 		}
 
 		return instance;
@@ -49,9 +45,4 @@ public class Game {
 	public List<Player> getPlayers() {
 		return new ArrayList<Player>(players);
 	}
-
-	public Board getBoard() {
-		return board;
-	}
-
 }
