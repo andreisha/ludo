@@ -28,10 +28,6 @@ public class BoardController {
 		 this.tokenCalculator = new TokenPositionCalculator(spotsCalculation);
 		 this.tokenFactory = new TokenFactory(width/30);
 	}
-
-	public void update() {
-		//boardPanel.repaint(getTokens());
-	}
 	
 	public void registerObserver(IObserver observer) {
 		List<Player> players = this.game.getPlayers();

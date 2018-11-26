@@ -29,7 +29,7 @@ public class TurnFinalizerController {
 		this.game.endPlayerTurn();
 		Player currentPlayer = this.game.currentPlayer();
 
-		this.boardController.update();
+		//this.boardController.update();
 		return currentPlayer;
 	}
 

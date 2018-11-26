@@ -37,6 +37,9 @@ public class DicesController {
 	}
 	
 	public Image getDiceImage(Player player) {
+		if(player.getDice() == null)
+			return null;
+		
 		int diceResult = player.getDiceResult();
 		return getDiceImage(diceResult);
 	}

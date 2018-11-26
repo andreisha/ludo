@@ -50,6 +50,8 @@ public class DicesImagesPanel extends JPanel {
     }
 	
 	public void repaint(Image dice1Image) {
+		if(diceImage == null)
+			return;
 		this.setBounds(0, 0, diceImage.getWidth(null), diceImage.getHeight(null));
 		this.repaint();
 	}

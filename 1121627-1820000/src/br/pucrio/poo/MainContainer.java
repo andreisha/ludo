@@ -36,33 +36,34 @@ public class MainContainer {
 
 	public static void main(String[] args) {
 		Game game = Game.getInstance(BOARD_WIDTH, BOARD_HEIGHT);
-		Board board = game.getBoard();		
-		
-		// initializing controllers		
-		BoardController boardController = new BoardController(game,BOARD_WIDTH, BOARD_HEIGHT);
+		Board board = game.getBoard();
+
+		// initializing controllers
+		BoardController boardController = new BoardController(game, BOARD_WIDTH, BOARD_HEIGHT);
 		TurnFinalizerController turnFinalizer = new TurnFinalizerController(boardController, game);
 		SpotFrontController spotFrontController = new SpotFrontController(new ArrayList<SpotController>());
-		PlayerWalkController walkController = new PlayerWalkController(boardController, turnFinalizer,spotFrontController, game);
+		PlayerWalkController walkController = new PlayerWalkController(boardController, turnFinalizer,
+				spotFrontController, game);
 		DicesController dicesController = new DicesController(game, walkController, turnFinalizer);
 
 		NewGameController newGameController = new NewGameController();
-		LoadGameController loadGameController = new LoadGameController();		
+		LoadGameController loadGameController = new LoadGameController();
 		SaveGameController saveGameController = new SaveGameController();
-		OperationsController operationsController = new OperationsController(loadGameController,newGameController, saveGameController);
+		OperationsController operationsController = new OperationsController(loadGameController, newGameController,
+				saveGameController);
 
-		TurnInitializerController turnInitializer = new TurnInitializerController(dicesController,operationsController);
+		TurnInitializerController turnInitializer = new TurnInitializerController(dicesController,
+				operationsController);
 		turnFinalizer.setTurnInitializer(turnInitializer);
-		
-		// initializing views
-				BoardPainter painter = new BoardPainter(BOARD_WIDTH, BOARD_HEIGHT, TOKEN_RADIUS);
-				BoardPanel boardPanel = new BoardPanel(painter, BOARD_WIDTH, BOARD_HEIGHT,boardController,walkController);
-				DicesPainter dicesPainter = new DicesPainter();
-				DicesPanel dicesPanel = new DicesPanel(dicesController);
-				OperationsPanel operationsPanel = new OperationsPanel();
-				MainWindow window = new MainWindow(boardPanel, dicesPanel, operationsPanel);
 
-		window.setVisible(true);
-		boardController.update();
+		// initializing views		
+		BoardPanel boardPanel = new BoardPanel(BOARD_WIDTH, BOARD_HEIGHT,TOKEN_RADIUS, boardController, walkController);
+		DicesPanel dicesPanel = new DicesPanel(dicesController);
+		OperationsPanel operationsPanel = new OperationsPanel();
+		MainWindow window = new MainWindow(boardPanel, dicesPanel, operationsPanel);
+		
+		// boardController.update();
 		turnInitializer.startTurnOf(game.currentPlayer());
+		window.setVisible(true);
 	}
 }

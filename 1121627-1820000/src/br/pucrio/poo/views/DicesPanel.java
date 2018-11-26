@@ -60,9 +60,11 @@ public class DicesPanel extends JPanel implements IObserver{
 	}
 	
 	public void repaint(Image diceImage, Color playerColor) {
-		this.imagesPanel.setDiceImage(diceImage);
 		this.imagesPanel.setPlayerColor(playerColor);
-		this.imagesPanel.setBounds(0, 0, diceImage.getWidth(null), diceImage.getHeight(null));
+		if (diceImage != null) {
+			this.imagesPanel.setDiceImage(diceImage);
+			this.imagesPanel.setBounds(0, 0, diceImage.getWidth(null), diceImage.getHeight(null));
+		}
 		this.repaint();
 	}
 

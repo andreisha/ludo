@@ -25,8 +25,8 @@ public class BoardPanel extends JPanel implements IObserver {
 	private BoardController boardController;
 	private PlayerWalkController playerWalkController;
 
-	public BoardPanel(BoardPainter painter, int width, int height, BoardController boardController,PlayerWalkController playerWalkController) {
-		this.painter = painter;
+	public BoardPanel(int width, int height, int tokenRadius, BoardController boardController,PlayerWalkController playerWalkController) {
+		this.painter = new BoardPainter(width, height, tokenRadius);
 		this.tokens = new ArrayList<Token>();
 		this.setPreferredSize(new Dimension(width, height));
 		ColorController colorController = new ColorController();
