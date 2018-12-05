@@ -1,3 +1,4 @@
+
 package br.pucrio.poo.utils;
 
 public interface IObservable {

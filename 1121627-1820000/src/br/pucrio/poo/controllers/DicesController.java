@@ -29,6 +29,7 @@ public class DicesController {
 	}
 
 	public void roll(Player player) throws Exception {
+
 		player.rollDices();
 		
 		if (!player.canPlayAgain()) {
@@ -42,6 +43,7 @@ public class DicesController {
 			turnFinalizer.finalizeTurn();
 		} 
 	}
+
 	public Image getDiceImage(Player player) {
 		if(player.getDice() == null)
 			return null;
@@ -60,4 +62,5 @@ public class DicesController {
 			player.registerResultObserver(observer);
 		}
 	}
+
 }

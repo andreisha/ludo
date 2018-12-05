@@ -64,6 +64,7 @@ public class DicesImagesPanel extends JPanel {
 		this.diceImage = diceImage;
 	}
 	
+	
 	public void setPlayerColor(Color color) {
 		this.playerColor = color;
 	}

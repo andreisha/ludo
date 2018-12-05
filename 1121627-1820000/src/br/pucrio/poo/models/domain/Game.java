@@ -17,6 +17,7 @@ public class Game {
 	private BoardSpotsCalculations boardCalculation;
 
 	private Game(List<Player> players, final int boardWidth, final int boardHeight) {
+
 		this.currentIndex = 0;
 		this.players = players;
 		this.boardCalculation = new BoardSpotsCalculations(boardWidth, boardHeight);
@@ -42,13 +43,13 @@ public class Game {
 			 
 	    	instance = new Game(players, boardWidth, boardHeight);
 		}
-
 		return instance;
 	}
 
 	public List<Player> getPlayers() {
 		return new ArrayList<Player>(players);
 	}
+
 
 	public boolean canMove(int spotNumber) {
 		Player player = this.currentPlayer();
@@ -69,3 +70,5 @@ public class Game {
 		// se captura, go20Forward(relativeSpotnumber DO PIN Q TEM Q SE MOVIMENTAR)
 	}
 }
+
+

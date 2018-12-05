@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,6 +28,7 @@ public class DicesPanel extends JPanel implements IResultObserver{
 	private JButton lançarButton4;	
 	private JButton lançarButton5;	
 	private JButton lançarButton6;	
+
 	private DicesImagesPanel imagesPanel;
 	private ActionListener buttonListener;
 	private ActionListener buttonListener1;
@@ -40,6 +42,7 @@ public class DicesPanel extends JPanel implements IResultObserver{
 	DicesController dicesController;
 	ColorController colorController;
 	PlayerWalkController playerController;
+
 	
 	public DicesPanel(DicesController dicesController) {
 		this.imagesPanel = new DicesImagesPanel();		
@@ -122,8 +125,10 @@ public class DicesPanel extends JPanel implements IResultObserver{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 			}
 		};
+
 		
 		this.buttonListener1 = new ActionListener() {
 			@Override
@@ -210,6 +215,7 @@ public class DicesPanel extends JPanel implements IResultObserver{
 		//disablePanel();
 		
 
+		this.enablePanel();
 	}
 
 	public void disablePanel() {

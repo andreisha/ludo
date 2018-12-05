@@ -14,7 +14,7 @@ public enum Dice {
 	public static Dice roll(int numero) {
 		return from(numero);
 	}
-	
+
 	public static Dice from(int number) {
 		switch (number) {
 		case 1:

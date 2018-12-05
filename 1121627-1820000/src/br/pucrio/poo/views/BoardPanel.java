@@ -27,12 +27,15 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 	private BoardController boardController;
 	private PlayerWalkController playerController;
 
+
 	public BoardPanel(int width, int height, int tokenRadius, BoardController boardController,PlayerWalkController playerWalkController) {
 		this.painter = new BoardPainter(width, height, tokenRadius);
 		this.tokens = new ArrayList<Token>();
 		this.setPreferredSize(new Dimension(width, height));
 		ColorController colorController = new ColorController();
+
 		this.playerController = playerWalkController;
+
 		this.boardController = boardController;
 		boardController.registerObserver(this);
 		

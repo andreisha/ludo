@@ -43,13 +43,25 @@ public class PlayerWalkController {
 		game.movePlayer(spotNumber);
 		
 		
+		if (player.isHomeSpot(relativeSpotNumber)) {
+			if (canLeaveHome(player)) {
+				player.leaveHome();				
+			}
+			return;
+		}
+		
+		if(!canMove(player,spotNumber))
+			return;		
+		
+		player.goForward(relativeSpotNumber);					
+
 	}
 	
 	private boolean canLeaveHome(Player player) {
 		if(!player.shouldLeaveHome())
 			return false;
 		
-		//verificar se não pode posicionar um peão na casa de saída
+		//verificar se n�o pode posicionar um pe�o na casa de sa�da
 		if(isInitialSpotBloqued(player))
 			return false;
 		
@@ -63,7 +75,7 @@ public class PlayerWalkController {
 	private boolean canMove(Player player, int spotNumber) {				
 		int relativeSpotNumber = boardController.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
 		
-		if(!game.canMove(spotNumber))
+		if(!player.canMove(relativeSpotNumber))
 			return false;
 				
 		int steps = player.getDicePoints();
@@ -90,6 +102,8 @@ public class PlayerWalkController {
 	private boolean isPlayerTurn(PlayerColor color) {
 		 return color == game.currentPlayer().getColor();
 	}
+	
+	
 	public boolean isPlayerTurn(Player player) {
 		 return player == game.currentPlayer();
 	}

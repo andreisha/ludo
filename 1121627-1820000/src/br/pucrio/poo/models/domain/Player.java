@@ -41,6 +41,7 @@ public class Player implements IMoveObservable, IResultObservable{
 		notifyMoveObservers();
 	}
 	
+
 	public void go20Forward(int spotNumber) {
 		Pin pin = getPinAtSpot(spotNumber);		
 		if(pin==null)
@@ -49,7 +50,7 @@ public class Player implements IMoveObservable, IResultObservable{
 		pin.goForward(steps);
 		notifyMoveObservers();
 	}
-	
+
 	private Pin getPinAtSpot(int spotNumber) {
 		for (Pin pin : pins) {
 			if(pin.getSpotNumber() == spotNumber)
@@ -70,9 +71,10 @@ public class Player implements IMoveObservable, IResultObservable{
 		return this.color;
 	}
 
-	public void rollDices() throws Exception{
-		this.dice = this.dice.roll();
-		
+
+	public void rollDices(){
+		this.dice = Dice.roll();
+	
 		if(shouldLeaveHome())
 			leaveHome();
 		
@@ -84,7 +86,7 @@ public class Player implements IMoveObservable, IResultObservable{
 		notifyResultObservers();
 	}
 	public void rollDices(int numero) throws Exception{
-		this.dice = this.dice.roll(numero);
+		this.dice = Dice.roll(numero);
 		
 		if(shouldLeaveHome())
 			leaveHome();
@@ -171,9 +173,12 @@ public class Player implements IMoveObservable, IResultObservable{
 		if(isAtHome && (steps != MUST_LEAVE_STEPS || isInitialSpotBloqued))
 			return false;
 		if (pin.getSpotNumber() + steps > 56 ) return false;
-		
-		return true;
+
+		return getDicePoints() == MUST_LEAVE_STEPS && anyPinAtHome() && !isInitialSpotBloqued();
 	}
+	
+
+
 
 	public boolean exceedContinuedRoll() {
 		return continuedRollCount >= MAX_CONTINUED_ROLL;
