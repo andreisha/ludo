@@ -1,10 +1,6 @@
 package br.pucrio.poo.controllers;
-
-import java.util.List;
-
 import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.Player;
-import br.pucrio.poo.views.board.*;
 public class TurnFinalizerController {
 
 	private BoardController boardController;
@@ -33,7 +29,7 @@ public class TurnFinalizerController {
 		this.game.endPlayerTurn();
 		Player currentPlayer = this.game.currentPlayer();
 
-		this.boardController.update();
+		//this.boardController.update();
 		return currentPlayer;
 	}
 

@@ -7,11 +7,15 @@ public enum Dice {
 
 	private int value;
 
-	public static Dice roll() throws Exception {
+	public static Dice roll() {
 		return from(new Random().nextInt(6) + 1);
 	}
 
-	public static Dice from(int number) throws Exception {
+	public static Dice roll(int numero) {
+		return from(numero);
+	}
+	
+	public static Dice from(int number) {
 		switch (number) {
 		case 1:
 			return ONE;
@@ -26,7 +30,7 @@ public enum Dice {
 		case 6:
 			return SIX;
 		default:
-			throw new Exception("Número inválido.");
+			return SIX;
 		}
 	}
 

@@ -137,24 +137,6 @@ public class BoardPainter {
 		return casas;	
 	}
 
-	/*public void paintBoard(Graphics2D graphics) {
-
-		 desenho das casas iniciais 
-		paintInicialArea(graphics);
-
-		// desenho das casas horizontais 
-		paintHorizontalSquares(graphics);
-		 
-		// desenho das casas brancas verticais 		
-		paintVerticalSquares(graphics);
-
-		// desenho dos triangulos centrais 
-		paintCentralTriangles(graphics);
-		
-		// desenho dos circulos dos retangulos 				
-		paintInitialSquares(graphics);		
-	}*/
-
 	private void paintInitialSquares(Graphics2D graphics) {
 		Casa casa = null;
 		for (int x = 0; x < 14; x++) {

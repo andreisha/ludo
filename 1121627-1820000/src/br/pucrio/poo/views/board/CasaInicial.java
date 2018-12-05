@@ -13,7 +13,8 @@ public class CasaInicial extends Casa {
 
 	public CasaInicial(int x_min, int x_max, int y_min, int y_max, Color color, int width, int heigth, int num_casa) {
 		super(x_min, x_max, y_min, y_max, color, width, heigth, num_casa);
-
+//precisa definir construtor com so esses argumentos?
+		
 	}
 
 	public void paintCasa(Graphics2D graphics) {
@@ -26,7 +27,7 @@ public class CasaInicial extends Casa {
 
 		paintToken(graphics);
 		
-		// temporário
+		// temporï¿½rio
 		paintSpotNum(graphics);
 	}
 

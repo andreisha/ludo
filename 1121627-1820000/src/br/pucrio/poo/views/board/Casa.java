@@ -103,7 +103,7 @@ public class Casa {
 		graphics.setPaint(this.getColor());
 		graphics.fill(casainicial);	
 		
-		// temporário
+		// temporï¿½rio
 		paintSpotNum(graphics);
 	}
 

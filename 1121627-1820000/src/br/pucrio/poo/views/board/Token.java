@@ -41,11 +41,25 @@ public class Token {
 	
 	public void paintToken(Graphics2D graphics) {
 
-		Ellipse2D token = new Ellipse2D.Double(x + radius/2, y + radius/2, radius, radius);
+		Ellipse2D token = new Ellipse2D.Double(x + 1.5*radius/4, y+ 1.5*radius/4, radius*1.2, radius*1.2);
 		graphics.setPaint(Color.BLACK);
 		graphics.draw(token);
 		graphics.setPaint(this.getColor());
 		graphics.fill(token);
 	}
+	public void paintTokenDouble(Graphics2D graphics, boolean sameColor) {
 
+		if (sameColor == true) {
+			Ellipse2D token = new Ellipse2D.Double(x + radius/8, y+ radius/8, radius*7/4, radius*7/4);
+			graphics.setPaint(this.getColor());
+			graphics.draw(token);
+		}
+		else {
+			Ellipse2D token = new Ellipse2D.Double(x + 2.2*radius/4, y+ 2.2*radius/4, radius*0.8, radius*0.8);
+			graphics.setPaint(Color.BLACK);
+			graphics.draw(token);
+			graphics.setPaint(this.getColor());
+			graphics.fill(token);
+		}
+	}
 }
