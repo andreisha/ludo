@@ -3,12 +3,21 @@ import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.PlayerColor;
 
 public class PlayerWalkController {
+	private static PlayerWalkController instance;
+	
 	private TurnFinalizerController turnFinalizer;
 	private Game game;
 	
-	public PlayerWalkController(TurnFinalizerController turnFinalizer, Game game) {
+	private PlayerWalkController(TurnFinalizerController turnFinalizer, Game game) {
 		this.turnFinalizer = turnFinalizer;
 		this.game = game;
+	}
+	
+	public static PlayerWalkController getInstance(TurnFinalizerController turnFinalizer, Game game){
+		if (instance == null) {			 
+	    	instance = new PlayerWalkController(turnFinalizer, game);
+		}
+		return instance;
 	}
 	
 	public void playerWalk(PlayerColor color, int spotNumber) {

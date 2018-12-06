@@ -16,12 +16,16 @@ public class Game {
 
 	private List<Player> players;
 	private int currentIndex;
+	private int boardWidth;
+	private int boardHeight;
 	private BoardSpotsCalculations boardSpotsCalculations;
 
 	private Game(List<Player> players, final int boardWidth, final int boardHeight) {
 
 		this.currentIndex = 0;
 		this.players = players;
+		this.boardHeight = boardHeight;
+		this.boardWidth = boardWidth;
 		this.boardSpotsCalculations = new BoardSpotsCalculations(boardWidth, boardHeight);
 	}
 
@@ -38,10 +42,10 @@ public class Game {
 		if (instance == null) {
 			// initializing models
 			List<Player> players = Arrays.asList(
-					new Player("Player 0", PlayerColor.RED, SPOTS_QUANTITY),
-					new Player("Player 1", PlayerColor.GREEN, SPOTS_QUANTITY),
-					new Player("Player 2", PlayerColor.YELLOW, SPOTS_QUANTITY),
-					new Player("Player 3", PlayerColor.BLUE, SPOTS_QUANTITY));		
+					new Player(PlayerColor.RED.toString(), PlayerColor.RED, SPOTS_QUANTITY),
+					new Player(PlayerColor.GREEN.toString(), PlayerColor.GREEN, SPOTS_QUANTITY),
+					new Player(PlayerColor.YELLOW.toString(), PlayerColor.YELLOW, SPOTS_QUANTITY),
+					new Player(PlayerColor.BLUE.toString(), PlayerColor.BLUE, SPOTS_QUANTITY));		
 			 
 	    	instance = new Game(players, boardWidth, boardHeight);
 		}
@@ -50,6 +54,14 @@ public class Game {
 
 	public List<Player> getPlayers() {
 		return new ArrayList<Player>(players);
+	}
+	
+	public int getBoardHeight(){
+		return this.boardHeight;
+	}
+	
+	public int getBoardWidth() {
+		return this.boardWidth;
 	}
 	
 	public boolean isInitialSpotBloqued() {
@@ -78,6 +90,8 @@ public class Game {
 		}		
 		return false;
 	}
+	
+	
 	
 	public Player getPlayerFromColor(PlayerColor color) {
 		for (Player player : getPlayers()) {

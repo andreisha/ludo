@@ -26,24 +26,17 @@ public class MainContainer {
 		Game game = Game.getInstance(BOARD_WIDTH, BOARD_HEIGHT);
 
 		// initializing controllers
-		BoardController boardController = new BoardController(game, BOARD_WIDTH, BOARD_HEIGHT);
-		TurnFinalizerController turnFinalizer = new TurnFinalizerController(boardController, game);
-		PlayerWalkController walkController = new PlayerWalkController(turnFinalizer, game);
-		DicesController dicesController = new DicesController(game, walkController);
-
-		NewGameController newGameController = new NewGameController();
-		LoadGameController loadGameController = new LoadGameController();
-		SaveGameController saveGameController = new SaveGameController();
-		OperationsController operationsController = new OperationsController(loadGameController, newGameController,
-				saveGameController);
-
-		TurnInitializerController turnInitializer = new TurnInitializerController(dicesController,
-				operationsController);
+		BoardController boardController = BoardController.getInstance(game);
+		TurnFinalizerController turnFinalizer = TurnFinalizerController.getInstance(boardController, game);
+		PlayerWalkController playerWalkController = PlayerWalkController.getInstance(turnFinalizer, game);
+		DicesController dicesController = DicesController.getInstance(game, playerWalkController);		
+		OperationsController operationsController = OperationsController.getInstance();
+		TurnInitializerController turnInitializer = TurnInitializerController.getInstance(dicesController, operationsController);
 		turnFinalizer.setTurnInitializer(turnInitializer);
 
 		// initializing views		
-		BoardPanel boardPanel = new BoardPanel(BOARD_WIDTH, BOARD_HEIGHT,TOKEN_RADIUS, boardController, walkController);
-		DicesPanel dicesPanel = new DicesPanel(dicesController, walkController);
+		BoardPanel boardPanel = new BoardPanel(BOARD_WIDTH, BOARD_HEIGHT,TOKEN_RADIUS, boardController, playerWalkController);
+		DicesPanel dicesPanel = new DicesPanel(dicesController, playerWalkController);
 		OperationsPanel operationsPanel = new OperationsPanel();
 		MainWindow window = new MainWindow(boardPanel, dicesPanel, operationsPanel);
 		

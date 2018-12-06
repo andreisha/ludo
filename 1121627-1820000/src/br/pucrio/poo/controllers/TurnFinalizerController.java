@@ -3,11 +3,20 @@ import br.pucrio.poo.models.domain.Game;
 
 import br.pucrio.poo.models.domain.Player;
 public class TurnFinalizerController {
+	private static TurnFinalizerController instance;
+	
 	private Game game;
 	private TurnInitializerController turnInitializer;
 
-	public TurnFinalizerController(BoardController boardController, Game game) {
+	private TurnFinalizerController(BoardController boardController, Game game) {
 		this.game = game;
+	}
+	
+	public static TurnFinalizerController getInstance(BoardController boardController, Game game){
+		if (instance == null) {			 
+	    	instance = new TurnFinalizerController(boardController, game);
+		}
+		return instance;
 	}
 
 	public void finalizeTurn() {

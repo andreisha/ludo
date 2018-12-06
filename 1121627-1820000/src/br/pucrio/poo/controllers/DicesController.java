@@ -10,12 +10,21 @@ import br.pucrio.poo.utils.IEnableToObserver;
 import br.pucrio.poo.utils.IObserver;
 
 public class DicesController {
+	private static DicesController instance;
+	
 	private Game game;
 	private PlayerWalkController playerWalkController;
 
-	public DicesController(Game game, PlayerWalkController playerWalkController) {
+	private DicesController(Game game, PlayerWalkController playerWalkController) {
 		this.game = game;
 		this.playerWalkController = playerWalkController;
+	}
+	
+	public static DicesController getInstance(Game game, PlayerWalkController playerWalkController){
+		if (instance == null) {			 
+	    	instance = new DicesController(game, playerWalkController);
+		}
+		return instance;
 	}
 
 	public void enableRolling(Player player) {

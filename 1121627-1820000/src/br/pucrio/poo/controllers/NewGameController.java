@@ -1,24 +1,21 @@
 package br.pucrio.poo.controllers;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
-import br.pucrio.poo.views.board.Casa;
-
 public class NewGameController {
+	private static NewGameController instance;
 
-	public NewGameController () {
+	private NewGameController () {
 
 	};
 	
+	public static NewGameController getInstance(){
+		if (instance == null) {			 
+	    	instance = new NewGameController();
+		}
+		return instance;
+	}
 
-
-	public void startNewGame(final int boardWidth, final int boardHeight) {
-	//71 casas para jogar  => 87 casas onde pode estar o token (casas iniciais incluidas)
-		
-		
-	
+	public void startNewGame(int boardWidth, int boardHeight) {
+		// TODO Auto-generated method stub
 		
 	}
 

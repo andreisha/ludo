@@ -15,18 +15,28 @@ import br.pucrio.poo.views.board.TokenFactory;
 
 
 public class BoardController {
+	
+	private static BoardController instance;
+	
 	private Game game;
 	private TokenPositionCalculator tokenCalculator;
 	private ColorController colorController;
 	private TokenFactory tokenFactory;
 	private BoardSpotsCalculations spotsCalculation;
 	
-	public BoardController(Game game, int width, int height) {
+	private BoardController(Game game, int width, int height) {
 		this.game = game;
 		this.colorController = new ColorController();
 		this.spotsCalculation = new BoardSpotsCalculations(width, height);
 		 this.tokenCalculator = new TokenPositionCalculator(spotsCalculation);
 		 this.tokenFactory = new TokenFactory(width/30);
+	}
+	
+	public static BoardController getInstance(Game game){
+		if (instance == null) {			 
+	    	instance = new BoardController(game, game.getBoardWidth(), game.getBoardHeight());
+		}
+		return instance;
 	}
 	
 	public void registerObserver(IObserver observer) {
