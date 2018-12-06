@@ -65,45 +65,5 @@ public class BoardController {
 	
 	public int getSpotNumberFromRelativeSpotNumber(int relativeSpotNumber, PlayerColor color) {
 		return spotsCalculation.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, color);
-	}
-	
-	public boolean isInitialSpotBloqued(PlayerColor color) {
-		int pinsAtInitialSpot = 0;
-
-		int initialSpot = getSpotNumberFromRelativeSpotNumber(0, color);
-		List<Player> players = this.game.getPlayers();
-		
-		for (Player player : players) {
-			for (int relativeSpotNumber : player.getSpotNumbers()) {
-				int spotNumber = tokenCalculator.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, player.getColor());
-				
-				if(spotNumber == initialSpot)
-					pinsAtInitialSpot++;
-			}
-		}
-		
-		if(pinsAtInitialSpot > 1)
-			return true;
-		
-		return false;
-	}
-	
-	public boolean isSpotBloqued(int spot) {
-		int pinsAtSpot = 0;
-		
-		List<Player> players = this.game.getPlayers();
-		for (Player player : players) {
-			for (int relativeSpotNumber : player.getSpotNumbers()) {
-				int spotNumber = tokenCalculator.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, player.getColor());
-				
-				if(spotNumber == spot) {
-					pinsAtSpot++;
-					
-					if(pinsAtSpot > 1)
-						return true;
-				}
-			}
-		}		
-		return false;
-	}
+	}	
 }	

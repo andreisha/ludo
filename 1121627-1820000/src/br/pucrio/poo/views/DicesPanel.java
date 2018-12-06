@@ -1,6 +1,4 @@
 package br.pucrio.poo.views;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -18,16 +16,17 @@ import br.pucrio.poo.controllers.ColorController;
 import br.pucrio.poo.controllers.DicesController;
 import br.pucrio.poo.controllers.PlayerWalkController;
 import br.pucrio.poo.models.domain.Player;
+import br.pucrio.poo.utils.IEnableToObserver;
 import br.pucrio.poo.utils.IResultObserver;
 
-public class DicesPanel extends JPanel implements IResultObserver{
-	private JButton lançarButton;	
-	private JButton lançarButton1;	
-	private JButton lançarButton2;	
-	private JButton lançarButton3;	
-	private JButton lançarButton4;	
-	private JButton lançarButton5;	
-	private JButton lançarButton6;	
+public class DicesPanel extends JPanel implements IResultObserver, IEnableToObserver{
+	private JButton rollButton;	
+	private JButton rollButton1;	
+	private JButton rollButton2;	
+	private JButton rollButton3;	
+	private JButton rollButton4;	
+	private JButton rollButton5;	
+	private JButton rollButton6;	
 
 	private DicesImagesPanel imagesPanel;
 	private ActionListener buttonListener;
@@ -39,39 +38,40 @@ public class DicesPanel extends JPanel implements IResultObserver{
 	private ActionListener buttonListener6;
 
 	private JLabel jogarLabel;
-	DicesController dicesController;
-	ColorController colorController;
-	PlayerWalkController playerController;
+	private DicesController dicesController;
+	private ColorController colorController;
+	private PlayerWalkController playerWalkController;
 
 	
-	public DicesPanel(DicesController dicesController) {
+	public DicesPanel(DicesController dicesController, PlayerWalkController playerWalkController) {
 		this.imagesPanel = new DicesImagesPanel();		
-		this.lançarButton = new JButton("Lancar Dado");
-		this.lançarButton1 = new JButton("Lancar 1");
-		this.lançarButton2 = new JButton("Lancar 2");
-		this.lançarButton3 = new JButton("Lancar 3");
-		this.lançarButton4= new JButton("Lancar 4");
-		this.lançarButton5 = new JButton("Lancar 5");
-		this.lançarButton6 = new JButton("Lancar 6");
+		this.rollButton = new JButton("Lancar Dado");
+		this.rollButton1 = new JButton("Lancar 1");
+		this.rollButton2 = new JButton("Lancar 2");
+		this.rollButton3 = new JButton("Lancar 3");
+		this.rollButton4= new JButton("Lancar 4");
+		this.rollButton5 = new JButton("Lancar 5");
+		this.rollButton6 = new JButton("Lancar 6");
 
 		this.jogarLabel = new JLabel("JOGAR");
 		this.colorController = new ColorController();
 		this.dicesController = dicesController; 
+		this.playerWalkController = playerWalkController;
 		dicesController.registerObserver(this);
-		
+		dicesController.registerEnableToObserver(this);
 
 		// panel do botao
 		JPanel buttonPanel = new JPanel();
 		
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		buttonPanel.add(jogarLabel);	
-		buttonPanel.add(lançarButton);
-		buttonPanel.add(lançarButton1);
-		buttonPanel.add(lançarButton2);
-		buttonPanel.add(lançarButton3);
-		buttonPanel.add(lançarButton4);
-		buttonPanel.add(lançarButton5);
-		buttonPanel.add(lançarButton6);
+		buttonPanel.add(rollButton);
+		buttonPanel.add(rollButton1);
+		buttonPanel.add(rollButton2);
+		buttonPanel.add(rollButton3);
+		buttonPanel.add(rollButton4);
+		buttonPanel.add(rollButton5);
+		buttonPanel.add(rollButton6);
 
 		this.setLayout(null);
 		this.add(buttonPanel);
@@ -84,10 +84,10 @@ public class DicesPanel extends JPanel implements IResultObserver{
 		//this.disablePanel();
 	}
 	
-	public void repaint(Image diceImage, Color playerColor) {
-		this.imagesPanel.setPlayerColor(playerColor);
+	public void repaint(Image diceImage) {
+		this.imagesPanel.setDiceImage(diceImage);
 		if (diceImage != null) {
-			this.imagesPanel.setDiceImage(diceImage);
+			
 			this.imagesPanel.setBounds(0, 0, diceImage.getWidth(null), diceImage.getHeight(null));
 		}
 		this.repaint();
@@ -95,25 +95,25 @@ public class DicesPanel extends JPanel implements IResultObserver{
 
 	public void enableTo(final Player player) {
 		if (this.buttonListener != null) {
-			this.lançarButton.removeActionListener(buttonListener);
+			this.rollButton.removeActionListener(buttonListener);
 		}
 		if (this.buttonListener1 != null) {
-			this.lançarButton1.removeActionListener(buttonListener1);
+			this.rollButton1.removeActionListener(buttonListener1);
 		}		
 		if (this.buttonListener2 != null) {
-			this.lançarButton2.removeActionListener(buttonListener2);
+			this.rollButton2.removeActionListener(buttonListener2);
 		}
 		if (this.buttonListener3 != null) {
-			this.lançarButton3.removeActionListener(buttonListener3);
+			this.rollButton3.removeActionListener(buttonListener3);
 		}
 		if (this.buttonListener4 != null) {
-			this.lançarButton4.removeActionListener(buttonListener4);
+			this.rollButton4.removeActionListener(buttonListener4);
 		}
 		if (this.buttonListener5 != null) {
-			this.lançarButton5.removeActionListener(buttonListener5);
+			this.rollButton5.removeActionListener(buttonListener5);
 		}
 		if (this.buttonListener6 != null) {
-			this.lançarButton6.removeActionListener(buttonListener6);
+			this.rollButton6.removeActionListener(buttonListener6);
 		}
 		this.buttonListener = new ActionListener() {
 			@Override
@@ -203,38 +203,55 @@ public class DicesPanel extends JPanel implements IResultObserver{
 			}
 		};
 		
-		this.lançarButton.addActionListener(buttonListener);	
-		this.lançarButton1.addActionListener(buttonListener1);		
-		this.lançarButton2.addActionListener(buttonListener2);		
-		this.lançarButton3.addActionListener(buttonListener3);		
-		this.lançarButton4.addActionListener(buttonListener4);		
-		this.lançarButton5.addActionListener(buttonListener5);		
-		this.lançarButton6.addActionListener(buttonListener6);		
-
-		//this.enablePanel();
-		//disablePanel();
-		
+		this.rollButton.addActionListener(buttonListener);	
+		this.rollButton1.addActionListener(buttonListener1);		
+		this.rollButton2.addActionListener(buttonListener2);		
+		this.rollButton3.addActionListener(buttonListener3);		
+		this.rollButton4.addActionListener(buttonListener4);		
+		this.rollButton5.addActionListener(buttonListener5);		
+		this.rollButton6.addActionListener(buttonListener6);		
 
 		this.enablePanel();
 	}
 
 	public void disablePanel() {
-		this.lançarButton.setEnabled(false);
+		this.rollButton.setEnabled(false);
+		this.rollButton1.setEnabled(false);		
+		this.rollButton2.setEnabled(false);		
+		this.rollButton3.setEnabled(false);		
+		this.rollButton4.setEnabled(false);		
+		this.rollButton5.setEnabled(false);		
+		this.rollButton6.setEnabled(false);
 	}
 
 	private void enablePanel() {
-		this.lançarButton.setEnabled(true);
+		this.rollButton.setEnabled(true);	
+		this.rollButton1.setEnabled(true);		
+		this.rollButton2.setEnabled(true);		
+		this.rollButton3.setEnabled(true);		
+		this.rollButton4.setEnabled(true);		
+		this.rollButton5.setEnabled(true);		
+		this.rollButton6.setEnabled(true);
 	}
 
 	@Override
 	public void updateView(Object o) {
-		Player player = (Player)o;
-    	//if (playerController.isPlayerTurn(player)) 
-			enableTo(player);	
+		this.disablePanel();
+		Player player = (Player)o;	
 	   Image image = dicesController.getDiceImage(player);	
+	   repaint(image);
+	}
+
+	@Override
+	public void EnableTo(Object obj) {
+		Image image = null;
+		Player player = (Player)obj;
 		Color playerColor = colorController.getColorFromPlayerColor(player.getColor());
-		repaint(image,playerColor);
-		enablePanel();
+		this.imagesPanel.setPlayerColor(playerColor);
+		repaint(image);
+		
+    	if (playerWalkController.isPlayerTurn(player.getColor())) 
+			enableTo(player);		
 	}
 
 }

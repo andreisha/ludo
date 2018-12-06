@@ -1,14 +1,12 @@
 package br.pucrio.poo.controllers;
 import br.pucrio.poo.models.domain.Game;
+
 import br.pucrio.poo.models.domain.Player;
 public class TurnFinalizerController {
-
-	private BoardController boardController;
 	private Game game;
 	private TurnInitializerController turnInitializer;
 
 	public TurnFinalizerController(BoardController boardController, Game game) {
-		this.boardController = boardController;
 		this.game = game;
 	}
 
@@ -28,8 +26,6 @@ public class TurnFinalizerController {
 	private Player passTurn(Player lastPlayer) {
 		this.game.endPlayerTurn();
 		Player currentPlayer = this.game.currentPlayer();
-
-		//this.boardController.update();
 		return currentPlayer;
 	}
 

@@ -6,42 +6,29 @@ import java.util.List;
 import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.utils.Resources;
+import br.pucrio.poo.utils.IEnableToObserver;
 import br.pucrio.poo.utils.IObserver;
-import br.pucrio.poo.views.BoardPanel;
-import br.pucrio.poo.views.DicesPanel;
-import br.pucrio.poo.views.board.Casa;
 
 public class DicesController {
-
-	private DicesPanel dicesPanel;
-	private PlayerWalkController walkController;
-	private TurnFinalizerController turnFinalizer;
 	private Game game;
+	private PlayerWalkController playerWalkController;
 
-	public DicesController(Game game, PlayerWalkController walkController, TurnFinalizerController turnFinalizer) {
+	public DicesController(Game game, PlayerWalkController playerWalkController) {
 		this.game = game;
-		this.walkController = walkController;
-		this.turnFinalizer = turnFinalizer;
+		this.playerWalkController = playerWalkController;
 	}
 
 	public void enableRolling(Player player) {
-		player.notifyResultObservers();
+		player.notifyEnableToObservers();
 	}
 
-	public void roll(Player player) throws Exception {
-
-		player.rollDices();
-		
-		if (!player.canPlayAgain()) {
-			turnFinalizer.finalizeTurn();
-		} 
+	public void roll(Player player){
+		player.rollDices();		
+		playerWalkController.doAutomaticMoves();		
 	}
-	public void roll(Player player, int numero) throws Exception {
+	public void roll(Player player, int numero){
 		player.rollDices(numero);
-		
-		if (!player.canPlayAgain()) {
-			turnFinalizer.finalizeTurn();
-		} 
+		playerWalkController.doAutomaticMoves();
 	}
 
 	public Image getDiceImage(Player player) {
@@ -60,6 +47,13 @@ public class DicesController {
 		List<Player> players = this.game.getPlayers();
 		for (Player player : players) {
 			player.registerResultObserver(observer);
+		}
+	}
+	
+	public void registerEnableToObserver(IEnableToObserver observer) {
+		List<Player> players = this.game.getPlayers();
+		for (Player player : players) {
+			player.registerEnableToObserver(observer);
 		}
 	}
 

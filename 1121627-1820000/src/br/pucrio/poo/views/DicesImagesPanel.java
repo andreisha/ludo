@@ -38,7 +38,7 @@ public class DicesImagesPanel extends JPanel {
         
         if(this.diceImage != null)
 		{
-			painter.paintDicesImages((Graphics2D) graphics, 10, 10, getWidth() -20, getHeight()-20, this.diceImage);
+			painter.paintDiceImage((Graphics2D) graphics, 10, 10, getWidth() -20, getHeight()-20, this.diceImage);
 		}
 
         graphics.dispose();

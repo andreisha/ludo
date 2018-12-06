@@ -6,7 +6,7 @@ import java.awt.image.ImageObserver;
 
 public class DicesPainter {
 
-	public void paintDicesImages(Graphics2D graphics,int x, int y, int width, int height, Image diceImage) {
+	public void paintDiceImage(Graphics2D graphics,int x, int y, int width, int height, Image diceImage) {
 		graphics.drawImage(diceImage, x, y, width, height, null);
 	}
 }

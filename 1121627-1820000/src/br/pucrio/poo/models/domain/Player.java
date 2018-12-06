@@ -3,6 +3,8 @@ package br.pucrio.poo.models.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.pucrio.poo.utils.IEnableToObservable;
+import br.pucrio.poo.utils.IEnableToObserver;
 import br.pucrio.poo.utils.IMoveObservable;
 import br.pucrio.poo.utils.IMoveObserver;
 import br.pucrio.poo.utils.IObservable;
@@ -11,10 +13,11 @@ import br.pucrio.poo.utils.IResultObservable;
 import br.pucrio.poo.utils.IResultObserver;
 
 
-public class Player implements IMoveObservable, IResultObservable{
+public class Player implements IMoveObservable, IResultObservable, IEnableToObservable{
 
 	private static final int MAX_CONTINUED_ROLL = 2;
 	private static final int MUST_LEAVE_STEPS = 5;
+	private static final int LAST_SPOT_NUMBER = 56;
 	private final PlayerColor color;
 	private Dice dice;
 	private int continuedRollCount = 0;
@@ -22,13 +25,14 @@ public class Player implements IMoveObservable, IResultObservable{
 	private List<Pin> pins;	
 	private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
 	private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
+	private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
+	
 
 	public Player(String name, PlayerColor color, int spotsQuantity) throws Exception {
 		this.name = name;
 		this.color = color;
 		PinFactory pinFactory = new PinFactory(spotsQuantity);
 		this.pins = pinFactory.getPin(color);
-		//this.dice = new Dice(ONE);
 		this.pins.get(0).goForward(1);
 	}
 
@@ -71,12 +75,8 @@ public class Player implements IMoveObservable, IResultObservable{
 		return this.color;
 	}
 
-
 	public void rollDices(){
 		this.dice = Dice.roll();
-	
-		if(shouldLeaveHome())
-			leaveHome();
 		
 		if (canPlayAgain()) {
 			continuedRollCount++;
@@ -85,11 +85,8 @@ public class Player implements IMoveObservable, IResultObservable{
 		}
 		notifyResultObservers();
 	}
-	public void rollDices(int numero) throws Exception{
+	public void rollDices(int numero){
 		this.dice = Dice.roll(numero);
-		
-		if(shouldLeaveHome())
-			leaveHome();
 		
 		if (canPlayAgain()) {
 			continuedRollCount++;
@@ -115,7 +112,7 @@ public class Player implements IMoveObservable, IResultObservable{
 		return dice.getValue() == 6 && !exceedContinuedRoll();
 	}
 	
-	public boolean isInitialSpotBloqued() {
+	public boolean isInitialSpotSelfBloqued() {
 		int pinsAtInitialSpot = 0;
 		
 		for (Pin pin : pins) {
@@ -124,6 +121,20 @@ public class Player implements IMoveObservable, IResultObservable{
 		}
 		
 		if(pinsAtInitialSpot > 1)
+			return true;
+		
+		return false;
+	}
+	
+	private boolean isSpotSelfBloqued(int targetSpot) {
+		int pinsAtTargetSpot = 0;
+		
+		for (Pin pin : pins) {
+			if(pin.getSpotNumber() == targetSpot)
+				pinsAtTargetSpot++;
+		}
+		
+		if(pinsAtTargetSpot > 1)
 			return true;
 		
 		return false;
@@ -146,11 +157,43 @@ public class Player implements IMoveObservable, IResultObservable{
 	}
 	
 	public boolean shouldLeaveHome() {
-		return (getDicePoints() == MUST_LEAVE_STEPS) && anyPinAtHome() && !isInitialSpotBloqued();
+		int diceResult = getDicePoints();
+		boolean anyPinAtHome = anyPinAtHome();
+		boolean isInitialSpotBloqued = isInitialSpotSelfBloqued();
+		return (diceResult == MUST_LEAVE_STEPS) && anyPinAtHome && !isInitialSpotBloqued;
+	}
+	
+	public boolean canLeaveHomeSpot(int spotNumber) {
+		
+		Pin pin = getPinAtSpot(spotNumber);
+		
+		if(pin==null)
+			return false;
+		
+		if(pin.isAtHome()) {
+			int steps = getDicePoints();
+			boolean isInitialSpotBloqued = isInitialSpotSelfBloqued();
+			
+			if(steps == MUST_LEAVE_STEPS && !isInitialSpotBloqued)
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean canLeaveHome() {
+		if(!shouldLeaveHome())
+			return false;
+		
+		for (Pin pin : pins) {
+			if(pin.isAtHome() && canLeaveHomeSpot(pin.getSpotNumber())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void leaveHome() {		
-		if(shouldLeaveHome()) {
+		if(canLeaveHome()) {
 			Pin pinAtHome = getPinAtHome();
 			pinAtHome.leaveHome();
 			notifyMoveObservers();
@@ -167,18 +210,22 @@ public class Player implements IMoveObservable, IResultObservable{
 		if(pin==null)
 			return false;
 		
-		boolean isAtHome = pin.isAtHome();
-		int steps = getDicePoints();
-		boolean isInitialSpotBloqued = isInitialSpotBloqued();
-		if(isAtHome && (steps != MUST_LEAVE_STEPS || isInitialSpotBloqued))
-			return false;
-		if (pin.getSpotNumber() + steps > 56 ) return false;
+		if(pin.isAtHome()) {
+			return canLeaveHomeSpot(spotNumber);
+		}
+		else {
+			int steps = getDicePoints();
+			int targetSpot = pin.getSpotNumber() + steps; 
+			
+			if (targetSpot > LAST_SPOT_NUMBER)
+				return false;
+			
+			if(isSpotSelfBloqued(targetSpot))
+				return false;
 
-		return getDicePoints() == MUST_LEAVE_STEPS && anyPinAtHome() && !isInitialSpotBloqued();
+			return true;
+		}
 	}
-	
-
-
 
 	public boolean exceedContinuedRoll() {
 		return continuedRollCount >= MAX_CONTINUED_ROLL;
@@ -225,5 +272,22 @@ public class Player implements IMoveObservable, IResultObservable{
 		for (IResultObserver observer : resultObservers) {
 			observer.updateView(this);
 		}
+	}
+
+	@Override
+	public void registerEnableToObserver(IEnableToObserver observer) {
+		enableToObservers.add(observer);		
+	}
+
+	@Override
+	public void removeEnableToObserver(IEnableToObserver observer) {
+		enableToObservers.remove(observer);	
+	}
+
+	@Override
+	public void notifyEnableToObservers() {
+		for (IEnableToObserver observer : enableToObservers) {
+			observer.EnableTo(this);
+		}		
 	}
 }

@@ -28,8 +28,8 @@ public class MainContainer {
 		// initializing controllers
 		BoardController boardController = new BoardController(game, BOARD_WIDTH, BOARD_HEIGHT);
 		TurnFinalizerController turnFinalizer = new TurnFinalizerController(boardController, game);
-		PlayerWalkController walkController = new PlayerWalkController(boardController, turnFinalizer, game);
-		DicesController dicesController = new DicesController(game, walkController, turnFinalizer);
+		PlayerWalkController walkController = new PlayerWalkController(turnFinalizer, game);
+		DicesController dicesController = new DicesController(game, walkController);
 
 		NewGameController newGameController = new NewGameController();
 		LoadGameController loadGameController = new LoadGameController();
@@ -43,7 +43,7 @@ public class MainContainer {
 
 		// initializing views		
 		BoardPanel boardPanel = new BoardPanel(BOARD_WIDTH, BOARD_HEIGHT,TOKEN_RADIUS, boardController, walkController);
-		DicesPanel dicesPanel = new DicesPanel(dicesController);
+		DicesPanel dicesPanel = new DicesPanel(dicesController, walkController);
 		OperationsPanel operationsPanel = new OperationsPanel();
 		MainWindow window = new MainWindow(boardPanel, dicesPanel, operationsPanel);
 		

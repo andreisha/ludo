@@ -1,110 +1,87 @@
 package br.pucrio.poo.controllers;
-
-import br.pucrio.poo.controllers.spot.SpotFrontController;
 import br.pucrio.poo.models.domain.Game;
-import br.pucrio.poo.models.domain.Pin;
-import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.domain.PlayerColor;
 
 public class PlayerWalkController {
-
-	private BoardController boardController;
 	private TurnFinalizerController turnFinalizer;
 	private Game game;
 	
-	public PlayerWalkController(BoardController boardController, TurnFinalizerController turnFinalizer, Game game) {
-		this.boardController = boardController;
+	public PlayerWalkController(TurnFinalizerController turnFinalizer, Game game) {
 		this.turnFinalizer = turnFinalizer;
 		this.game = game;
 	}
 	
 	public void playerWalk(PlayerColor color, int spotNumber) {
-		if(!isPlayerTurn(color))
+		if (!isPlayerTurn(color))
 			return;
-		
-		Player player = getPlayerFromColor(color);		
-		if(player == null)
+
+		if (isHomeSpot(spotNumber)) {			
 			return;
-		
-		int relativeSpotNumber = boardController.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
-		
-	/*	if (player.isHomeSpot(relativeSpotNumber)) {
-			if (canLeaveHome(player)) {
-				player.leaveHome();				
+		}
+
+		if (!canMove(spotNumber)) {			
+			if(!canMove() && !canPlayAgain()) {
+				finalizeTurn();
 			}
 			return;
-		}*/
+		}
+
+		movePlayer(spotNumber);
 		
-		if(!canMove(player,spotNumber)) {
-			turnFinalizer.finalizeTurn();
-			return;	
-			}
-		
+		if (!canPlayAgain()) {
+			finalizeTurn();
+		}		
+	}
+	
+	private void movePlayer(int spotNumber) {
 		game.movePlayer(spotNumber);
-		
-		
-		if (player.isHomeSpot(relativeSpotNumber)) {
-			if (canLeaveHome(player)) {
-				player.leaveHome();				
-			}
+	}
+	
+	private boolean canLeaveHome() {		
+		return game.canLeaveHome();
+	}
+	
+	private void leaveHome(){
+		game.leaveHome();
+	}
+	
+	private boolean isHomeSpot(int spotNumber) {
+		return game.isHomeSpot(spotNumber);
+	}
+	
+	private boolean canPlayAgain() {
+		return game.canPlayAgain();
+	}	
+	
+	private boolean canMove(int spotNumber) {				
+		return game.canMove(spotNumber);
+	}
+	
+	private boolean canMove() {
+		return game.canMove();
+	}
+	
+	private void finalizeTurn() {
+		turnFinalizer.finalizeTurn();
+	}
+	
+	public boolean isSpotBloqued(int spot) {
+		return game.isSpotBloqued(spot);
+	}
+	
+	public boolean isPlayerTurn(PlayerColor color) {
+		 return game.isPlayerTurn(color);
+	}	
+
+	public void doAutomaticMoves() {		
+		if (canLeaveHome()) {
+			leaveHome();
+			finalizeTurn();
 			return;
 		}
 		
-		if(!canMove(player,spotNumber))
-			return;		
-		
-		player.goForward(relativeSpotNumber);					
-
-	}
-	
-	private boolean canLeaveHome(Player player) {
-		if(!player.shouldLeaveHome())
-			return false;
-		
-		//verificar se n�o pode posicionar um pe�o na casa de sa�da
-		if(isInitialSpotBloqued(player))
-			return false;
-		
-		return true;
-	}
-	
-	public boolean isInitialSpotBloqued(Player player) {
-		return boardController.isInitialSpotBloqued(player.getColor());
-	}
-
-	private boolean canMove(Player player, int spotNumber) {				
-		int relativeSpotNumber = boardController.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
-		
-		if(!player.canMove(relativeSpotNumber))
-			return false;
-				
-		int steps = player.getDicePoints();
-		int targetSpot = relativeSpotNumber + steps;
-		
-		if(isSpotBloqued(targetSpot))
-			return false;
-		
-		return true;
-	}
-	
-	private boolean isSpotBloqued(int spotNumber) {
-		return boardController.isSpotBloqued(spotNumber);
-	}
-
-	private Player getPlayerFromColor(PlayerColor color) {
-		for (Player player : game.getPlayers()) {
-			if(player.getColor() == color) 
-				return player;
-		}
-		return null;
-	}
-	
-	private boolean isPlayerTurn(PlayerColor color) {
-		 return color == game.currentPlayer().getColor();
-	}
-	
-	
-	public boolean isPlayerTurn(Player player) {
-		 return player == game.currentPlayer();
+		if (!canMove() && !canPlayAgain()) {
+			finalizeTurn();
+		} 		
 	}
 }
