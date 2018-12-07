@@ -15,7 +15,7 @@ import br.pucrio.poo.utils.IResultObserver;
 
 public class Player implements IMoveObservable, IResultObservable, IEnableToObservable{
 
-	private static final int MAX_CONTINUED_ROLL = 2;
+	private static final int MAX_CONTINUED_ROLL = 3;
 	private static final int MUST_LEAVE_STEPS = 5;
 	private static final int LAST_SPOT_NUMBER = 56;
 	private final PlayerColor color;
@@ -26,7 +26,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
 	private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
 	private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
-	
+	private Pin lastPinPlayed;
 
 	public Player(String name, PlayerColor color, int spotsQuantity) throws Exception {
 		this.name = name;
@@ -40,8 +40,17 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		Pin pin = getPinAtSpot(spotNumber);		
 		if(pin==null)
 			return;		
-		int steps = getDicePoints();		
-		pin.goForward(steps);
+		int steps = getDicePoints();
+		
+		if ((steps == 6) && allPinsOut() ) {
+			pin.goForward(steps+1);
+		}
+		
+		else {
+			pin.goForward(steps);
+
+		}
+		lastPinPlayed = pin;
 		notifyMoveObservers();
 	}
 	
@@ -54,8 +63,12 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		pin.goForward(steps);
 		notifyMoveObservers();
 	}
+	
+	public Pin getLastPinPlayed() {
+		return lastPinPlayed;
+	}
 
-	private Pin getPinAtSpot(int spotNumber) {
+	public Pin getPinAtSpot(int spotNumber) {
 		for (Pin pin : pins) {
 			if(pin.getSpotNumber() == spotNumber)
 				return pin;
@@ -70,11 +83,29 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		}
 		return spotNumbers;
 	}
-
+	
+	public List<Pin> getPins() {
+		return this.pins;
+	}
+	
 	public PlayerColor getColor() {
 		return this.color;
 	}
 
+	public boolean allPinsOut() {
+		int pinsOut = 0;
+		
+		for (Pin pin: pins) {
+			if (pin.isAtHome()) return false;
+			else pinsOut++;
+		}
+		
+		if (pinsOut == 4) return true;
+		
+		return false;
+	}
+	
+	
 	public void rollDices(){
 		this.dice = Dice.roll();
 		
@@ -109,7 +140,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	}
 
 	public boolean canPlayAgain() {
-		return dice.getValue() == 6 && !exceedContinuedRoll();
+		return (dice.getValue() == 6) && !exceedContinuedRoll();
 	}
 	
 	public boolean isInitialSpotSelfBloqued() {
@@ -200,6 +231,15 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		}
 	}
 	
+	public boolean needsGoHome() {		
+		if ((dice.getValue() == 6) && (continuedRollCount == 3 ) && (lastPinPlayed.getSpotNumber() < 52 ) ) {
+			lastPinPlayed.goToHome();
+			notifyMoveObservers();
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean isHomeSpot(int spotNumber) {
 		return spotNumber < 0;
 	}
@@ -227,6 +267,12 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		}
 	}
 
+	public void goToHome(Pin pinEaten) {
+		pinEaten.goToHome();
+		notifyMoveObservers();
+	}
+
+	
 	public boolean exceedContinuedRoll() {
 		return continuedRollCount >= MAX_CONTINUED_ROLL;
 	}

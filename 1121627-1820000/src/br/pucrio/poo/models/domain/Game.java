@@ -87,11 +87,27 @@ public class Game {
 						return true;
 				}
 			}
-		}		
+		}	
+		
 		return false;
 	}
 	
-	
+	public Player otherPlayerBlocking(int targetRelativeSpot, Player playerEating) {
+		
+		int targetSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(targetRelativeSpot, currentPlayer().getColor());
+		
+		List<Player> players = getPlayers();
+		for (Player player : players) {
+			for (int relativeSpotNumber : player.getSpotNumbers()) {
+				int spotNumber = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, player.getColor());
+				
+				if(spotNumber == targetSpot && player!= playerEating) {
+					return player;
+				}
+			}
+		}	
+		return null;
+	}
 	
 	public Player getPlayerFromColor(PlayerColor color) {
 		for (Player player : getPlayers()) {
@@ -143,6 +159,26 @@ public class Game {
 		return this.currentPlayer().canPlayAgain();
 	}
 	
+	public boolean casaPreta (int targetRelativeSpot) {
+		int targetSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(targetRelativeSpot, currentPlayer().getColor());
+
+		if ((targetSpot == 10) || (targetSpot == 23) || (targetSpot == 36) ||(targetSpot == 49)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean casaInicial (int targetRelativeSpot) {
+		int targetSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(targetRelativeSpot, currentPlayer().getColor());
+
+		if ((targetSpot == 1) || (targetSpot == 14) || (targetSpot == 27) ||(targetSpot == 40)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public boolean canMove(int spotNumber) {
 		Player currentPlayer = this.currentPlayer();
 		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, currentPlayer.getColor());
@@ -153,19 +189,71 @@ public class Game {
 		
 		int targetRelativeSpot = relativeSpotNumber + steps;
 		
-		if(isSpotBloqued(targetRelativeSpot))
-			return false;
+		for (int path = relativeSpotNumber + 1; path < targetRelativeSpot +1 ; path++) {
+			if(isSpotBloqued(path))
+				return false;
+		}
 		
-		// textar barreira, casa preta 
 		
+		if (casaPreta(targetRelativeSpot) && !isSpotBloqued(targetRelativeSpot))
+			return true;		
+		
+		
+		//implementar quando estiver na linha final e for a unica peça em jogo (ultima peça OU as outras 3 no inicio)
 		return true;
 	}
 	
+	public boolean canMove20(int spotNumber) {
+		Player currentPlayer = this.currentPlayer();
+		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, currentPlayer.getColor());
+		int steps = 20;
+		
+		if (!currentPlayer.canMove(relativeSpotNumber)) 
+			return false;
+		
+		int targetRelativeSpot = relativeSpotNumber + steps;
+		
+		for (int path = relativeSpotNumber + 1; path < targetRelativeSpot +1 ; path++) {
+			if(isSpotBloqued(path))
+				return false;
+		}
+		
+		
+		if (casaPreta(targetRelativeSpot) && !isSpotBloqued(targetRelativeSpot))
+			return true;		
+		
+		
+		//implementar quando estiver na linha final e for a unica peça em jogo (ultima peça OU as outras 3 no inicio)
+		return true;
+	}
 	public void movePlayer(int spotNumber) {
 		Player player = this.currentPlayer();
 		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
 		player.goForward(relativeSpotNumber);
 		
+		int relativeSpotAfterSteps = player.getLastPinPlayed().getSpotNumber();
+		int spotAfterSteps = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterSteps, player.getColor());
+		
+		if (isSpotBloqued(relativeSpotAfterSteps) && !casaPreta(relativeSpotAfterSteps) && !casaInicial(relativeSpotAfterSteps)) {
+			Player playerEaten = otherPlayerBlocking(relativeSpotAfterSteps, player);
+			int spotEaten = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotAfterSteps, playerEaten.getColor());
+
+			Pin pinEaten = playerEaten.getPinAtSpot(spotEaten);
+			playerEaten.goToHome(pinEaten);	
+			
+			List<Pin> pinsPlayer = player.getPins();
+			for (Pin pin : pinsPlayer) {
+				int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), player.getColor());
+
+				if (canMove20(spotPin)) {
+					player.go20Forward(pin.getSpotNumber());
+					return;
+				}					
+			}
+		}
+		return;
+
+
 		// se captura, go20Forward(relativeSpotnumber DO PIN Q TEM Q SE MOVIMENTAR)
 	}		
 }

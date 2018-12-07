@@ -47,13 +47,17 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 			    
 			    for (Casa casa: painter.getCasas()) {
 			    	if ( x >= casa.getXMIN() && x <= casa.getXMAX() && y >= casa.getYMIN() && y <= casa.getYMAX()) {			    		
-			    		for (Token token : tokens) {
+			    		int i = tokens.size();
+			    		
+			    		//for (Token token = tokens.get(i-1); tokens.get(0) ;i--)
+			    		for (int j = i-1 ; j > -1; j--){
 			    				
-			    			if(token.getSpotNumber() == casa.getNum()) {
-			    				playerWalkController.playerWalk(colorController.getPlayerColorFromColor(token.getColor()),token.getSpotNumber());
-			    				return;			    			
+			    			if(tokens.get(j).getSpotNumber() == casa.getNum()) {
+			    				playerWalkController.playerWalk(colorController.getPlayerColorFromColor(tokens.get(j).getColor()),tokens.get(j).getSpotNumber());
+			    							    			
 			    			}
 						}
+			    		return;
 			    	}
 			    }		    
 			}
