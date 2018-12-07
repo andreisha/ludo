@@ -3,6 +3,8 @@ package br.pucrio.poo.models.utils;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -42,13 +44,16 @@ public class Serializer {
 	}
 
 	private void java2Gson(String path) {
-		
-		  try (Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8")) {
+		try {
+			//FileOutputStream fileOutputStream = new FileOutputStream(path);
+			//OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
+			Writer writer = new FileWriter(path);
+
 			GsonBuilder gsonBilder = new GsonBuilder();
-			gsonBilder.excludeFieldsWithoutExposeAnnotation();			
-			gsonBilder.setPrettyPrinting();			
+			gsonBilder.excludeFieldsWithoutExposeAnnotation();
+			gsonBilder.setPrettyPrinting();
 			Gson gson = gsonBilder.create();
-			
+
 			String json = gson.toJson(this.game);
 			writer.write(json);
 			writer.close();
@@ -57,28 +62,28 @@ public class Serializer {
 		}
 	}
 
-	private void gson2Java(String path){
-		
-		try(Reader reader = new InputStreamReader(new FileInputStream(path), "UTF-8")){
+	private void gson2Java(String path) {
+
+		try {
+			//FileInputStream fileInputStream = new FileInputStream(path);
+			//InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+			Reader reader = new FileReader(path);
+
 			GsonBuilder gsonBilder = new GsonBuilder();
-			gsonBilder.excludeFieldsWithoutExposeAnnotation();			
+			gsonBilder.excludeFieldsWithoutExposeAnnotation();
 			gsonBilder.setPrettyPrinting();
 			Gson gson = gsonBilder.create();
-			
-            game = gson.fromJson(reader, Game.class);
-            game.initializeBoardSpotsCalculations();
-            register.registerObservers(game);
-            Player currentPlayer = game.currentPlayer();
-            currentPlayer.notifyMoveObservers();
-            currentPlayer.notifyEnableToObservers();
-            currentPlayer.notifyResultObservers();
-            
-        } catch (FileNotFoundException e) {
+
+			game = gson.fromJson(reader, Game.class);
+			game.initializeBoardSpotsCalculations();
+			register.registerObservers(game);
+			Player currentPlayer = game.currentPlayer();
+			currentPlayer.notifyMoveObservers();
+			currentPlayer.notifyEnableToObservers();
+			currentPlayer.notifyResultObservers();
+
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		} 
 	}
 }
