@@ -36,7 +36,7 @@ public class DicesController {
 	}
 
 	public void roll(Player player){
-		player.rollDices();		
+		player.rollDices();
 		playerWalkController.doAutomaticMoves();		
 	}
 	public void roll(Player player, int numero){

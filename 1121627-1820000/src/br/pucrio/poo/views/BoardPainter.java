@@ -96,7 +96,7 @@ public class BoardPainter {
 		casas.add(new Casa(11*boardWidth / 15, 12*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 64));
 		casas.add(new Casa(10*boardWidth / 15, 11*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 65));
 		casas.add(new Casa(9*boardWidth / 15, 10*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 66));		
-		//finais verdes
+		//finais azuis
 		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 13*boardHeight / 15, 14* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 67));
 		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 12*boardHeight / 15, 13* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 68));
 		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 11*boardHeight / 15, 12* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 69));
@@ -124,7 +124,11 @@ public class BoardPainter {
 		casas.add(new CasaInicial(boardWidth / 15, 2*boardWidth / 15, 13*boardHeight / 15, 14* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 86));
 		casas.add(new CasaInicial(4*boardWidth / 15, 5*boardWidth / 15, 13*boardHeight / 15, 14* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 87));
 		
-
+		/*casas.add(new CasaInicial(6*boardWidth / 15, 7*boardWidth / 15, 7*boardHeight / 15, 8* boardHeight /15, null, boardWidth/15, boardHeight/15, 88));
+		casas.add(new CasaInicial(7*boardWidth / 15, 8*boardWidth / 15, 6*boardHeight / 15, 7* boardHeight /15, null, boardWidth/15, boardHeight/15, 89));
+		casas.add(new CasaInicial(8*boardWidth / 15, 7*boardWidth / 15, 7*boardHeight / 15, 8* boardHeight /15, null, boardWidth/15, boardHeight/15, 90));
+		casas.add(new CasaInicial(7*boardWidth / 15, 8*boardWidth / 15, 8*boardHeight / 15, 9* boardHeight /15, null, boardWidth/15, boardHeight/15, 91));
+*/
 		for (Casa casa : casas) {
 			casa.paintCasa(graphics);
 		}

@@ -10,13 +10,15 @@ public class Token {
 	private Color color;
 	private int radius;
 	private final int spotNumber;
+	private boolean enabled;
 
-	public Token(int x, int y, Color color, int radius, int spotNumber) {
+	public Token(int x, int y, Color color, int radius, int spotNumber, boolean enabled) {
 		this.x = x;
 		this.y = y;
 		this.color = color;
 		this.radius = radius;
 		this.spotNumber = spotNumber;
+		this.enabled = enabled;
 	}
 
 	public int getX() {
@@ -38,6 +40,10 @@ public class Token {
 	public int getSpotNumber() {
 		return spotNumber;
 	}	
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
 	
 	public void paintToken(Graphics2D graphics) {
 

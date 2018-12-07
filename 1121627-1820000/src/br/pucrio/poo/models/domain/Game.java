@@ -72,6 +72,11 @@ public class Game {
 		return this.boardWidth;
 	}
 	
+	public boolean isSpotEnabled(PlayerColor color,int spotNumber) {
+		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
+		return getPlayerFromColor(color).getPinAtSpot(relativeSpotNumber).isEnabled();
+	}
+	
 	public boolean isInitialSpotBloqued() {
 		return isSpotBloqued(0);
 	}

@@ -155,7 +155,7 @@ public class BoardSpotsCalculations {
 				                  21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
 				                  31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 				                  41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-				                  51, 52, 53, 54, 55, 56}; 
+				                  51, 52, 53, 54, 55, 56, 88}; 
 		
 		initialRedSpots = new Integer[] {72,73,74,75};
 	}
@@ -167,7 +167,7 @@ public class BoardSpotsCalculations {
                 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
                 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
                 51, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                57, 58, 59, 60, 61};
+                57, 58, 59, 60, 61, 89};
 		
 		initialGreenSpots = new Integer[] {76,77,78,79};
 	}
@@ -179,7 +179,7 @@ public class BoardSpotsCalculations {
                 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
                 51, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
                 11, 12,13, 14, 15, 16, 17, 18, 19, 20,
-                21, 22, 23, 24, 25, 62, 63, 64, 65, 66};
+                21, 22, 23, 24, 25, 62, 63, 64, 65, 66, 90};
 		
 		initialYellowSpots = new Integer[] {80,81,82,83};
 	}	
@@ -192,7 +192,7 @@ public class BoardSpotsCalculations {
                 11, 12,13, 14, 15, 16, 17, 18, 19, 20,
                 21, 22, 23, 24, 25,26, 27, 28, 29, 30,
                 31, 32, 33, 34, 35, 36, 37, 38, 67, 68,
-                69, 70, 71};
+                69, 70, 71, 91};
 		
 		initialBlueSpots = new Integer[] {84,85,86,87};
 	}
@@ -287,6 +287,14 @@ public class BoardSpotsCalculations {
 		positionMap.put(85, new Position(4*boardWidth / 15,10*boardHeight / 15));
 		positionMap.put(86, new Position(boardWidth / 15,13*boardHeight / 15));
 		positionMap.put(87, new Position(4*boardWidth / 15,13*boardHeight / 15));
+		
+		
+		positionMap.put(88, new Position(6*boardWidth / 15,7*boardHeight / 15));
+		positionMap.put(89, new Position(7*boardWidth / 15,6*boardHeight / 15));
+		positionMap.put(90, new Position(8*boardWidth / 15,7*boardHeight / 15));
+		positionMap.put(91, new Position(7*boardWidth / 15,8*boardHeight / 15));
+
+
 	}
 
 	

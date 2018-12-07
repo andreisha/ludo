@@ -65,9 +65,10 @@ public class BoardController {
 		Player player = this.game.getPlayers().get(playerIndex);
 		
 		for (int relativeSpotNumber : player.getSpotNumbers()) {
+			boolean enabled = player.getPinAtSpot(relativeSpotNumber).isEnabled();
 			Position tokenPosition = tokenCalculator.getPositionOf(relativeSpotNumber, player.getColor());
 			int spotNumber = tokenCalculator.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, player.getColor());
-			Token token = tokenFactory.getToken(tokenPosition, colorController.getColorFromPlayerColor(player.getColor()), spotNumber);			
+			Token token = tokenFactory.getToken(tokenPosition, colorController.getColorFromPlayerColor(player.getColor()), spotNumber, enabled);			
 			tokens.add(token);
 		}		
 		return tokens;
