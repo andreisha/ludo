@@ -33,9 +33,7 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		this.tokens = new ArrayList<Token>();
 		this.setPreferredSize(new Dimension(width, height));
 		ColorController colorController = new ColorController();
-
 		this.playerController = playerWalkController;
-
 		this.boardController = boardController;
 		boardController.registerObserver(this);
 		
@@ -64,6 +62,10 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		};		
 		this.addMouseListener(mouseListener);
 		updateView(null);
+	}
+	
+	public BoardController getBoardController() {
+		return boardController;
 	}
 
 	public void paintComponent(Graphics graphics) {

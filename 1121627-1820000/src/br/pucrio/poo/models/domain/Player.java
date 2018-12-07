@@ -24,9 +24,9 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	@Expose private int continuedRollCount = 0;
 	@Expose private String name;
 	@Expose private List<Pin> pins;	
-	@Expose private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
-	@Expose private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
-	@Expose private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
+	private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
+	private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
+	private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
 	@Expose private Pin lastPinPlayed;
 	private int numberPlayerSucceed = 0;
 
@@ -362,6 +362,9 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 
 	@Override
 	public void registerMoveObserver(IObserver observer) {
+		if(moveObservers == null)
+			moveObservers = new ArrayList<IMoveObserver>();
+			
 		moveObservers.add((IMoveObserver)observer);		
 	}
 
@@ -379,6 +382,8 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 
 	@Override
 	public void registerResultObserver(IObserver observer) {
+		if(resultObservers == null)
+			resultObservers = new ArrayList<IResultObserver>();
 		resultObservers.add((IResultObserver)observer);		
 	}
 
@@ -396,6 +401,8 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 
 	@Override
 	public void registerEnableToObserver(IEnableToObserver observer) {
+		if(enableToObservers == null)
+			enableToObservers = new ArrayList<IEnableToObserver>();
 		enableToObservers.add(observer);		
 	}
 
