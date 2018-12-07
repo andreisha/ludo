@@ -54,6 +54,18 @@ public class PlayerWalkController {
 		return game.currentPlayer().needsGoHome();
 	}
 	
+	private void goHome() {		
+		game.currentPlayer().goHome();
+	}
+	
+	private boolean needsOpenBarreira() {		
+		return game.currentPlayer().needsOpenBarreira();
+	}
+	
+	private void openBarreira() {		
+		game.openBarreira();
+	}
+	
 	private void leaveHome(){
 		game.leaveHome();
 	}
@@ -92,13 +104,19 @@ public class PlayerWalkController {
 			finalizeTurn();
 			return;
 		}
-		
-		if (!canMove() && !canPlayAgain()) {
-			finalizeTurn();
-		} 
-		
+	
 		if (needsGoHome()) {
+			goHome();
 			finalizeTurn();
 		} 
+		
+		if (!canMove()) { //  && !canPlayAgain()) {
+			finalizeTurn();
+		} 
+		
+		if (needsOpenBarreira() && canMove()) {
+			openBarreira();
+			finalizeTurn();
+		}
 	}
 }
