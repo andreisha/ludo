@@ -1,11 +1,13 @@
 package br.pucrio.poo.models.domain;
 
+import com.google.gson.annotations.Expose;
+
 public class Pin {
 	
 	private static final int INITIAL_SPOT = 0;
-	private int spotNumber;
-	private int spotsQuantity;
-	private int homeSpotNumber;
+	@Expose private int spotNumber;
+	@Expose private int spotsQuantity;
+	@Expose private int homeSpotNumber;
 
 	public Pin(int spotsQuantity, int spotNumber) {
 		this.spotsQuantity = spotsQuantity;

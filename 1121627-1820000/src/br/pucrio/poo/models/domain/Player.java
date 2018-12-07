@@ -3,11 +3,12 @@ package br.pucrio.poo.models.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 import br.pucrio.poo.utils.IEnableToObservable;
 import br.pucrio.poo.utils.IEnableToObserver;
 import br.pucrio.poo.utils.IMoveObservable;
 import br.pucrio.poo.utils.IMoveObserver;
-import br.pucrio.poo.utils.IObservable;
 import br.pucrio.poo.utils.IObserver;
 import br.pucrio.poo.utils.IResultObservable;
 import br.pucrio.poo.utils.IResultObserver;
@@ -18,11 +19,11 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	private static final int MAX_CONTINUED_ROLL = 2;
 	private static final int MUST_LEAVE_STEPS = 5;
 	private static final int LAST_SPOT_NUMBER = 56;
-	private final PlayerColor color;
-	private Dice dice;
-	private int continuedRollCount = 0;
-	private String name;
-	private List<Pin> pins;	
+	@Expose private final PlayerColor color;
+	@Expose private Dice dice;
+	@Expose private int continuedRollCount = 0;
+	@Expose private String name;
+	@Expose private List<Pin> pins;	
 	private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
 	private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
 	private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
@@ -34,6 +35,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		PinFactory pinFactory = new PinFactory(spotsQuantity);
 		this.pins = pinFactory.getPin(color);
 		this.pins.get(0).goForward(1);
+		this.dice = new Dice();
 	}
 
 	public void goForward(int spotNumber) {
@@ -76,7 +78,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	}
 
 	public void rollDices(){
-		this.dice = Dice.roll();
+		dice.roll();
 		
 		if (canPlayAgain()) {
 			continuedRollCount++;
@@ -86,7 +88,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		notifyResultObservers();
 	}
 	public void rollDices(int numero){
-		this.dice = Dice.roll(numero);
+		dice.roll(numero);
 		
 		if (canPlayAgain()) {
 			continuedRollCount++;
@@ -104,8 +106,8 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		return dice.getValue();
 	}	
 
-	public Dice getDice() {
-		return dice;
+	public boolean hasDice() {
+		return dice!=null;
 	}
 
 	public boolean canPlayAgain() {

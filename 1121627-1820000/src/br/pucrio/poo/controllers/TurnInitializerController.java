@@ -5,22 +5,19 @@ public class TurnInitializerController {
 	private static TurnInitializerController instance;
 	
 	private DicesController dicesController;
-	private OperationsController operationsController;
 
-	private TurnInitializerController(DicesController dicesController, OperationsController operationsController) {
+	private TurnInitializerController(DicesController dicesController) {
 		this.dicesController = dicesController;
-		this.operationsController = operationsController;
 	}
 	
-	public static TurnInitializerController getInstance(DicesController dicesController, OperationsController operationsController){
+	public static TurnInitializerController getInstance(DicesController dicesController){
 		if (instance == null) {			 
-	    	instance = new TurnInitializerController(dicesController, operationsController);
+	    	instance = new TurnInitializerController(dicesController);
 		}
 		return instance;
 	}
 
 	public void startTurnOf(Player player) {
 		dicesController.enableRolling(player);
-		operationsController.enableTo(player);
 	}
 }

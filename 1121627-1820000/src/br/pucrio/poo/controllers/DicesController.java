@@ -41,7 +41,7 @@ public class DicesController {
 	}
 
 	public Image getDiceImage(Player player) {
-		if(player.getDice() == null)
+		if(!player.hasDice())
 			return null;
 		
 		int diceResult = player.getDiceResult();

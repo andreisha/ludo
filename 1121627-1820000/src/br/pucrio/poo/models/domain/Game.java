@@ -3,22 +3,21 @@ package br.pucrio.poo.models.domain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import com.google.gson.annotations.Expose;
 import br.pucrio.poo.models.BoardSpotsCalculations;
-import br.pucrio.poo.models.Position;
 
 public class Game {
 
 	private static final int SPOTS_QUANTITY = 57;
 	private static final int RELATIVE_INITIAL_SPOT = 0;
 	
-	private static Game instance;
-
-	private List<Player> players;
-	private int currentIndex;
-	private int boardWidth;
-	private int boardHeight;
-	private BoardSpotsCalculations boardSpotsCalculations;
+	@Expose private static Game instance;
+	@Expose private List<Player> players;
+	@Expose private int currentIndex;
+	@Expose private int boardWidth;
+	@Expose private int boardHeight;
+	
+	private BoardSpotsCalculations boardSpotsCalculations;	
 
 	private Game(List<Player> players, final int boardWidth, final int boardHeight) {
 
@@ -26,7 +25,11 @@ public class Game {
 		this.players = players;
 		this.boardHeight = boardHeight;
 		this.boardWidth = boardWidth;
-		this.boardSpotsCalculations = new BoardSpotsCalculations(boardWidth, boardHeight);
+		initializeBoardSpotsCalculations();
+	}
+	
+	public void initializeBoardSpotsCalculations() {
+		this.boardSpotsCalculations = new BoardSpotsCalculations(boardWidth, boardHeight);	
 	}
 
 	public Player currentPlayer() {

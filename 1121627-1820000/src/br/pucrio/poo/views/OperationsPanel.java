@@ -5,6 +5,8 @@ import java.awt.Insets;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+
+import br.pucrio.poo.models.utils.Serializer;
 import br.pucrio.poo.views.buttons.LoadGameButton;
 import br.pucrio.poo.views.buttons.NewGameButton;
 import br.pucrio.poo.views.buttons.SaveGameButton;
@@ -14,11 +16,11 @@ public class OperationsPanel extends JPanel {
 	private LoadGameButton loadGameButton;
 	private SaveGameButton saveGameButton;
 
-	public OperationsPanel() {
+	public OperationsPanel(Serializer serializer) {
 		Dimension size;
 		this.newGameButton = new NewGameButton();
-		this.loadGameButton = new LoadGameButton();
-		this.saveGameButton = new SaveGameButton();
+		this.loadGameButton = new LoadGameButton(serializer);
+		this.saveGameButton = new SaveGameButton(serializer);
 
 		// this.setLayout(null);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
