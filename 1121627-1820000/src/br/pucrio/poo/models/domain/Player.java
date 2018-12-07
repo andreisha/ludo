@@ -29,6 +29,8 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
 	@Expose private Pin lastPinPlayed;
 
+	
+	
 	public Player(String name, PlayerColor color, int spotsQuantity) throws Exception {
 		this.name = name;
 		this.color = color;
@@ -235,12 +237,65 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	
 	public boolean needsGoHome() {		
 		if ((dice.getValue() == 6) && (continuedRollCount == 3 ) && (lastPinPlayed.getSpotNumber() < 52 ) ) {
-			lastPinPlayed.goToHome();
-			notifyMoveObservers();
 			return true;
 		}
 		return false;
 	}
+	
+	public void goHome(){	
+		lastPinPlayed.goToHome();
+		notifyMoveObservers();
+	}
+	
+	public boolean hasBarreira() {
+		List<Integer> spots = this.getSpotNumbers();
+		for (int j = 0; j < spots.size(); j++) {
+			for (int i=0; i < spots.size(); i++) {
+				if ((i != j) && (spots.get(i) == spots.get(j)))
+						return true;
+				i++;
+			}
+		}
+		return false;
+	}
+	
+	public List<Integer> spotsOfBarreira() {
+		List<Integer> spots = this.getSpotNumbers();
+		List<Integer> spotsOfBarreira = new ArrayList<Integer>();
+		for (int j = 0; j < spots.size(); j++) {
+			for (int i=0; i < spots.size(); i++) {
+				if ((i != j) && (spots.get(i) == spots.get(j)))
+						spotsOfBarreira.add(spots.get(j));
+				i++;
+			}
+		}
+		return spotsOfBarreira; 
+	}
+	
+	public boolean needsOpenBarreira() {		
+		if ((dice.getValue() == 6) && hasBarreira() ){
+			return true;
+		}
+		return false;
+	}
+	
+	public void openBarreira(int spotNumber){	
+		Pin pinAMovimentar = getPinAtSpot(spotNumber);
+		pinAMovimentar.goForward(dice.getValue());
+		notifyMoveObservers();
+		
+		
+		/*List<Integer> spotsBarreira = spotsOfBarreira();
+		Pin pinAMovimentar = null;
+		for (int spot : spotsBarreira) {
+			if (canMove(spot)) 
+				pinAMovimentar = getPinAtSpot(spot);
+				pinAMovimentar.goForward(dice.getValue());
+				notifyMoveObservers();
+				return;
+		}*/
+	}
+	
 	
 	public boolean isHomeSpot(int spotNumber) {
 		return spotNumber < 0;

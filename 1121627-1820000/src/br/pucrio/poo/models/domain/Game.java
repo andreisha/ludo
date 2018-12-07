@@ -1,9 +1,12 @@
 package br.pucrio.poo.models.domain;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.google.gson.annotations.Expose;
+
+import br.pucrio.poo.controllers.BoardController;
 import br.pucrio.poo.models.BoardSpotsCalculations;
 
 public class Game {
@@ -15,7 +18,13 @@ public class Game {
 	@Expose private List<Player> players;
 	@Expose private int currentIndex;
 	@Expose private int boardWidth;
-	@Expose private int boardHeight;	
+	@Expose private int boardHeight;
+	private Pin lastPinAtRedInitialSpot;
+	private Pin lastPinAtGreenInitialSpot;
+	private Pin lastPinAtYellowInitialSpot;
+	private Pin lastPinAtBlueInitialSpot;
+	
+	
 	private BoardSpotsCalculations boardSpotsCalculations;	
 	
 	private Game(List<Player> players, final int boardWidth, final int boardHeight) {
@@ -67,9 +76,7 @@ public class Game {
 	}
 	
 	public boolean isInitialSpotBloqued() {
-		
-		int initialSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(RELATIVE_INITIAL_SPOT, currentPlayer().getColor());		
-		return isSpotBloqued(initialSpot);
+		return isSpotBloqued(0);
 	}
 	
 	public boolean isSpotBloqued(int targetRelativeSpot) {
@@ -108,7 +115,7 @@ public class Game {
 				}
 			}
 		}	
-		return null;
+		return playerEating;
 	}
 	
 	public Player getPlayerFromColor(PlayerColor color) {
@@ -129,17 +136,63 @@ public class Game {
 		return currentPlayer.isHomeSpot(relativeSpotNumber);
 	}
 	
+	private Pin getLastPinAtInitial(PlayerColor color) {
+		switch(color) {
+			case RED:
+				return lastPinAtRedInitialSpot;
+			case GREEN:
+				return lastPinAtGreenInitialSpot;
+			case YELLOW:
+				return lastPinAtYellowInitialSpot;
+			case BLUE:
+				return lastPinAtBlueInitialSpot;
+			default:
+				return null;
+		}
+	}
+	
 	public boolean canLeaveHome() {
 		Player currentPlayer = this.currentPlayer();
 		
 		if(!currentPlayer.canLeaveHome())
 			return false;		
 		
-		if(isInitialSpotBloqued())
-			return false;
+		if(isInitialSpotBloqued()) {
+			
+			Pin pinEaten = getLastPinAtInitial(currentPlayer.getColor());
+			Player playerEaten = getPlayerFromPin(pinEaten);
+			playerEaten.goToHome(pinEaten);
+			
+			currentPlayer.go20Forward(RELATIVE_INITIAL_SPOT);
+			return true;
+		}
+		
 		
 		return true;
 	}
+	
+	public Player getPlayerFromPin(Pin pin) {
+		for (Player player: players) {
+			List<Pin> pinsPlayer= player.getPins();
+			for (Pin pinPlayer : pinsPlayer) {
+				if (pin == pinPlayer)
+					return player;
+			}
+		}
+		return null;
+	}
+	
+	public void openBarreira() {
+		List<Integer> relativeSpotsOfBarreira = currentPlayer().spotsOfBarreira();
+		for (int relativeSpot : relativeSpotsOfBarreira) {
+			int spotNumber = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpot, currentPlayer().getColor());
+			if (canMove(spotNumber)) {
+				movePlayer(spotNumber);
+				return;
+			}
+		}
+	}
+
 	
 	public void leaveHome() {
 		this.currentPlayer().leaveHome();		
@@ -232,28 +285,57 @@ public class Game {
 		Player player = this.currentPlayer();
 		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
 		player.goForward(relativeSpotNumber);
-		
-		
+	
 		int relativeSpotAfterSteps = player.getLastPinPlayed().getSpotNumber();
 		int spotAfterSteps = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterSteps, player.getColor());
-		
+				
 		if (isSpotBloqued(relativeSpotAfterSteps) && !casaPreta(relativeSpotAfterSteps) && !casaInicial(relativeSpotAfterSteps)) {
 			Player playerEaten = otherPlayerBlocking(relativeSpotAfterSteps, player);
+			if (playerEaten != player) {
+				int spotEaten = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotAfterSteps, playerEaten.getColor());
+
+				
+				Pin pinEaten = playerEaten.getPinAtSpot(spotEaten);
+				playerEaten.goToHome(pinEaten);	
+				
+				List<Pin> pinsPlayer = player.getPins();
+				for (Pin pin : pinsPlayer) {
+					int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), player.getColor());
+
+					if (canMove20(spotPin)) {
+						player.go20Forward(pin.getSpotNumber());
+						return;
+					}					
+				}
+			}
 			int spotEaten = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotAfterSteps, playerEaten.getColor());
 
-			Pin pinEaten = playerEaten.getPinAtSpot(spotEaten);
-			playerEaten.goToHome(pinEaten);	
-			
-			List<Pin> pinsPlayer = player.getPins();
-			for (Pin pin : pinsPlayer) {
-				int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), player.getColor());
-
-				if (canMove20(spotPin)) {
-					player.go20Forward(pin.getSpotNumber());
-					return;
-				}					
-			}
 		}
+		
+		int relativeSpotAfterMovement = player.getLastPinPlayed().getSpotNumber();
+		int spotAfterMovement = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterMovement, player.getColor());
+		
+		switch (spotAfterMovement) {
+			case(1):
+				if (player.getColor() != PlayerColor.RED)
+					lastPinAtRedInitialSpot = player.getLastPinPlayed();
+				break;
+			case(14):
+				if (player.getColor() != PlayerColor.GREEN)
+					lastPinAtGreenInitialSpot = player.getLastPinPlayed();
+				break;
+			case(27):
+				if (player.getColor() != PlayerColor.YELLOW)
+					lastPinAtYellowInitialSpot = player.getLastPinPlayed();
+				break;
+			case(40):
+				if (player.getColor() != PlayerColor.BLUE)
+					lastPinAtBlueInitialSpot = player.getLastPinPlayed();
+				break;
+			default:
+				break;
+		}
+
 		return;
 		// se captura, go20Forward(relativeSpotnumber DO PIN Q TEM Q SE MOVIMENTAR)
 	}		

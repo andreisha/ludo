@@ -8,7 +8,8 @@ public class Pin {
 	@Expose private int spotNumber;
 	@Expose private int spotsQuantity;
 	@Expose private int homeSpotNumber;
-
+	
+	
 	public Pin(int spotsQuantity, int spotNumber) {
 		this.spotsQuantity = spotsQuantity;
 		this.spotNumber = spotNumber;
