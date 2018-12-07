@@ -35,8 +35,7 @@ public class MainContainer {
 		DicesPanel dicesPanel = new DicesPanel(dicesController, playerWalkController);
 		
 		Register register = Register.getInstance(boardPanel, dicesPanel);
-		Serializer serializer = Serializer.getInstance(game, register);
-		
+		Serializer serializer = Serializer.getInstance(game, register);		
 		OperationsPanel operationsPanel = new OperationsPanel(serializer);
 		MainWindow window = new MainWindow(boardPanel, dicesPanel, operationsPanel);
 		
