@@ -256,7 +256,6 @@ public class Game {
 		}
 		return;
 
-
 		// se captura, go20Forward(relativeSpotnumber DO PIN Q TEM Q SE MOVIMENTAR)
 	}		
 }

@@ -24,10 +24,10 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	@Expose private int continuedRollCount = 0;
 	@Expose private String name;
 	@Expose private List<Pin> pins;	
-	private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
-	private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
-	private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
-	private Pin lastPinPlayed;
+	@Expose private List<IMoveObserver> moveObservers = new ArrayList<IMoveObserver>();
+	@Expose private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
+	@Expose private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
+	@Expose private Pin lastPinPlayed;
 
 	public Player(String name, PlayerColor color, int spotsQuantity) throws Exception {
 		this.name = name;
