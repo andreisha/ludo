@@ -12,8 +12,8 @@ public class TokenFactory {
 	}
 	
 	
-	public Token getToken(Position position, Color color, int spotNumber){
-		return new Token(position.getRoundedX(),position.getRoundedY(),color,radius,spotNumber);
+	public Token getToken(Position position, Color color, int spotNumber, boolean enabled){
+		return new Token(position.getRoundedX(),position.getRoundedY(),color,radius,spotNumber, enabled);
 	}
 	
 

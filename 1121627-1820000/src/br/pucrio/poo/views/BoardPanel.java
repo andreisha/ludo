@@ -49,12 +49,12 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 			    	if ( x >= casa.getXMIN() && x <= casa.getXMAX() && y >= casa.getYMIN() && y <= casa.getYMAX()) {			    		
 			    		int i = tokens.size();
 			    		
-			    		//for (Token token = tokens.get(i-1); tokens.get(0) ;i--)
 			    		for (int j = i-1 ; j > -1; j--){
 			    				
 			    			if(tokens.get(j).getSpotNumber() == casa.getNum()) {
 			    				playerWalkController.playerWalk(colorController.getPlayerColorFromColor(tokens.get(j).getColor()),tokens.get(j).getSpotNumber());
-			    							    			
+					    		return;
+	    			
 			    			}
 						}
 			    		return;
@@ -87,6 +87,7 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 			boolean draw = true;
 			int tokenSpot = token.getSpotNumber();
 			Color tokenColor = token.getColor();
+			
 			for (int l=0; l < tokens.size(); l++) {
 				if (drawSpots[l] == tokenSpot) {
 					if (drawSpotsColor[l] == tokenColor) 
@@ -95,6 +96,9 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 				draw = false;
 				}
 			}
+			if (!token.isEnabled())
+				draw = false;
+
 			if (draw == true) {
 					token.paintToken(graphics);
 					drawSpots[j] = token.getSpotNumber();

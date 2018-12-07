@@ -23,7 +23,10 @@ public class PlayerWalkController {
 	public void playerWalk(PlayerColor color, int spotNumber) {
 		if (!isPlayerTurn(color))
 			return;
-
+		
+		if (!spotEnabled(color, spotNumber))
+			return;
+		
 		if (isHomeSpot(spotNumber)) {			
 			return;
 		}
@@ -70,6 +73,10 @@ public class PlayerWalkController {
 		game.leaveHome();
 	}
 	
+	private boolean spotEnabled(PlayerColor color,int spotNumber){
+		return game.isSpotEnabled(color, spotNumber);
+	}
+	
 	private boolean isHomeSpot(int spotNumber) {
 		return game.isHomeSpot(spotNumber);
 	}
@@ -108,15 +115,18 @@ public class PlayerWalkController {
 		if (needsGoHome()) {
 			goHome();
 			finalizeTurn();
+			return;
 		} 
 		
 		if (!canMove()) { //  && !canPlayAgain()) {
 			finalizeTurn();
+			return;
 		} 
 		
 		if (needsOpenBarreira() && canMove()) {
 			openBarreira();
 			finalizeTurn();
+			return;
 		}
 	}
 }

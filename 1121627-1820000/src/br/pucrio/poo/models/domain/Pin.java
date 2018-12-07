@@ -8,6 +8,7 @@ public class Pin {
 	@Expose private int spotNumber;
 	@Expose private int spotsQuantity;
 	@Expose private int homeSpotNumber;
+	private boolean enabled = true;
 	
 	
 	public Pin(int spotsQuantity, int spotNumber) {
@@ -19,7 +20,13 @@ public class Pin {
 	public int getSpotNumber() {
 		return this.spotNumber;
 	}
-
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+	public void disenable() {
+		enabled = false;
+	}
 	public void goForward(int steps) {
 		if(isAtHome()) {
 			this.spotNumber = INITIAL_SPOT;

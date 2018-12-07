@@ -17,10 +17,8 @@ public class Casa {
 	protected int y_min;
 	protected int y_max;
 	private Color color;
-	private boolean tem_reta;  // true=sim e false=nao
 	protected int width;
 	protected int heigth;
-	private boolean casa_final; //true se casas finais, false nao)
 	protected int num_casa;
 
 	private List<Token> tokens;
@@ -67,14 +65,6 @@ public class Casa {
 	
 	public int getNum() {
 		return num_casa;
-	}
-	
-	public boolean getTemReta() {
-		return tem_reta;
-	}
-	
-	public boolean getCasaFinal() {
-		return casa_final;
 	}
 	
 	public void addToken(Token token) {

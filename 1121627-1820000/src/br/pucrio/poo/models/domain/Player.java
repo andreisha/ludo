@@ -18,7 +18,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 
 	private static final int MAX_CONTINUED_ROLL = 3;
 	private static final int MUST_LEAVE_STEPS = 5;
-	private static final int LAST_SPOT_NUMBER = 56;
+	private static final int LAST_SPOT_NUMBER = 57;
 	@Expose private final PlayerColor color;
 	@Expose private Dice dice;
 	@Expose private int continuedRollCount = 0;
@@ -28,6 +28,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	@Expose private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
 	@Expose private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
 	@Expose private Pin lastPinPlayed;
+	private int numberPlayerSucceed = 0;
 
 	
 	
@@ -37,6 +38,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		PinFactory pinFactory = new PinFactory(spotsQuantity);
 		this.pins = pinFactory.getPin(color);
 		this.pins.get(0).goForward(1);
+		if (color == PlayerColor.RED) this.pins.get(0).goForward(49);
 		this.dice = new Dice();
 	}
 
@@ -46,6 +48,14 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 			return;		
 		int steps = getDicePoints();
 		
+		
+		if ((pin.getSpotNumber() + steps) == 56){
+			numberPlayerSucceed++;
+			lastPinPlayed.goToHome();
+			lastPinPlayed.disenable();
+		}
+			
+		
 		if ((steps == 6) && allPinsOut() ) {
 			pin.goForward(steps+1);
 		}
@@ -54,7 +64,16 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 			pin.goForward(steps);
 
 		}
+		
 		lastPinPlayed = pin;
+		
+	/*	if (lastPinPlayed.isFinalized()) {
+			numberPlayerSucceed++;
+			lastPinPlayed.goToHome();
+			lastPinPlayed.disenable();
+		}*/
+		
+		
 		notifyMoveObservers();
 	}
 	
@@ -65,6 +84,15 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 			return;		
 		int steps = 20;		
 		pin.goForward(steps);
+		
+		lastPinPlayed = pin;
+		
+		if (lastPinPlayed.isFinalized()) {
+			numberPlayerSucceed++;
+			lastPinPlayed.goToHome();
+			lastPinPlayed.disenable();
+		}
+		
 		notifyMoveObservers();
 	}
 	
@@ -279,22 +307,11 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		return false;
 	}
 	
-	public void openBarreira(int spotNumber){	
+	/*public void openBarreira(int spotNumber){	
 		Pin pinAMovimentar = getPinAtSpot(spotNumber);
 		pinAMovimentar.goForward(dice.getValue());
 		notifyMoveObservers();
-		
-		
-		/*List<Integer> spotsBarreira = spotsOfBarreira();
-		Pin pinAMovimentar = null;
-		for (int spot : spotsBarreira) {
-			if (canMove(spot)) 
-				pinAMovimentar = getPinAtSpot(spot);
-				pinAMovimentar.goForward(dice.getValue());
-				notifyMoveObservers();
-				return;
-		}*/
-	}
+	}*/
 	
 	
 	public boolean isHomeSpot(int spotNumber) {
@@ -313,7 +330,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		else {
 			int steps = getDicePoints();
 			int targetSpot = pin.getSpotNumber() + steps; 
-			
+						
 			if (targetSpot > LAST_SPOT_NUMBER)
 				return false;
 			
