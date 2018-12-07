@@ -2,8 +2,10 @@ package br.pucrio.poo.models.domain;
 
 import java.util.Random;
 
+import com.google.gson.annotations.Expose;
+
 public class Dice {
-	private int value;
+	@Expose private int value;
 
 	public void roll() {
 		value = new Random().nextInt(6) + 1;

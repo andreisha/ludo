@@ -81,7 +81,10 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 		buttonPanel.setBounds(insets.left, 100 + insets.top, size.width, size.height);	
 		size = imagesPanel.getPreferredSize();
 		imagesPanel.setBounds(insets.left, insets.top, size.width, size.height);
-		//this.disablePanel();
+	}
+	
+	public DicesController getDicesController() {
+		return dicesController;
 	}
 	
 	public void repaint(Image diceImage) {

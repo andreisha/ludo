@@ -11,6 +11,7 @@ import br.pucrio.poo.views.BoardPanel;
 import br.pucrio.poo.views.DicesPanel;
 import br.pucrio.poo.views.MainWindow;
 import br.pucrio.poo.views.OperationsPanel;
+import br.pucrio.poo.utils.Register;;
 
 public class MainContainer {
 
@@ -19,8 +20,7 @@ public class MainContainer {
 	private static final int BOARD_HEIGHT = 500;
 
 	public static void main(String[] args) throws Exception {
-		Game game = Game.getInstance(BOARD_WIDTH, BOARD_HEIGHT);
-		Serializer serializer = Serializer.getInstance(game);
+		Game game = Game.getInstance(BOARD_WIDTH, BOARD_HEIGHT);		
 
 		// initializing controllers
 		BoardController boardController = BoardController.getInstance(game);
@@ -33,6 +33,10 @@ public class MainContainer {
 		// initializing views		
 		BoardPanel boardPanel = new BoardPanel(BOARD_WIDTH, BOARD_HEIGHT,TOKEN_RADIUS, boardController, playerWalkController);
 		DicesPanel dicesPanel = new DicesPanel(dicesController, playerWalkController);
+		
+		Register register = Register.getInstance(boardPanel, dicesPanel);
+		Serializer serializer = Serializer.getInstance(game, register);
+		
 		OperationsPanel operationsPanel = new OperationsPanel(serializer);
 		MainWindow window = new MainWindow(boardPanel, dicesPanel, operationsPanel);
 		

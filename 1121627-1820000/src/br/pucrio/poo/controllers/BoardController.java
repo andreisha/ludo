@@ -39,6 +39,10 @@ public class BoardController {
 		return instance;
 	}
 	
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	
 	public void registerObserver(IObserver observer) {
 		List<Player> players = this.game.getPlayers();
 		for (Player player : players) {

@@ -26,6 +26,10 @@ public class DicesController {
 		}
 		return instance;
 	}
+	
+	public void setGame(Game game) {
+		this.game = game;
+	}
 
 	public void enableRolling(Player player) {
 		player.notifyEnableToObservers();

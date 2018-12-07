@@ -12,6 +12,9 @@ public abstract class Resources {
 	public static Image getDiceImage(int value) {
 		String path = DICE_IMG_NAME + Integer.toString(value) + IMAGE_EXTENSION;
 		URL url = getImageURL(path);
+		
+		if(url == null)
+			return null;
 		return imageFromURL(url);
 	}	
 
