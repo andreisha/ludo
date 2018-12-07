@@ -15,10 +15,9 @@ public class Game {
 	@Expose private List<Player> players;
 	@Expose private int currentIndex;
 	@Expose private int boardWidth;
-	@Expose private int boardHeight;
-	
+	@Expose private int boardHeight;	
 	private BoardSpotsCalculations boardSpotsCalculations;	
-
+	
 	private Game(List<Player> players, final int boardWidth, final int boardHeight) {
 
 		this.currentIndex = 0;
@@ -221,18 +220,19 @@ public class Game {
 				return false;
 		}
 		
-		
 		if (casaPreta(targetRelativeSpot) && !isSpotBloqued(targetRelativeSpot))
 			return true;		
 		
-		
 		//implementar quando estiver na linha final e for a unica peça em jogo (ultima peça OU as outras 3 no inicio)
+
+		
 		return true;
 	}
 	public void movePlayer(int spotNumber) {
 		Player player = this.currentPlayer();
 		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
 		player.goForward(relativeSpotNumber);
+		
 		
 		int relativeSpotAfterSteps = player.getLastPinPlayed().getSpotNumber();
 		int spotAfterSteps = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterSteps, player.getColor());
@@ -255,7 +255,6 @@ public class Game {
 			}
 		}
 		return;
-
 		// se captura, go20Forward(relativeSpotnumber DO PIN Q TEM Q SE MOVIMENTAR)
 	}		
 }

@@ -29,7 +29,7 @@ public class PlayerWalkController {
 		}
 
 		if (!canMove(spotNumber)) {			
-			if(!canMove() && !canPlayAgain()) {
+			if(!canMove()) { // && !canPlayAgain()) {
 				finalizeTurn();
 			}
 			return;
