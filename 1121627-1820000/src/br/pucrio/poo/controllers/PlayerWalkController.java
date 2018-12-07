@@ -37,9 +37,9 @@ public class PlayerWalkController {
 
 		movePlayer(spotNumber);
 		
-		if (!canPlayAgain()) {
-			finalizeTurn();
-		}		
+		
+		finalizeTurn();
+				
 	}
 	
 	private void movePlayer(int spotNumber) {
@@ -48,6 +48,10 @@ public class PlayerWalkController {
 	
 	private boolean canLeaveHome() {		
 		return game.canLeaveHome();
+	}
+	
+	private boolean needsGoHome() {		
+		return game.currentPlayer().needsGoHome();
 	}
 	
 	private void leaveHome(){
@@ -80,7 +84,7 @@ public class PlayerWalkController {
 	
 	public boolean isPlayerTurn(PlayerColor color) {
 		 return game.isPlayerTurn(color);
-	}	
+	}				
 
 	public void doAutomaticMoves() {		
 		if (canLeaveHome()) {
@@ -91,6 +95,10 @@ public class PlayerWalkController {
 		
 		if (!canMove() && !canPlayAgain()) {
 			finalizeTurn();
-		} 		
+		} 
+		
+		if (needsGoHome()) {
+			finalizeTurn();
+		} 
 	}
 }
