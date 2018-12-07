@@ -41,5 +41,9 @@ public class TurnFinalizerController {
 	public void setTurnInitializer(TurnInitializerController turnInitializer) {
 		this.turnInitializer = turnInitializer;
 	}
+	
+	public void setGame(Game game) {
+		this.game = game;
+	}
 
 }

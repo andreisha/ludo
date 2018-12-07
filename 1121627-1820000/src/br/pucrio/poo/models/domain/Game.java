@@ -1,12 +1,9 @@
 package br.pucrio.poo.models.domain;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.google.gson.annotations.Expose;
-
-import br.pucrio.poo.controllers.BoardController;
 import br.pucrio.poo.models.BoardSpotsCalculations;
 
 public class Game {
@@ -127,7 +124,8 @@ public class Game {
 	}
 
 	public boolean isPlayerTurn(PlayerColor color) {
-		 return color == currentPlayer().getColor();
+		PlayerColor currentPlayerColor = currentPlayer().getColor();
+		 return color == currentPlayerColor;
 	}
 	
 	public boolean isHomeSpot(int spotNumber) {

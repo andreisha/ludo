@@ -1,6 +1,8 @@
 package br.pucrio.poo.utils;
 import br.pucrio.poo.controllers.BoardController;
 import br.pucrio.poo.controllers.DicesController;
+import br.pucrio.poo.controllers.PlayerWalkController;
+import br.pucrio.poo.controllers.TurnFinalizerController;
 import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.views.BoardPanel;
 import br.pucrio.poo.views.DicesPanel;
@@ -23,14 +25,18 @@ public class Register {
 	}
 	
 	public void registerObservers(Game game) {
-		BoardController BoardController = boardPanel.getBoardController();
-		DicesController DicesController = dicesPanel.getDicesController();
+		BoardController boardController = boardPanel.getBoardController();
+		DicesController dicesController = dicesPanel.getDicesController();
+		PlayerWalkController playerWalkController = dicesController.getPlayerWalkController();
+		TurnFinalizerController turnFinalizerController = playerWalkController.getTurnFinalizerController();
 		
-		BoardController.setGame(game);
-		DicesController.setGame(game);
+		boardController.setGame(game);
+		dicesController.setGame(game);
+		playerWalkController.setGame(game);
+		turnFinalizerController.setGame(game);	
 		
-		BoardController.registerObserver(this.boardPanel);
-		DicesController.registerEnableToObserver(this.dicesPanel);
-		DicesController.registerObserver(this.dicesPanel);		
+		boardController.registerObserver(this.boardPanel);
+		dicesController.registerEnableToObserver(this.dicesPanel);
+		dicesController.registerObserver(this.dicesPanel);		
 	}
 }

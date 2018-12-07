@@ -52,6 +52,10 @@ public class DicesController {
 		return getDiceImage(diceResult);
 	}
 	
+	public PlayerWalkController getPlayerWalkController() {
+		return playerWalkController;
+	}
+
 	private Image getDiceImage(int value) {
 		return Resources.getDiceImage(value);
 	}

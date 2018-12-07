@@ -42,6 +42,14 @@ public class PlayerWalkController {
 				
 	}
 	
+	public TurnFinalizerController getTurnFinalizerController() {
+		return turnFinalizer;
+	}
+	
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	
 	private void movePlayer(int spotNumber) {
 		game.movePlayer(spotNumber);
 	}

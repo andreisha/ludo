@@ -16,11 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import br.pucrio.poo.models.domain.Game;
 import br.pucrio.poo.models.domain.Player;
-import br.pucrio.poo.utils.IEnableToObserver;
-import br.pucrio.poo.utils.IMoveObserver;
-import br.pucrio.poo.utils.IResultObserver;
 import br.pucrio.poo.utils.Register;
-import br.pucrio.poo.views.BoardPanel;
 
 public class Serializer {
 	private static Serializer instance;
@@ -49,19 +45,8 @@ public class Serializer {
 
 	private void java2Gson(String path) {
 		
-		  //GsonBuilder gsonBilder = new GsonBuilder();
-		   // gsonBilder.registerTypeAdapter(Conteudo.class, new InterfaceAdapter<Conteudo>());
-		    //gsonBilder.setPrettyPrinting();
-		    //Gson gson =gsonBilder.create();
-		    //String str2send = gson.toJson(message);
-		    //Mensagem msg_recv = gson.fromJson(str2send,Mensagem.class);
-		
-
-		try (Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8")) {
+		  try (Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8")) {
 			GsonBuilder gsonBilder = new GsonBuilder();
-			//gsonBilder.registerTypeAdapter(IMoveObserver.class, new InterfaceAdapter<IMoveObserver>());
-			//gsonBilder.registerTypeAdapter(IResultObserver.class, new InterfaceAdapter<IResultObserver>());
-			//gsonBilder.registerTypeAdapter(IEnableToObserver.class, new InterfaceAdapter<IEnableToObserver>());
 			gsonBilder.excludeFieldsWithoutExposeAnnotation();			
 			gsonBilder.setPrettyPrinting();			
 			Gson gson = gsonBilder.create();
@@ -78,9 +63,6 @@ public class Serializer {
 		
 		try(Reader reader = new InputStreamReader(new FileInputStream(path), "UTF-8")){
 			GsonBuilder gsonBilder = new GsonBuilder();
-			//gsonBilder.registerTypeAdapter(IMoveObserver.class, new InterfaceAdapter<IMoveObserver>());
-			//gsonBilder.registerTypeAdapter(IResultObserver.class, new InterfaceAdapter<IResultObserver>());
-			//gsonBilder.registerTypeAdapter(IEnableToObserver.class, new InterfaceAdapter<IEnableToObserver>());
 			gsonBilder.excludeFieldsWithoutExposeAnnotation();			
 			gsonBilder.setPrettyPrinting();
 			Gson gson = gsonBilder.create();
@@ -90,8 +72,9 @@ public class Serializer {
             register.registerObservers(game);
             Player currentPlayer = game.currentPlayer();
             currentPlayer.notifyMoveObservers();
-            currentPlayer.notifyResultObservers();
             currentPlayer.notifyEnableToObservers();
+            currentPlayer.notifyResultObservers();
+            
         } catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e1) {
