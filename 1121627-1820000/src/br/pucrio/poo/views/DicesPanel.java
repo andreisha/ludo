@@ -41,15 +41,16 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 	private DicesController dicesController;
 	private ColorController colorController;
 	private PlayerWalkController playerWalkController;
-
+	private BoardPanel boardPanel;
 	
-	public DicesPanel(DicesController dicesController, PlayerWalkController playerWalkController) {
+	public DicesPanel(DicesController dicesController, PlayerWalkController playerWalkController, BoardPanel boardPanel) {
+		this.boardPanel = boardPanel;
 		this.imagesPanel = new DicesImagesPanel();		
 		this.rollButton = new JButton("Lancar Dado");
 		this.rollButton1 = new JButton("Lancar 1");
 		this.rollButton2 = new JButton("Lancar 2");
 		this.rollButton3 = new JButton("Lancar 3");
-		this.rollButton4= new JButton("Lancar 4");
+		this.rollButton4 = new JButton("Lancar 4");
 		this.rollButton5 = new JButton("Lancar 5");
 		this.rollButton6 = new JButton("Lancar 6");
 
@@ -123,24 +124,19 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 			public void actionPerformed(ActionEvent event) {				
 				try {
 						dicesController.roll(player);
-						//disablePanel();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 			}
 		};
-
 		
 		this.buttonListener1 = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {				
 				try {
 						dicesController.roll(player, 1);
-						//disablePanel();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -150,9 +146,7 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 			public void actionPerformed(ActionEvent event) {				
 				try {
 						dicesController.roll(player, 2);
-						//disablePanel();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -162,9 +156,7 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 			public void actionPerformed(ActionEvent event) {				
 				try {
 						dicesController.roll(player, 3);
-						//disablePanel();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -174,9 +166,7 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 			public void actionPerformed(ActionEvent event) {				
 				try {
 						dicesController.roll(player, 4);
-						//disablePanel();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -186,9 +176,7 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 			public void actionPerformed(ActionEvent event) {				
 				try {
 						dicesController.roll(player, 5);
-						//disablePanel();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -198,9 +186,7 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 			public void actionPerformed(ActionEvent event) {				
 				try {
 						dicesController.roll(player, 6);
-						//disablePanel();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -241,8 +227,9 @@ public class DicesPanel extends JPanel implements IResultObserver, IEnableToObse
 	public void updateView(Object o) {
 		this.disablePanel();
 		Player player = (Player)o;	
-	   Image image = dicesController.getDiceImage(player);	
-	   repaint(image);
+	    Image image = dicesController.getDiceImage(player);	
+	    repaint(image);
+	    boardPanel.enableMouseListener();
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public class MainContainer {
 
 		// initializing views		
 		BoardPanel boardPanel = new BoardPanel(BOARD_WIDTH, BOARD_HEIGHT,TOKEN_RADIUS, boardController, playerWalkController);
-		DicesPanel dicesPanel = new DicesPanel(dicesController, playerWalkController);
+		DicesPanel dicesPanel = new DicesPanel(dicesController, playerWalkController, boardPanel);
 		
 		Register register = Register.getInstance(boardPanel, dicesPanel);
 		Serializer serializer = Serializer.getInstance(game, register);		

@@ -2,13 +2,20 @@ package br.pucrio.poo.models.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import javax.naming.ldap.SortKey;
+
 import com.google.gson.annotations.Expose;
 import br.pucrio.poo.models.BoardSpotsCalculations;
 
 public class Game {
 
-	private static final int SPOTS_QUANTITY = 57;
+	private static final int SPOTS_QUANTITY = 56;
 	private static final int RELATIVE_INITIAL_SPOT = 0;
 	
 	@Expose private static Game instance;
@@ -87,6 +94,8 @@ public class Game {
 	
 	public boolean isSpotBloqued(int targetRelativeSpot) {
 		int pinsAtTargetSpot = 0;
+		
+		//if (targetRelativeSpot == 57) targetRelativeSpot--;
 		
 		int targetSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(targetRelativeSpot, currentPlayer().getColor());
 		
@@ -170,7 +179,7 @@ public class Game {
 			Player playerEaten = getPlayerFromPin(pinEaten);
 			playerEaten.goToHome(pinEaten);
 			
-			currentPlayer.go20Forward(RELATIVE_INITIAL_SPOT);
+			currentPlayer.goForward(RELATIVE_INITIAL_SPOT, 20);
 			return true;
 		}
 		
@@ -241,6 +250,47 @@ public class Game {
 		return false;
 	}
 	
+	private int getDistancia(Player player) {		
+		int distanciaPlayer = 0;
+		List<Pin> pinPlayer = player.getPins();
+		for (Pin pin : pinPlayer) {
+			if (pin.isEnabled()) {
+				int relativeSpotNumber = pin.getSpotNumber();
+				if (relativeSpotNumber < 0 ) 
+					relativeSpotNumber = -1;
+				int distanciaPin = 56 - relativeSpotNumber;
+				distanciaPlayer += distanciaPin;
+			}
+		}
+		return distanciaPlayer;
+	}
+	
+	private List<Player> classificacoes() {
+		List<Integer> distanciasPlayers = new ArrayList<Integer>();
+		SortedMap<Integer, Player> distanciasMap = new TreeMap<Integer, Player>();
+		for (Player player : players) {
+			int distanciaPlayer = getDistancia(player);
+			for (int distancia : distanciasPlayers) {
+				if (distancia == distanciaPlayer)
+					distanciaPlayer++;
+			}
+			distanciasMap.put(distanciaPlayer, player);
+			distanciasPlayers.add(distanciaPlayer);
+			List<Pin> pinPlayer = player.getPins();
+			for (Pin pin : pinPlayer) {
+				if (pin.isEnabled()) {
+					pin.disenable();
+				}
+			}
+		}
+		List<Player> classificacoes = new ArrayList<Player>();
+		for (Map.Entry<Integer, Player> entry : distanciasMap.entrySet()) {
+		    classificacoes.add(entry.getValue()); 
+		}		
+		return classificacoes;
+	}
+	
+	
 	public boolean canMove(int spotNumber) {
 		Player currentPlayer = this.currentPlayer();
 		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, currentPlayer.getColor());
@@ -251,6 +301,9 @@ public class Game {
 		
 		int targetRelativeSpot = relativeSpotNumber + steps;
 		
+		if (targetRelativeSpot > 56)
+			return false;
+		
 		for (int path = relativeSpotNumber + 1; path < targetRelativeSpot +1 ; path++) {
 			if(isSpotBloqued(path))
 				return false;
@@ -261,20 +314,22 @@ public class Game {
 			return true;		
 		
 		
-		//implementar quando estiver na linha final e for a unica peça em jogo (ultima peça OU as outras 3 no inicio)
 		return true;
 	}
 	
-	public boolean canMove20(int spotNumber) {
+	public boolean canMove(int spotNumber, int steps10or20) {
 		Player currentPlayer = this.currentPlayer();
 		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, currentPlayer.getColor());
-		int steps = 20;
+		int steps = steps10or20;
 		
 		if (!currentPlayer.canMove(relativeSpotNumber)) 
 			return false;
 		
 		int targetRelativeSpot = relativeSpotNumber + steps;
 		
+		if (targetRelativeSpot > 56)
+			return false;
+		
 		for (int path = relativeSpotNumber + 1; path < targetRelativeSpot +1 ; path++) {
 			if(isSpotBloqued(path))
 				return false;
@@ -282,9 +337,6 @@ public class Game {
 		
 		if (casaPreta(targetRelativeSpot) && !isSpotBloqued(targetRelativeSpot))
 			return true;		
-		
-		//implementar quando estiver na linha final e for a unica peça em jogo (ultima peça OU as outras 3 no inicio)
-
 		
 		return true;
 	}
@@ -300,8 +352,7 @@ public class Game {
 			Player playerEaten = otherPlayerBlocking(relativeSpotAfterSteps, player);
 			if (playerEaten != player) {
 				int spotEaten = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotAfterSteps, playerEaten.getColor());
-
-				
+	
 				Pin pinEaten = playerEaten.getPinAtSpot(spotEaten);
 				playerEaten.goToHome(pinEaten);	
 				
@@ -309,16 +360,27 @@ public class Game {
 				for (Pin pin : pinsPlayer) {
 					int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), player.getColor());
 
-					if (canMove20(spotPin)) {
-						player.go20Forward(pin.getSpotNumber());
+					if (canMove(spotPin, 20)) {
+						player.goForward(pin.getSpotNumber(), 20);
 						return;
 					}					
 				}
 			}
-			int spotEaten = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotAfterSteps, playerEaten.getColor());
-
 		}
 		
+		if (!player.getLastPinPlayed().isEnabled()) {
+			List<Pin> pinsPlayer = player.getPins();
+			for (Pin pin : pinsPlayer) {
+				int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), player.getColor());
+
+				if (canMove(spotPin, 10)) {
+					player.goForward(pin.getSpotNumber(), 10);
+					return;
+				}					
+			}
+		}
+		
+
 		int relativeSpotAfterMovement = player.getLastPinPlayed().getSpotNumber();
 		int spotAfterMovement = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterMovement, player.getColor());
 		
@@ -343,8 +405,10 @@ public class Game {
 				break;
 		}
 
+		if (player.getNumberPlayerSucceed() == 4) 
+			player.finalizeGame(classificacoes());
+		
 		return;
-		// se captura, go20Forward(relativeSpotnumber DO PIN Q TEM Q SE MOVIMENTAR)
 	}		
 }
 

@@ -10,11 +10,14 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import br.pucrio.poo.controllers.BoardController;
 import br.pucrio.poo.controllers.ColorController;
 import br.pucrio.poo.controllers.PlayerWalkController;
+import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.domain.PlayerColor;
 import br.pucrio.poo.utils.IMoveObserver;
 import br.pucrio.poo.utils.IObserver;
@@ -29,7 +32,10 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 	private PlayerWalkController playerController;
 	private int boardWidth;
 	private int boardHeight;
-
+	private List<Color> classificacoes = null;
+	private boolean finished = false;
+	private boolean mouseEnabled = false;
+	
 	public BoardPanel(int width, int height, int tokenRadius, BoardController boardController,
 			PlayerWalkController playerWalkController) {
 		this.painter = new BoardPainter(width, height, tokenRadius);
@@ -45,6 +51,9 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		this.mouseListener = new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {
+				if (!mouseEnabled())
+					return;
+				
 				int x = e.getX();
 				int y = e.getY();
 				List<Casa> casas = painter.getCasas();
@@ -63,6 +72,7 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 								
 								if(!playerWalkController.isPlayerTurn(playerColor))
 									continue;
+								
 								
 								playerWalkController.playerWalk(playerColor,tokenSpotNumber);
 								return;
@@ -91,9 +101,43 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
-		painter.paintBoard((Graphics2D) graphics);
-		paintTokens((Graphics2D) graphics);
+		if (finished == false) {
+			painter.paintBoard((Graphics2D) graphics);
+			paintTokens((Graphics2D) graphics);
 
+		}
+		
+		if (finished == true) {
+			graphics.drawString("A classificaçao final é:", 150, 250);
+			int i = 1;
+			for (Color color : classificacoes) {
+				String strColor;
+				if (color == Color.RED)
+					strColor = "Vermelho";
+				else if (color == Color.GREEN)
+					strColor = "Verde";
+				else if (color == Color.YELLOW)
+					strColor = "Amarelo";
+				else 
+					strColor = "Azul";
+				String strPlayer = "" + String.valueOf(i) + ". " + strColor;
+				graphics.drawString(strPlayer, 150 + 20, 250 + 15*i);
+				i++;
+			}
+			
+		}
+			
+	}
+	
+	public boolean mouseEnabled() {
+		return mouseEnabled;
+	}
+	public void enableMouseListener() {
+		mouseEnabled = true;
+	}
+	
+	public void disableMouseListener() {
+		mouseEnabled = false;
 	}
 
 	public void repaint(List<Token> tokens) {
@@ -104,6 +148,8 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 
 	private void paintTokens(Graphics2D graphics) {
 		int drawSpots[] = new int[tokens.size()];
+		for (int spot =0; spot < drawSpots.length; spot++)
+			drawSpots[spot] = -100;
 		Color drawSpotsColor[] = new Color[tokens.size()];
 		int j = 0;
 		for (Token token : tokens) {
@@ -131,10 +177,27 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 			j++;
 		}
 	}
-
+	
+	public List<Color> getClassificacoes(){
+		return classificacoes;
+	}
+	
+	public boolean finished() {
+		return finished;
+	}
+	
 	@Override
 	public void updateView(Object obj) {
 		List<Token> tokens = boardController.getTokens();
 		repaint(tokens);
+		disableMouseListener();
 	}
+	
+	public void finalizeGame(List<Color> classificacoesCores) {
+		this.classificacoes = classificacoesCores;
+		this.finished  = true;
+		this.repaint();
+	}
+	
+	
 }

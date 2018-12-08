@@ -43,7 +43,7 @@ public class Pin {
 	
 	
 	public boolean isAtHome() {
-		return spotNumber == homeSpotNumber;
+		return ((spotNumber == homeSpotNumber) && isEnabled());
 	}
 	
 	public boolean isAtInitialSpot(){
