@@ -40,7 +40,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		this.pins = pinFactory.getPin(color);
 		this.pins.get(0).goForward(1);
 		
-		/*if (color == PlayerColor.GREEN) {
+	/*	if (color == PlayerColor.RED) {
 			this.pins.get(1).goForward(3);
 			this.pins.get(2).goForward(2);
 			this.pins.get(3).goForward(4);
@@ -49,12 +49,10 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 			this.pins.get(2).goForward(51);
 			this.pins.get(3).goForward(52);
 		}*/
-		if (color == PlayerColor.YELLOW) {
-			this.pins.get(0).goForward(25);
-		}
 		this.dice = new Dice();
 	}
 
+	
 	public void goForward(int spotNumber) {
 		Pin pin = getPinAtSpot(spotNumber);		
 		if(pin==null)

@@ -104,7 +104,6 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		if (finished == false) {
 			painter.paintBoard((Graphics2D) graphics);
 			paintTokens((Graphics2D) graphics);
-
 		}
 		
 		if (finished == true) {
@@ -186,11 +185,22 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		return finished;
 	}
 	
+	public void finishedToFalse() {
+		finished = false;
+	}
+	
 	@Override
 	public void updateView(Object obj) {
 		List<Token> tokens = boardController.getTokens();
 		repaint(tokens);
 		disableMouseListener();
+	}
+	
+	public void startGame() {
+		this.classificacoes = null;
+		this.finished  = false;
+		mouseEnabled = false;
+		this.repaint();
 	}
 	
 	public void finalizeGame(List<Color> classificacoesCores) {

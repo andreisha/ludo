@@ -8,4 +8,5 @@ public interface IMoveObserver extends IObserver{
 
 	void finalizeGame(List<Color> classificacoesCores);
 
+
 }

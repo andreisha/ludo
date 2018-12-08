@@ -19,7 +19,7 @@ public class Register {
 	}
 	
 	public static Register getInstance(BoardPanel boardPanel,DicesPanel dicesPanel) {
-		if (instance == null) {			 
+		if (instance == null) {	
 	    	instance = new Register(boardPanel,dicesPanel);
 		}
 		return instance;
@@ -46,6 +46,7 @@ public class Register {
 		Game game = Game.getInstance(boardPanel.getBoardWidth(), boardPanel.getBoardHeight());
 		game.initializeBoardSpotsCalculations();
 		registerObservers(game);
+		boardPanel.finishedToFalse();
 		Player currentPlayer = game.currentPlayer();
 		currentPlayer.notifyMoveObservers();
 		currentPlayer.notifyResultObservers();
