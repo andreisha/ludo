@@ -17,8 +17,7 @@ public class OperationsPanel extends JPanel {
 	private SaveGameButton saveGameButton;
 
 	public OperationsPanel(Serializer serializer) {
-		Dimension size;
-		this.newGameButton = new NewGameButton();
+		this.newGameButton = new NewGameButton(serializer);
 		this.loadGameButton = new LoadGameButton(serializer);
 		this.saveGameButton = new SaveGameButton(serializer);
 
@@ -27,14 +26,6 @@ public class OperationsPanel extends JPanel {
 		this.add(newGameButton);
 		this.add(loadGameButton);
 		this.add(saveGameButton);
-
-//		Insets in = this.getInsets();
-//		size=newGameButton.getPreferredSize();
-//		newGameButton.setBounds(25+in.left, 5+in.top,size.width,size.height);
-//		size=loadGameButton.getPreferredSize();
-//		loadGameButton.setBounds(55+in.left,40+in.top,size.width,size.height);
-//		size=saveGameButton.getPreferredSize();
-//		saveGameButton.setBounds(150+in.left,15+in.top,size.width+50,size.height+20);
 	}
 
 	public NewGameButton getNewGameButton() {
