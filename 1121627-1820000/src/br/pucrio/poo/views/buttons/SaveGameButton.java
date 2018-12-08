@@ -38,15 +38,15 @@ public class SaveGameButton extends JButton {
 
 				int returnValue = jfc.showSaveDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
-					if (jfc.getSelectedFile().isDirectory()) {
+					//if (jfc.getSelectedFile().isDirectory()) {
 						File selectedFile = jfc.getSelectedFile();
 						
-						if(Files.isWritable(selectedFile.toPath())){							
+						//if(Files.isWritable(selectedFile.toPath())){							
 							saveGameController.saveGame(selectedFile.toPath());
 							} else {
 						  // no write access
-						}
-					}
+						//}
+					//}
 				}
 				
 				

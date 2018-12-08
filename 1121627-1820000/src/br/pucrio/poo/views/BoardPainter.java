@@ -79,29 +79,29 @@ public class BoardPainter {
 		casas.add(new Casa(0, boardWidth/ 15, 8* boardHeight / 15, 9* boardHeight /15, Color.WHITE, boardWidth/15, boardHeight/15, 50));
 		casas.add(new Casa(0, boardWidth/ 15, 7* boardHeight / 15, 8* boardHeight /15, Color.WHITE, boardWidth/15, boardHeight/15, 51));
 	//finais vermelhas
-		casas.add(new Casa(boardWidth / 15, 2*boardWidth, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15,52));
-		casas.add(new Casa(2*boardWidth / 15, 3*boardWidth, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 53));
-		casas.add(new Casa(3*boardWidth / 15, 4*boardWidth, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 54));
-		casas.add(new Casa(4*boardWidth / 15, 5*boardWidth, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 55));
-		casas.add(new Casa(5*boardWidth / 15, 6*boardWidth, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 56));
+		casas.add(new Casa(boardWidth / 15, 2*boardWidth/ 15, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15,52));
+		casas.add(new Casa(2*boardWidth / 15, 3*boardWidth/ 15, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 53));
+		casas.add(new Casa(3*boardWidth / 15, 4*boardWidth/ 15, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 54));
+		casas.add(new Casa(4*boardWidth / 15, 5*boardWidth/ 15, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 55));
+		casas.add(new Casa(5*boardWidth / 15, 6*boardWidth/ 15, 7* boardHeight / 15, 8* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 56));
 	//finais verdes
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, boardHeight / 15, 2* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 57));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 2*boardHeight / 15, 3* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 58));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 3*boardHeight / 15, 4* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 59));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 4*boardHeight / 15, 5* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 60));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 5*boardHeight / 15, 6* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 61));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, boardHeight / 15, 2* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 57));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 2*boardHeight / 15, 3* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 58));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 3*boardHeight / 15, 4* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 59));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 4*boardHeight / 15, 5* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 60));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 5*boardHeight / 15, 6* boardHeight /15, Color.GREEN, boardWidth/15, boardHeight/15, 61));
 		//finais amarelas
-		casas.add(new Casa(13*boardWidth / 15, 14*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 62));
-		casas.add(new Casa(12*boardWidth / 15, 13*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 63));
-		casas.add(new Casa(11*boardWidth / 15, 12*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 64));
-		casas.add(new Casa(10*boardWidth / 15, 11*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 65));
-		casas.add(new Casa(9*boardWidth / 15, 10*boardWidth, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 66));		
+		casas.add(new Casa(13*boardWidth / 15, 14*boardWidth/ 15, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 62));
+		casas.add(new Casa(12*boardWidth / 15, 13*boardWidth/ 15, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 63));
+		casas.add(new Casa(11*boardWidth / 15, 12*boardWidth/ 15, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 64));
+		casas.add(new Casa(10*boardWidth / 15, 11*boardWidth/ 15, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 65));
+		casas.add(new Casa(9*boardWidth / 15, 10*boardWidth/ 15, 7*boardHeight / 15, 8* boardHeight /15, Color.YELLOW, boardWidth/15, boardHeight/15, 66));		
 		//finais azuis
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 13*boardHeight / 15, 14* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 67));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 12*boardHeight / 15, 13* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 68));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 11*boardHeight / 15, 12* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 69));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 10*boardHeight / 15, 11* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 70));
-		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth, 9*boardHeight / 15, 10* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 71));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 13*boardHeight / 15, 14* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 67));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 12*boardHeight / 15, 13* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 68));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 11*boardHeight / 15, 12* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 69));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 10*boardHeight / 15, 11* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 70));
+		casas.add(new Casa(7*boardWidth / 15, 8*boardWidth/ 15, 9*boardHeight / 15, 10* boardHeight /15, Color.BLUE, boardWidth/15, boardHeight/15, 71));
 	
 		//casas iniciais
 		casas.add(new CasaInicial(boardWidth / 15, 2*boardWidth / 15, boardHeight / 15, 2* boardHeight /15, Color.RED, boardWidth/15, boardHeight/15, 72));
