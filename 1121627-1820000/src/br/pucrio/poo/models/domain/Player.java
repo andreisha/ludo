@@ -32,13 +32,12 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 
 	
 	
-	public Player(String name, PlayerColor color, int spotsQuantity) throws Exception {
+	public Player(String name, PlayerColor color, int spotsQuantity){
 		this.name = name;
 		this.color = color;
 		PinFactory pinFactory = new PinFactory(spotsQuantity);
 		this.pins = pinFactory.getPin(color);
 		this.pins.get(0).goForward(1);
-		if (color == PlayerColor.RED) this.pins.get(0).goForward(49);
 		this.dice = new Dice();
 	}
 
@@ -365,7 +364,8 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		if(moveObservers == null)
 			moveObservers = new ArrayList<IMoveObserver>();
 			
-		moveObservers.add((IMoveObserver)observer);		
+		if(!moveObservers.contains(observer))
+			moveObservers.add((IMoveObserver)observer);		
 	}
 
 	@Override
@@ -384,7 +384,9 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	public void registerResultObserver(IObserver observer) {
 		if(resultObservers == null)
 			resultObservers = new ArrayList<IResultObserver>();
-		resultObservers.add((IResultObserver)observer);		
+		
+		if(!resultObservers.contains(observer))
+			resultObservers.add((IResultObserver)observer);		
 	}
 
 	@Override
@@ -403,7 +405,9 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	public void registerEnableToObserver(IEnableToObserver observer) {
 		if(enableToObservers == null)
 			enableToObservers = new ArrayList<IEnableToObserver>();
-		enableToObservers.add(observer);		
+		
+		if(!enableToObservers.contains(observer))
+			enableToObservers.add(observer);		
 	}
 
 	@Override

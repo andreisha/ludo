@@ -1,5 +1,8 @@
 package br.pucrio.poo.controllers;
 
+import br.pucrio.poo.models.utils.Serializer;
+import br.pucrio.poo.utils.Register;
+
 public class NewGameController {
 	private static NewGameController instance;
 
@@ -14,9 +17,9 @@ public class NewGameController {
 		return instance;
 	}
 
-	public void startNewGame(int boardWidth, int boardHeight) {
-		// TODO Auto-generated method stub
-		
+	public void startNewGame(Serializer serializer) {
+		Register register = serializer.getRegister();
+		register.reset();		
 	}
 
 }

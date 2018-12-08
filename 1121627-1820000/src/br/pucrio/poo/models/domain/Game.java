@@ -19,9 +19,7 @@ public class Game {
 	private Pin lastPinAtRedInitialSpot;
 	private Pin lastPinAtGreenInitialSpot;
 	private Pin lastPinAtYellowInitialSpot;
-	private Pin lastPinAtBlueInitialSpot;
-	
-	
+	private Pin lastPinAtBlueInitialSpot;	
 	private BoardSpotsCalculations boardSpotsCalculations;	
 	
 	private Game(List<Player> players, final int boardWidth, final int boardHeight) {
@@ -46,7 +44,7 @@ public class Game {
 		currentIndex %= players.size();
 	}
 	
-	public static Game getInstance(final int boardWidth, final int boardHeight) throws Exception {
+	public static Game getInstance(final int boardWidth, final int boardHeight) {
 		if (instance == null) {
 			// initializing models
 			List<Player> players = Arrays.asList(
@@ -58,6 +56,10 @@ public class Game {
 	    	instance = new Game(players, boardWidth, boardHeight);
 		}
 		return instance;
+	}
+	
+	public static void reset() {
+		instance = null;	
 	}
 
 	public List<Player> getPlayers() {
@@ -72,13 +74,15 @@ public class Game {
 		return this.boardWidth;
 	}
 	
-	public boolean isSpotEnabled(PlayerColor color,int spotNumber) {
-		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, color);
-		return getPlayerFromColor(color).getPinAtSpot(relativeSpotNumber).isEnabled();
+	public boolean isSpotEnabled(int spotNumber) {
+		Player currentPlayer = this.currentPlayer();
+		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, currentPlayer.getColor());
+		Pin pinAtSpot = currentPlayer.getPinAtSpot(relativeSpotNumber);
+		return pinAtSpot.isEnabled();
 	}
 	
 	public boolean isInitialSpotBloqued() {
-		return isSpotBloqued(0);
+		return isSpotBloqued(RELATIVE_INITIAL_SPOT);
 	}
 	
 	public boolean isSpotBloqued(int targetRelativeSpot) {

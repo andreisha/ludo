@@ -1,15 +1,10 @@
 package br.pucrio.poo.models.utils;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import com.google.gson.Gson;
@@ -26,7 +21,7 @@ public class Serializer {
 	private Serializer(final Game game, final Register register) {
 		this.game = game;
 		this.register = register;
-	}
+	}	
 
 	public static Serializer getInstance(final Game game, final Register register) {
 		if (instance == null) {
@@ -45,8 +40,6 @@ public class Serializer {
 
 	private void java2Gson(String path) {
 		try {
-			//FileOutputStream fileOutputStream = new FileOutputStream(path);
-			//OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
 			Writer writer = new FileWriter(path);
 
 			GsonBuilder gsonBilder = new GsonBuilder();
@@ -65,8 +58,6 @@ public class Serializer {
 	private void gson2Java(String path) {
 
 		try {
-			//FileInputStream fileInputStream = new FileInputStream(path);
-			//InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
 			Reader reader = new FileReader(path);
 
 			GsonBuilder gsonBilder = new GsonBuilder();
@@ -85,5 +76,9 @@ public class Serializer {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} 
+	}
+	
+	public Register getRegister() {
+		return register;
 	}
 }

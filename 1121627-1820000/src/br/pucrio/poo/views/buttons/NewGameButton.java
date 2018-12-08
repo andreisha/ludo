@@ -6,15 +6,21 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import br.pucrio.poo.controllers.NewGameController;
+import br.pucrio.poo.models.utils.Serializer;
 
 public class NewGameButton extends JButton {
 	private ActionListener listener;
+	private NewGameController newGameController;
+	private Serializer serializer;
 
-	public NewGameButton() {
+	public NewGameButton(Serializer serializer) {
 		super("Novo Jogo");
+		this.serializer = serializer;
+		this.newGameController = NewGameController.getInstance();
+		enable();
 	}
 
-	public void enable(final NewGameController newGameController, final int boardWidth, final int boardHeight) {
+	public void enable() {
 		if (this.listener != null) {
 			removeActionListener(listener);
 		}
@@ -23,11 +29,9 @@ public class NewGameButton extends JButton {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				newGameController.startNewGame(boardWidth,boardHeight);
+				newGameController.startNewGame(serializer);
 			}
 		};
 		addActionListener(listener);
-
-		this.setEnabled(true);
 	}
 }

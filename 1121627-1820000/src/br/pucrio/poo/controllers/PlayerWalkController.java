@@ -24,7 +24,7 @@ public class PlayerWalkController {
 		if (!isPlayerTurn(color))
 			return;
 		
-		if (!spotEnabled(color, spotNumber))
+		if (!spotEnabled(spotNumber))
 			return;
 		
 		if (isHomeSpot(spotNumber)) {			
@@ -81,8 +81,8 @@ public class PlayerWalkController {
 		game.leaveHome();
 	}
 	
-	private boolean spotEnabled(PlayerColor color,int spotNumber){
-		return game.isSpotEnabled(color, spotNumber);
+	private boolean spotEnabled(int spotNumber){
+		return game.isSpotEnabled(spotNumber);
 	}
 	
 	private boolean isHomeSpot(int spotNumber) {

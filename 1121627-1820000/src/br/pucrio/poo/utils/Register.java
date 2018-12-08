@@ -4,6 +4,7 @@ import br.pucrio.poo.controllers.DicesController;
 import br.pucrio.poo.controllers.PlayerWalkController;
 import br.pucrio.poo.controllers.TurnFinalizerController;
 import br.pucrio.poo.models.domain.Game;
+import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.views.BoardPanel;
 import br.pucrio.poo.views.DicesPanel;
 
@@ -38,5 +39,16 @@ public class Register {
 		boardController.registerObserver(this.boardPanel);
 		dicesController.registerEnableToObserver(this.dicesPanel);
 		dicesController.registerObserver(this.dicesPanel);		
+	}
+	
+	public void reset() {
+		Game.reset();
+		Game game = Game.getInstance(boardPanel.getBoardWidth(), boardPanel.getBoardHeight());
+		game.initializeBoardSpotsCalculations();
+		registerObservers(game);
+		Player currentPlayer = game.currentPlayer();
+		currentPlayer.notifyMoveObservers();
+		currentPlayer.notifyResultObservers();
+		currentPlayer.notifyEnableToObservers();
 	}
 }
