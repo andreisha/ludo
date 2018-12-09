@@ -93,10 +93,7 @@ public class Game {
 	}
 	
 	public boolean isSpotBloqued(int targetRelativeSpot) {
-		int pinsAtTargetSpot = 0;
-		
-		//if (targetRelativeSpot == 57) targetRelativeSpot--;
-		
+		int pinsAtTargetSpot = 0;		
 		int targetSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(targetRelativeSpot, currentPlayer().getColor());
 		
 		List<Player> players = getPlayers();
@@ -111,9 +108,25 @@ public class Game {
 						return true;
 				}
 			}
-		}	
-		
+		}		
 		return false;
+	}
+	
+	private List<Pin> getPinsAtSpot(int targetSpot) {
+		List<Pin> pinsAtTargetSpot = new ArrayList<Pin>();
+		
+		List<Player> players = getPlayers();
+		for (Player player : players) {
+			for (Pin pin : player.getPins()) {
+				int relativeSpotNumber = pin.getSpotNumber();
+				int spotNumber = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotNumber, player.getColor());
+				
+				if(spotNumber == targetSpot) {
+					pinsAtTargetSpot.add(pin);
+				}
+			}
+		}			
+		return pinsAtTargetSpot;
 	}
 	
 	public Player otherPlayerBlocking(int targetRelativeSpot, Player playerEating) {
@@ -165,27 +178,7 @@ public class Game {
 			default:
 				return null;
 		}
-	}
-	
-	public boolean canLeaveHome() {
-		Player currentPlayer = this.currentPlayer();
-		
-		if(!currentPlayer.canLeaveHome())
-			return false;		
-		
-		if(isInitialSpotBloqued()) {
-			
-			Pin pinEaten = getLastPinAtInitial(currentPlayer.getColor());
-			Player playerEaten = getPlayerFromPin(pinEaten);
-			playerEaten.goToHome(pinEaten);
-			
-			currentPlayer.goForward(RELATIVE_INITIAL_SPOT, 20);
-			return true;
-		}
-		
-		
-		return true;
-	}
+	}	
 	
 	public Player getPlayerFromPin(Pin pin) {
 		for (Player player: players) {
@@ -209,8 +202,20 @@ public class Game {
 		}
 	}
 
+	public boolean canLeaveHome() {
+		Player currentPlayer = this.currentPlayer();
+		
+		if(!currentPlayer.canLeaveHome())
+			return false;		
+		
+		if(isInitialSpotBloqued()) {
+			return false;
+		}		
+		return true;
+	}
 	
 	public void leaveHome() {
+		tryEatAndMoveBeforeLeaveHome();				
 		this.currentPlayer().leaveHome();		
 	}
 
@@ -224,6 +229,28 @@ public class Game {
 				return true;			
 		}				
 		return false;
+	}
+	
+	private void tryEatAndMoveBeforeLeaveHome(){
+		Player currentPlayer = currentPlayer();
+		int targetSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(0, currentPlayer.getColor());
+		List<Pin> pinsAtSpot = getPinsAtSpot(targetSpot);
+		
+		if(pinsAtSpot.size() == 1) {
+			Pin pinEaten = getLastPinAtInitial(currentPlayer.getColor());
+			Player playerEaten = getPlayerFromColor(pinEaten.getPlayerColor());
+			playerEaten.goToHome(pinEaten);
+			
+			List<Pin> pinsPlayer = currentPlayer.getPins();
+			for (Pin pin : pinsPlayer) {
+				int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), currentPlayer.getColor());
+
+				if (canMove(spotPin, 6)) {
+					currentPlayer.goForward(pin.getSpotNumber(), 6);
+					return;
+				}					
+			}
+		}		
 	}
 	
 	public boolean canPlayAgain() {
@@ -340,11 +367,39 @@ public class Game {
 		
 		return true;
 	}
-	public void movePlayer(int spotNumber) {
-		Player player = this.currentPlayer();
-		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
-		player.goForward(relativeSpotNumber);
 	
+	private boolean tryMoveAnyPin(int steps) {
+		Player currentPlayer = currentPlayer();
+		List<Pin> pinsPlayer = currentPlayer.getPins();
+		for (Pin pin : pinsPlayer) {
+			int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), currentPlayer.getColor());
+
+			if (canMove(spotPin, steps)) {
+				currentPlayer.goForward(pin.getSpotNumber(), steps);
+				return true;
+			}					
+		}
+		return false;
+	}
+	
+	public void movePlayer(int spotNumber) {
+		goForward(spotNumber);
+		
+		if(tryEatAndMoveAfterMovement())
+			return;
+		
+		if(moveIfLastPinReachedEnd())
+			return;
+		
+		setLastPinAtInitial();		
+
+		if (canGameFinalize()) 
+			finalizeGame();		
+		return;
+	}	
+	
+	private boolean tryEatAndMoveAfterMovement() {
+		Player player = currentPlayer();
 		int relativeSpotAfterSteps = player.getLastPinPlayed().getSpotNumber();
 		int spotAfterSteps = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterSteps, player.getColor());
 				
@@ -354,62 +409,66 @@ public class Game {
 				int spotEaten = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotAfterSteps, playerEaten.getColor());
 	
 				Pin pinEaten = playerEaten.getPinAtSpot(spotEaten);
-				playerEaten.goToHome(pinEaten);	
-				
-				List<Pin> pinsPlayer = player.getPins();
-				for (Pin pin : pinsPlayer) {
-					int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), player.getColor());
-
-					if (canMove(spotPin, 20)) {
-						player.goForward(pin.getSpotNumber(), 20);
-						return;
-					}					
-				}
+				playerEaten.goToHome(pinEaten);				
+				boolean moved = tryMoveAnyPin(6);				
+				if(moved)
+					return true;
 			}
 		}
-		
-		if (!player.getLastPinPlayed().isEnabled()) {
-			List<Pin> pinsPlayer = player.getPins();
-			for (Pin pin : pinsPlayer) {
-				int spotPin = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(pin.getSpotNumber(), player.getColor());
-
-				if (canMove(spotPin, 10)) {
-					player.goForward(pin.getSpotNumber(), 10);
-					return;
-				}					
-			}
+		return false;
+	}
+	
+	private boolean moveIfLastPinReachedEnd() {
+		if (!currentPlayer().getLastPinPlayed().isEnabled()) {
+			boolean moved = tryMoveAnyPin(6);			
+			if(moved)
+				return true;
 		}
-		
-
+		return false;
+	}
+	
+	private void goForward(int spotNumber) {
+		Player player = this.currentPlayer();
+		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, player.getColor());
+		player.goForward(relativeSpotNumber);	
+	}
+	
+	private void setLastPinAtInitial() {
+		Player player = currentPlayer();
 		int relativeSpotAfterMovement = player.getLastPinPlayed().getSpotNumber();
-		int spotAfterMovement = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterMovement, player.getColor());
+		int spotAfterMovement = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(relativeSpotAfterMovement, currentPlayer().getColor());
 		
 		switch (spotAfterMovement) {
 			case(1):
-				if (player.getColor() != PlayerColor.RED)
-					lastPinAtRedInitialSpot = player.getLastPinPlayed();
+				if (currentPlayer().getColor() != PlayerColor.RED)
+					lastPinAtRedInitialSpot = currentPlayer().getLastPinPlayed();
 				break;
 			case(14):
-				if (player.getColor() != PlayerColor.GREEN)
-					lastPinAtGreenInitialSpot = player.getLastPinPlayed();
+				if (currentPlayer().getColor() != PlayerColor.GREEN)
+					lastPinAtGreenInitialSpot = currentPlayer().getLastPinPlayed();
 				break;
 			case(27):
-				if (player.getColor() != PlayerColor.YELLOW)
-					lastPinAtYellowInitialSpot = player.getLastPinPlayed();
+				if (currentPlayer().getColor() != PlayerColor.YELLOW)
+					lastPinAtYellowInitialSpot = currentPlayer().getLastPinPlayed();
 				break;
 			case(40):
-				if (player.getColor() != PlayerColor.BLUE)
-					lastPinAtBlueInitialSpot = player.getLastPinPlayed();
+				if (currentPlayer().getColor() != PlayerColor.BLUE)
+					lastPinAtBlueInitialSpot = currentPlayer().getLastPinPlayed();
 				break;
 			default:
 				break;
-		}
-
-		if (player.getNumberPlayerSucceed() == 4) 
-			player.finalizeGame(classificacoes());
-		
-		return;
-	}		
+		}	
+	}
+	
+	private boolean canGameFinalize() {
+		if (currentPlayer().getNumberPlayerSucceed() == 4) 
+			return true;
+		return false;					
+	}
+	
+	private void finalizeGame(){
+		currentPlayer().finalizeGame(classificacoes());
+	}
 }
 
 

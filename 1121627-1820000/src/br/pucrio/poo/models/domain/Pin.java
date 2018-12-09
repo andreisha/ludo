@@ -9,12 +9,13 @@ public class Pin {
 	@Expose private int spotsQuantity;
 	@Expose private int homeSpotNumber;
 	@Expose private boolean enabled = true;
+	@Expose private PlayerColor playerColor;
 	
-	
-	public Pin(int spotsQuantity, int spotNumber) {
+	public Pin(PlayerColor playerColor, int spotsQuantity, int spotNumber) {
 		this.spotsQuantity = spotsQuantity;
 		this.spotNumber = spotNumber;
 		this.homeSpotNumber = spotNumber;
+		this.playerColor = playerColor;
 	}
 
 	public int getSpotNumber() {
@@ -39,9 +40,12 @@ public class Pin {
 	
 	public void goToHome() {
 		spotNumber = homeSpotNumber;
+	}	
+	
+	public PlayerColor getPlayerColor() {
+		return playerColor;
 	}
-	
-	
+
 	public boolean isAtHome() {
 		return ((spotNumber == homeSpotNumber) && isEnabled());
 	}

@@ -15,7 +15,7 @@ public class PinFactory {
 		List<Pin> pins = new ArrayList<Pin>();
 		
 		for (int spot = -PIN_QUANTITY; spot < 0; spot++) {
-			pins.add(new Pin(spotsQuantity,spot));
+			pins.add(new Pin(color,spotsQuantity,spot));
 		}		
 		return pins;
 	}
