@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import br.pucrio.poo.controllers.BoardController;
@@ -106,6 +107,10 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		}
 		
 		if (finished == true) {
+			JOptionPane d = new JOptionPane();
+			d.showMessageDialog( this, "A classificaçao final é:", 
+			      "Fim do jogo", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(graphics, "A classificaçao final é:");
 			graphics.drawString("A classificaçao final é:", 150, 250);
 			int i = 1;
 			for (Color color : classificacoes) {
