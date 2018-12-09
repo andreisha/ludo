@@ -8,7 +8,7 @@ public class Pin {
 	@Expose private int spotNumber;
 	@Expose private int spotsQuantity;
 	@Expose private int homeSpotNumber;
-	private boolean enabled = true;
+	@Expose private boolean enabled = true;
 	
 	
 	public Pin(int spotsQuantity, int spotNumber) {

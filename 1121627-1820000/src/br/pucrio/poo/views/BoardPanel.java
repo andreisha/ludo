@@ -71,8 +71,7 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 								PlayerColor playerColor = colorController.getPlayerColorFromColor(tokenColor);
 								
 								if(!playerWalkController.isPlayerTurn(playerColor))
-									continue;
-								
+									continue;								
 								
 								playerWalkController.playerWalk(playerColor,tokenSpotNumber);
 								return;
@@ -141,7 +140,6 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 
 	public void repaint(List<Token> tokens) {
 		this.tokens = tokens;
-
 		this.repaint();
 	}
 

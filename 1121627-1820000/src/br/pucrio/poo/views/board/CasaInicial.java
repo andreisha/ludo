@@ -27,7 +27,7 @@ public class CasaInicial extends Casa {
 		paintToken(graphics);
 		
 		// tempor�rio
-		paintSpotNum(graphics);
+		//paintSpotNum(graphics);
 	}
 
 	public void paintToken(Graphics2D graphics) {

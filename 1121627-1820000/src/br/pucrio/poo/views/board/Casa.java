@@ -94,7 +94,7 @@ public class Casa {
 		graphics.fill(casainicial);	
 		
 		// tempor�rio
-		paintSpotNum(graphics);
+		//paintSpotNum(graphics);
 	}
 
 	private void paintSpotNum(Graphics2D graphics) {

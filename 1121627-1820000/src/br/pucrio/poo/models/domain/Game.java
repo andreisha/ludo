@@ -23,10 +23,10 @@ public class Game {
 	@Expose private int currentIndex;
 	@Expose private int boardWidth;
 	@Expose private int boardHeight;
-	private Pin lastPinAtRedInitialSpot;
-	private Pin lastPinAtGreenInitialSpot;
-	private Pin lastPinAtYellowInitialSpot;
-	private Pin lastPinAtBlueInitialSpot;	
+	@Expose private Pin lastPinAtRedInitialSpot;
+	@Expose private Pin lastPinAtGreenInitialSpot;
+	@Expose private Pin lastPinAtYellowInitialSpot;
+	@Expose private Pin lastPinAtBlueInitialSpot;	
 	private BoardSpotsCalculations boardSpotsCalculations;	
 	
 	private Game(List<Player> players, final int boardWidth, final int boardHeight) {

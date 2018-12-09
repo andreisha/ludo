@@ -29,7 +29,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	private List<IResultObserver> resultObservers = new ArrayList<IResultObserver>();
 	private List<IEnableToObserver> enableToObservers = new ArrayList<IEnableToObserver>();
 	@Expose private Pin lastPinPlayed;
-	private int numberPlayerSucceed = 0;
+	@Expose private int numberPlayerSucceed = 0;
 
 	
 	
@@ -39,16 +39,6 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 		PinFactory pinFactory = new PinFactory(spotsQuantity);
 		this.pins = pinFactory.getPin(color);
 		this.pins.get(0).goForward(1);
-		
-	/*	if (color == PlayerColor.RED) {
-			this.pins.get(1).goForward(3);
-			this.pins.get(2).goForward(2);
-			this.pins.get(3).goForward(4);
-			this.pins.get(0).goForward(53);
-			this.pins.get(1).goForward(49);
-			this.pins.get(2).goForward(51);
-			this.pins.get(3).goForward(52);
-		}*/
 		this.dice = new Dice();
 	}
 
@@ -198,7 +188,7 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 				pinsAtInitialSpot++;
 		}
 		
-		if(pinsAtInitialSpot > 1)
+		if(pinsAtInitialSpot > 0)
 			return true;
 		
 		return false;
