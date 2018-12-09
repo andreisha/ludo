@@ -49,10 +49,6 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 			return;		
 		int steps = getDicePoints();
 		
-		if ((steps == 6) && allPinsOut() ) {
-			steps++;
-		}
-		
 		if ((pin.getSpotNumber() + steps) == 56){
 			lastPinPlayed = pin;
 			numberPlayerSucceed++;
@@ -61,32 +57,18 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 			notifyMoveObservers();
 			return;
 		}
-			
 		
-		if ((steps == 6) && allPinsOut() ) {
-			pin.goForward(steps+1);
-		}
-		
-		else {
-			pin.goForward(steps);
-
-		}
-		
-		lastPinPlayed = pin;
-		
+		pin.goForward(steps);		
+		lastPinPlayed = pin;		
 		notifyMoveObservers();
 	}
 	
-
 	public void goForward(int spotNumber, int steps10or20) {
 		Pin pin = getPinAtSpot(spotNumber);		
 		if(pin==null)
 			return;		
 		int steps = steps10or20;		
-		pin.goForward(steps);
-		
-		lastPinPlayed = pin;
-		
+				
 		if ((pin.getSpotNumber() + steps) == 56){
 			lastPinPlayed = pin;
 			numberPlayerSucceed++;
@@ -94,6 +76,8 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 			lastPinPlayed.disenable();
 		}
 		
+		pin.goForward(steps);		
+		lastPinPlayed = pin;		
 		notifyMoveObservers();
 	}
 	
@@ -111,6 +95,16 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 				return pin;
 		}
 		return null;
+	}
+	
+	public List<Pin> getPinsAtSpot(int spotNumber){
+		List<Pin> pinsAtSpot = new ArrayList<Pin>();
+		for (Pin pin : pins) {
+			if(pin.getSpotNumber() == spotNumber) {
+				pinsAtSpot.add(pin);
+			}
+		}
+		return pinsAtSpot;	
 	}
 	
 	public List<Integer> getSpotNumbers() {
@@ -281,6 +275,11 @@ public class Player implements IMoveObservable, IResultObservable, IEnableToObse
 	public void goHome(){	
 		lastPinPlayed.goToHome();
 		notifyMoveObservers();
+	}
+	
+	public boolean hasBarreira(int targetSpot) {
+	    List<Pin> pinsAtSpot = getPinsAtSpot(targetSpot); 		
+		return pinsAtSpot.size() > 1;			
 	}
 	
 	public boolean hasBarreira() {

@@ -106,7 +106,7 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		}
 		
 		if (finished == true) {
-			graphics.drawString("A classificaçao final é:", 150, 250);
+			graphics.drawString("Final:", 150, 250);
 			int i = 1;
 			for (Color color : classificacoes) {
 				String strColor;
