@@ -18,8 +18,10 @@ import javax.swing.JPanel;
 import br.pucrio.poo.controllers.BoardController;
 import br.pucrio.poo.controllers.ColorController;
 import br.pucrio.poo.controllers.PlayerWalkController;
+import br.pucrio.poo.controllers.NewGameController;
 import br.pucrio.poo.models.domain.Player;
 import br.pucrio.poo.models.domain.PlayerColor;
+import br.pucrio.poo.models.utils.Serializer;
 import br.pucrio.poo.utils.IMoveObserver;
 import br.pucrio.poo.utils.IObserver;
 import br.pucrio.poo.views.board.Casa;
@@ -29,14 +31,17 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 	private BoardPainter painter;
 	private List<Token> tokens;
 	private MouseListener mouseListener;
+	private MouseListener mouseListenerOK;
 	private BoardController boardController;
 	private PlayerWalkController playerController;
+	private NewGameController newGameController;
 	private int boardWidth;
 	private int boardHeight;
 	private List<Color> classificacoes = null;
 	private boolean finished = false;
 	private boolean mouseEnabled = false;
-	
+	private Serializer serializer;
+
 	public BoardPanel(int width, int height, int tokenRadius, BoardController boardController,
 			PlayerWalkController playerWalkController) {
 		this.painter = new BoardPainter(width, height, tokenRadius);
@@ -48,6 +53,7 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		this.playerController = playerWalkController;
 		this.boardController = boardController;
 		boardController.registerObserver(this);
+		this.newGameController = newGameController.getInstance();
 
 		this.mouseListener = new MouseAdapter() {
 
@@ -107,11 +113,12 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		}
 		
 		if (finished == true) {
-			JOptionPane d = new JOptionPane();
-			d.showMessageDialog( this, "A classificaçao final é:", 
-			      "Fim do jogo", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane fimJogo = new JOptionPane();
+
 			//JOptionPane.showMessageDialog(graphics, "A classificaçao final é:");
-			graphics.drawString("A classificaçao final é:", 150, 250);
+			//graphics.drawString("A classificaçao final é:", 150, 250);
+			//graphics.drawString("Final:", 150, 250);
+			String strFinal = "A classificaçao final é:\n";
 			int i = 1;
 			for (Color color : classificacoes) {
 				String strColor;
@@ -123,11 +130,25 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 					strColor = "Amarelo";
 				else 
 					strColor = "Azul";
-				String strPlayer = "" + String.valueOf(i) + ". " + strColor;
-				graphics.drawString(strPlayer, 150 + 20, 250 + 15*i);
+				
+				strFinal = strFinal + String.valueOf(i) + ". " + strColor + "\n";
 				i++;
 			}
+			fimJogo.showMessageDialog( this, strFinal, "Fim do jogo", JOptionPane.INFORMATION_MESSAGE);	
 			
+			JOptionPane continuar = new JOptionPane();
+
+			
+			Object[] options = { "Encerrar", "Continuar" };
+			int resposta = continuar.showOptionDialog(null,"Quer continuar?", "Continuar ou encerrar",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,options, options[0]);
+			if (resposta == JOptionPane.YES_OPTION) {
+				System.exit(0);
+			}
+			if (resposta == JOptionPane.NO_OPTION) {
+				serializer.getInstance();
+				newGameController.startNewGame(serializer);
+
+			}
 		}
 			
 	}

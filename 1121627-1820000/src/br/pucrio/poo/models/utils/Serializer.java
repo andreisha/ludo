@@ -29,6 +29,10 @@ public class Serializer {
 		}
 		return instance;
 	}
+	
+	public static Serializer getInstance() {
+		return instance;
+	}
 
 	public void Serialize(String path) throws IOException {
 		java2Gson(path);

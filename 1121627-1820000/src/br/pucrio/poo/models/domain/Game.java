@@ -2,13 +2,10 @@ package br.pucrio.poo.models.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import javax.naming.ldap.SortKey;
 
 import com.google.gson.annotations.Expose;
 import br.pucrio.poo.models.BoardSpotsCalculations;
@@ -317,55 +314,59 @@ public class Game {
 		return classificacoes;
 	}
 	
+	public boolean hasBarreira(int relativeSpotNumber, int steps) {
+		int targetRelativeSpot = relativeSpotNumber + steps;
+		
+		for (int path = relativeSpotNumber + 1; path < targetRelativeSpot +1 ; path++) {
+			if(isSpotBloqued(path)) {				
+				int spot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(path, currentPlayer().getColor());
+				List<Pin> pinsAtSpot = getPinsAtSpot(spot);				
+				if(pinsAtSpot.size() == 2 && (pinsAtSpot.get(0).getPlayerColor() == pinsAtSpot.get(1).getPlayerColor()))
+					return true;
+			}
+		}
+		return false;
+	}
 	
 	public boolean canMove(int spotNumber) {
 		Player currentPlayer = this.currentPlayer();
+		int steps = currentPlayer.getDicePoints();		
+		return canMove(spotNumber, steps);
+	}
+	
+	private boolean canMove(int spotNumber, int steps) {
+		Player currentPlayer = this.currentPlayer();
 		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, currentPlayer.getColor());
-		int steps = currentPlayer.getDicePoints();
 		
 		if (!currentPlayer.canMove(relativeSpotNumber)) 
 			return false;
 		
-		int targetRelativeSpot = relativeSpotNumber + steps;
-		
-		if (targetRelativeSpot > 56)
+		int targetRelativeSpot = relativeSpotNumber + steps;		
+		if (targetRelativeSpot > SPOTS_QUANTITY)
 			return false;
 		
-		for (int path = relativeSpotNumber + 1; path < targetRelativeSpot +1 ; path++) {
-			if(isSpotBloqued(path))
-				return false;
-		}
+		if(hasBarreira(relativeSpotNumber,steps))
+			return false;
 		
+		if(isSpotBloqued(targetRelativeSpot))
+			return false;
 		
-		if (casaPreta(targetRelativeSpot) && !isSpotBloqued(targetRelativeSpot))
-			return true;		
+		if(casaInicial(targetRelativeSpot) && HasPlayerAnotherPinAtSpot(targetRelativeSpot))
+			return false;		
 		
+		//if (casaPreta(targetRelativeSpot) && !isSpotBloqued(targetRelativeSpot))
+			//return true;		
 		
 		return true;
 	}
 	
-	public boolean canMove(int spotNumber, int steps10or20) {
-		Player currentPlayer = this.currentPlayer();
-		int relativeSpotNumber = boardSpotsCalculations.getRelativeSpotNumberFromSpotNumber(spotNumber, currentPlayer.getColor());
-		int steps = steps10or20;
+	private boolean HasPlayerAnotherPinAtSpot(int targetRelativeSpot) {
+		int targetSpot = boardSpotsCalculations.getSpotNumberFromRelativeSpotNumber(targetRelativeSpot, currentPlayer().getColor());
+		List<Pin> pinsAtSpot = getPinsAtSpot(targetSpot);
+		if(pinsAtSpot.size() == 1 && pinsAtSpot.get(0).getPlayerColor() == currentPlayer().getColor())
+			return true;
 		
-		if (!currentPlayer.canMove(relativeSpotNumber)) 
-			return false;
-		
-		int targetRelativeSpot = relativeSpotNumber + steps;
-		
-		if (targetRelativeSpot > 56)
-			return false;
-		
-		for (int path = relativeSpotNumber + 1; path < targetRelativeSpot +1 ; path++) {
-			if(isSpotBloqued(path))
-				return false;
-		}
-		
-		if (casaPreta(targetRelativeSpot) && !isSpotBloqued(targetRelativeSpot))
-			return true;		
-		
-		return true;
+		return false;
 	}
 	
 	private boolean tryMoveAnyPin(int steps) {
