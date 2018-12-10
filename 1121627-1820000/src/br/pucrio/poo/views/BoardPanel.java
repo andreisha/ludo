@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,7 +41,6 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 	private List<Color> classificacoes = null;
 	private boolean finished = false;
 	private boolean mouseEnabled = false;
-	private Serializer serializer;
 
 	public BoardPanel(int width, int height, int tokenRadius, BoardController boardController,
 			PlayerWalkController playerWalkController) {
@@ -53,7 +53,6 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 		this.playerController = playerWalkController;
 		this.boardController = boardController;
 		boardController.registerObserver(this);
-		this.newGameController = newGameController.getInstance();
 
 		this.mouseListener = new MouseAdapter() {
 
@@ -135,6 +134,8 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 				i++;
 			}
 			fimJogo.showMessageDialog( this, strFinal, "Fim do jogo", JOptionPane.INFORMATION_MESSAGE);	
+			fimJogo.setVisible(false);
+			JOptionPane.getRootFrame().dispose();  
 			
 			JOptionPane continuar = new JOptionPane();
 
@@ -145,12 +146,13 @@ public class BoardPanel extends JPanel implements IMoveObserver {
 				System.exit(0);
 			}
 			if (resposta == JOptionPane.NO_OPTION) {
-				serializer.getInstance();
+				Serializer serializer = Serializer.getInstance();
+				NewGameController newGameController  = NewGameController.getInstance();
 				newGameController.startNewGame(serializer);
-
 			}
-		}
-			
+			continuar.setVisible(false);
+			JOptionPane.getRootFrame().dispose();  
+		}			
 	}
 	
 	public boolean mouseEnabled() {
